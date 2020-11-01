@@ -4,13 +4,13 @@ object Dependencies {
     }
 
     object Android {
-        const val material = "com.google.android.material:material:1.2.1"
+        const val material = "com.google.android.material:material:${Versions.material}"
     }
 
     object AndroidX {
-        const val ktxCore = "androidx.core:core-ktx:1.3.2"
-        const val ktxLifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-beta01"
-        const val appCompat = "androidx.appcompat:appcompat:1.2.0"
+        const val ktxCore = "androidx.core:core-ktx:${Versions.ktxCore}"
+        const val ktxLifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.ktxLifecycle}"
+        const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
 
         object Compose {
             const val ui = "androidx.compose.ui:ui:${Versions.compose}"
@@ -21,12 +21,12 @@ object Dependencies {
 
     object Tests {
         object Framework {
-            const val junit = "junit:junit:4.13.1"
+            const val junit = "junit:junit:${Versions.Tests.jUnit}"
         }
 
         object UI {
-            const val androidx_junit = "androidx.test.ext:junit:1.1.2"
-            const val espresso = "androidx.test.espresso:espresso-core:3.3.0"
+            const val androidx_junit = "androidx.test.ext:junit:${Versions.Tests.jUnitExt}"
+            const val espresso = "androidx.test.espresso:espresso-core:${Versions.Tests.espresso}"
         }
     }
 }

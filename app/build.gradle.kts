@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdkVersion(Versions.compileSdk)
 
     defaultConfig {
         applicationId = "com.thiosin.novus"
-        minSdkVersion(28)
-        targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        minSdkVersion(Versions.minSdk)
+        targetSdkVersion(Versions.targetSdk)
+        versionCode = Versions.versionCode
+        versionName = Versions.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
