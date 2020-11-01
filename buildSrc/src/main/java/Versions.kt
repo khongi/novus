@@ -19,5 +19,7 @@ object Versions {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"
         const val espresso = "3.3.0"
+        const val kotest = "4.3.1"
+        const val mockk = "1.10.2"
     }
 }

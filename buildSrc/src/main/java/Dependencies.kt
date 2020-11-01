@@ -22,6 +22,15 @@ object Dependencies {
     object Tests {
         object Framework {
             const val junit = "junit:junit:${Versions.Tests.jUnit}"
+            const val kotest = "io.kotest:kotest-runner-junit5:${Versions.Tests.kotest}"
+        }
+
+        object Assertion {
+            const val kotest = "io.kotest:kotest-assertions-core:${Versions.Tests.kotest}"
+        }
+
+        object Mock {
+            const val mockk = "io.mockk:mockk:${Versions.Tests.mockk}"
         }
 
         object UI {

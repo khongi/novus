@@ -43,6 +43,10 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
@@ -58,7 +62,11 @@ dependencies {
 
     implementation(Dependencies.AndroidX.appCompat)
 
-    testImplementation(Dependencies.Tests.Framework.junit)
+    testImplementation(Dependencies.Tests.Framework.kotest)
+    testImplementation(Dependencies.Tests.Assertion.kotest)
+    testImplementation(Dependencies.Tests.Mock.mockk)
+
+    androidTestImplementation(Dependencies.Tests.Framework.junit)
     androidTestImplementation(Dependencies.Tests.UI.androidx_junit)
     androidTestImplementation(Dependencies.Tests.UI.espresso)
 }
