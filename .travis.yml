@@ -4,7 +4,7 @@ jdk: oraclejdk8
 env:
   global:
     - ANDROID_API_LEVEL=30
-    - ANDROID_BUILD_TOOLS_VERSION=30.0.4
+    - ANDROID_BUILD_TOOLS_VERSION=30.0.0
 android:
   components:
     - tools
@@ -22,9 +22,9 @@ android:
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
     # - sys-img-x86-android-30
-licenses:
+  licenses:
   # White list all the licenses.
-  - '.+'
+    - '.+'
 script:
   - ./gradlew build check
 before_cache:
