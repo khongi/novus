@@ -1,2 +1,3 @@
 rootProject.name = "Novus"
-include ':app'
+
+include(":app")
