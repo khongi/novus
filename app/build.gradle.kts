@@ -41,6 +41,10 @@ android {
         kotlinCompilerExtensionVersion = Versions.compose
         kotlinCompilerVersion = Versions.kotlin
     }
+
+    lintOptions {
+        isAbortOnError = false
+    }
 }
 
 tasks.withType<Test> {
