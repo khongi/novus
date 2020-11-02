@@ -33,7 +33,7 @@ before_cache:
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 script:
-  - ./gradlew assembleDebug testDebugUnitTest
+  - ./gradlew assembleDebug testDebugUnitTest lintDebug
 
 cache:
   directories:
