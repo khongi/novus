@@ -8,6 +8,12 @@ env:
     - ANDROID_API_LEVEL=30
     - ANDROID_BUILD_TOOLS_VERSION=30.0.2
 
+addons:
+  sonarcloud:
+    organization: "khongi"
+    token:
+      secure: "Py20jtyzzeL/bf6pqnabKSHQ6KwtIQnv8nu8Tspax1jm+tGmMSu6FDVxa59syZmFcBxtJYa2usKGVHXQwQBVKbF5VCt/z0noMdy+/3rmSO4SgQt7dpObFRQcJeQdSfmM8X/OHDFYqPaHPa4Wytbw4e+MYb2Bi/raiL3fxJLQ1kJoW/me53myOlODGms0zgsnzf/YjBjTvljpGyqArsNjHaHuD8zmOFtbMqErYokQv5GgDKyR6ar8UaMxMoC0/X2tSLjYBDY+90WeW/PX6KuzaGNfcSHiX9jTJZgbyasj42JC+f9kW1I+tz9V1m1ubL35wxb5UsGQsHe4TfLq1w2wRYTgOYJEzP1qI7e/tzCDypU3VZ9ccjzzGTjvoNNGW7Sc7ML1Pwm0KpNivEEtgrNiNsEx04DLEjovd5UJDukFJyh7IRcFR9x0exTSbN9GCj1ihDiey0khWqkFjl31yytn41AMUHm1bTtLKntmqdWjTgBJfQHP7q3hI3uBiB5KxpO3uVDWLzHy9jVKQvl5oADMIMAR40NWJdJebCzqYsCjkvM+nviQQotMaOwszsHavqEeNUMitCOa2iT1TEhINk1zBwHCLduGTvvCfUxxysWJWzzm8mVTaCdeisQV1E2wB5G5hSdgESkxUhrgKjJ5bDpevAHB8Oz7y3PLmGQwj9YTvs4="
+
 android:
   components:
     - tools
@@ -34,6 +40,7 @@ before_cache:
 
 script:
   - ./gradlew assembleDebug testDebugUnitTest lintDebug
+  - sonar-scanner
 
 cache:
   directories:
