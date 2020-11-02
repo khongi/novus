@@ -25,7 +25,7 @@ android:
 before_install:
   - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
   - touch $HOME/.android/repositories.cfg
-  - yes | sdkmanager "--licenses"
+  - yes | sdkmanager --list
   - yes | sdkmanager "platforms;android-30"
   - yes | sdkmanager "build-tools;30.0.0"
 
