@@ -12,6 +12,7 @@ android:
   components:
     - tools
     - platform-tools
+    - tools
     # Additional components
     - extra-google-google_play_services
     - extra-google-m2repository
@@ -22,7 +23,9 @@ android:
     - '.+'
 
 before_install:
+  - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
   - touch $HOME/.android/repositories.cfg
+  - yes | sdkmanager --licenses
   - yes | sdkmanager "platforms;android-30"
   - yes | sdkmanager "build-tools;30.0.0"
 
