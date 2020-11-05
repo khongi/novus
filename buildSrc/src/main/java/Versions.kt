@@ -15,6 +15,9 @@ object Versions {
     const val ktxLifecycle = "2.3.0-beta01"
     const val appCompat = "1.2.0"
 
+    const val hilt = "2.29-alpha"
+    const val hiltLifecycle = "1.0.0-alpha02"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"

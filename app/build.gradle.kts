@@ -1,6 +1,8 @@
 plugins {
     id(Plugins.androidApplication)
+    id(Plugins.hilt)
     kotlin(Plugins.Kotlin.android)
+    kotlin(Plugins.Kotlin.kapt)
 }
 
 android {
@@ -51,9 +53,17 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
+
+    implementation(Dependencies.Hilt.android)
+    implementation(Dependencies.AndroidX.hiltLifecycle)
+    kapt(Dependencies.Hilt.compiler)
 
     implementation(Dependencies.Android.material)
 
@@ -69,8 +79,12 @@ dependencies {
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)
     testImplementation(Dependencies.Tests.Mock.mockk)
+    testImplementation(Dependencies.Tests.Hilt.android)
+    kaptTest(Dependencies.Hilt.compiler)
 
     androidTestImplementation(Dependencies.Tests.Framework.junit)
     androidTestImplementation(Dependencies.Tests.UI.androidx_junit)
     androidTestImplementation(Dependencies.Tests.UI.espresso)
+    androidTestImplementation(Dependencies.Tests.Hilt.android)
+    kaptAndroidTest(Dependencies.Hilt.compiler)
 }
