@@ -16,6 +16,7 @@ object Versions {
     const val appCompat = "1.2.0"
 
     const val hilt = "2.29-alpha"
+    const val hiltLifecycle = "1.0.0-alpha02"
 
     object Tests {
         const val jUnit = "4.13.1"
