@@ -40,6 +40,9 @@ before_cache:
 
 script:
   - ./gradlew assembleDebug testDebugUnitTest lintDebug
+  - export JAVA_HOME=$HOME/oraclejdk11
+  - chmod +x $TRAVIS_BUILD_DIR/ci/install-jdk.sh
+  - $TRAVIS_BUILD_DIR/ci/install-jdk.sh --target $JAVA_HOME --workspace "/home/travis/.cache/install-jdk" --feature "11" --license "BCL"
   - sonar-scanner
 
 cache:
@@ -47,3 +50,4 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+    - $HOME/.cache
