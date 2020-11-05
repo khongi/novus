@@ -3,6 +3,11 @@ object Dependencies {
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
     }
 
+    object Hilt {
+        const val android = "com.google.dagger:hilt-android:${Versions.hilt}"
+        const val compiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+    }
+
     object Android {
         const val material = "com.google.android.material:material:${Versions.material}"
     }

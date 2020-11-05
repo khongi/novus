@@ -1,6 +1,8 @@
 plugins {
     id(Plugins.androidApplication)
+    id(Plugins.hilt)
     kotlin(Plugins.Kotlin.android)
+    kotlin(Plugins.Kotlin.kapt)
 }
 
 android {
@@ -51,9 +53,16 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
+
+    implementation(Dependencies.Hilt.android)
+    kapt(Dependencies.Hilt.compiler)
 
     implementation(Dependencies.Android.material)
 
