@@ -2,8 +2,6 @@ package com.thiosin.novus
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import org.junit.Assert.assertEquals
-import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).
