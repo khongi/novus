@@ -8,6 +8,9 @@ env:
     - ANDROID_API_LEVEL=30
     - ANDROID_BUILD_TOOLS_VERSION=30.0.2
 
+git:
+  depth: false
+
 addons:
   sonarcloud:
     organization: "khongi"
