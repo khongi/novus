@@ -3,6 +3,12 @@ object Dependencies {
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
     }
 
+    object RainbowCake {
+        const val core = "co.zsmb:rainbow-cake-core:${Versions.rainbowcake}"
+        const val navigation = "co.zsmb:rainbow-cake-navigation:${Versions.rainbowcake}"
+        const val timber = "co.zsmb:rainbow-cake-timber:${Versions.rainbowcake}"
+    }
+
     object Hilt {
         const val android = "com.google.dagger:hilt-android:${Versions.hilt}"
         const val compiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
@@ -16,7 +22,11 @@ object Dependencies {
         const val ktxCore = "androidx.core:core-ktx:${Versions.ktxCore}"
         const val ktxLifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.ktxLifecycle}"
         const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
-        const val hiltLifecycle = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltLifecycle}"
+
+        object Hilt {
+            const val viewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltAndroidx}"
+            const val compiler = "androidx.hilt:hilt-compiler:${Versions.hiltAndroidx}"
+        }
 
         object Compose {
             const val ui = "androidx.compose.ui:ui:${Versions.compose}"
@@ -29,6 +39,7 @@ object Dependencies {
         object Framework {
             const val junit = "junit:junit:${Versions.Tests.jUnit}"
             const val kotest = "io.kotest:kotest-runner-junit5:${Versions.Tests.kotest}"
+            const val rainbowcake = "co.zsmb:rainbow-cake-test:${Versions.rainbowcake}"
         }
 
         object Assertion {

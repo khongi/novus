@@ -21,7 +21,10 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -53,6 +56,13 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-progressive"
+        freeCompilerArgs = freeCompilerArgs + "-Xuse-experimental=kotlin.Experimental"
+    }
+}
+
 kapt {
     correctErrorTypes = true
 }
@@ -61,9 +71,14 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
 
+    implementation(Dependencies.RainbowCake.core)
+    implementation(Dependencies.RainbowCake.navigation)
+    implementation(Dependencies.RainbowCake.timber)
+
     implementation(Dependencies.Hilt.android)
-    implementation(Dependencies.AndroidX.hiltLifecycle)
     kapt(Dependencies.Hilt.compiler)
+    implementation(Dependencies.AndroidX.Hilt.viewModel)
+    kapt(Dependencies.AndroidX.Hilt.compiler)
 
     implementation(Dependencies.Android.material)
 
@@ -78,6 +93,7 @@ dependencies {
 
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)
+    testImplementation(Dependencies.Tests.Framework.rainbowcake)
     testImplementation(Dependencies.Tests.Mock.mockk)
     testImplementation(Dependencies.Tests.Hilt.android)
     kaptTest(Dependencies.Hilt.compiler)
