@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Text
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.ui.tooling.preview.Preview
@@ -40,10 +42,15 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     @Composable
     private fun HomeScreenContent(text: String = "") {
         NovusTheme {
-            // A surface container using the 'background' color from the theme
-            Surface(color = MaterialTheme.colors.background) {
-                Greeting(text)
-            }
+            Scaffold(topBar = {
+                TopAppBar(title = { Text(text = "Hot") })
+            },
+            bodyContent = {
+                // A surface container using the 'background' color from the theme
+                Surface(color = MaterialTheme.colors.background) {
+                    Greeting(text)
+                }
+            })
         }
     }
 
