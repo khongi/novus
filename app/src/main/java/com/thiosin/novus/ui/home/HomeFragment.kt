@@ -62,9 +62,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        NovusTheme {
-            Greeting("Hello Compose")
-        }
+        HomeScreenContent("Preview")
     }
 
     override fun render(viewState: HomeViewState) {
