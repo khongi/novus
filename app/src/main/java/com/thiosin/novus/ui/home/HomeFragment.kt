@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Text
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
@@ -38,13 +37,9 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                             is Content -> {
                                 Scaffold(
                                     topBar = {
-                                        TopAppBar(title = {
-                                            if (homeViewState.showLoading) {
-                                                Text(text = "Loading...")
-                                            } else {
-                                                Text(text = "Ready")
-                                            }
-                                        })
+                                        if (homeViewState.showLoading) {
+                                            LinearProgressIndicator()
+                                        }
                                     },
                                     bodyContent = {
                                         // A surface container using the 'background' color from the theme
