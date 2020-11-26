@@ -5,6 +5,7 @@ import co.zsmb.rainbowcake.config.Loggers
 import co.zsmb.rainbowcake.config.rainbowCake
 import co.zsmb.rainbowcake.timber.TIMBER
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
 open class NovusApplication : Application() {
@@ -15,5 +16,7 @@ open class NovusApplication : Application() {
             logger = Loggers.TIMBER
             isDebug = BuildConfig.DEBUG
         }
+
+        Timber.plant(Timber.DebugTree())
     }
 }

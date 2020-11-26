@@ -9,12 +9,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
-import androidx.ui.tooling.preview.Preview
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.NovusTheme
+import com.thiosin.novus.ui.list.ListPage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,10 +26,40 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                HomeScreenContent()
+                NovusTheme {
+                    viewModel.state.observeAsState().value?.let { homeViewState ->
+                        when (homeViewState) {
+                            is Initial -> {
+                                // TODO
+                            }
+                            is Content -> {
+                                Scaffold(
+                                    topBar = {
+                                        TopAppBar(title = {
+                                            if (homeViewState.showLoading) {
+                                                Text(text = "Loading...")
+                                            } else {
+                                                Text(text = "Ready")
+                                            }
+                                        })
+                                    },
+                                    bodyContent = {
+                                        // A surface container using the 'background' color from the theme
+                                        Surface(color = MaterialTheme.colors.background) {
+                                            ListPage(
+                                                listState = homeViewState.listState,
+                                                onListEnd = viewModel::loadNext
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -39,39 +69,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         viewModel.load()
     }
 
-    @Composable
-    private fun HomeScreenContent(text: String = "") {
-        NovusTheme {
-            Scaffold(topBar = {
-                TopAppBar(title = { Text(text = "Hot") })
-            },
-            bodyContent = {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting(text)
-                }
-            })
-        }
-    }
-
-    @Composable
-    fun Greeting(name: String) {
-        Text(text = "Hello $name!")
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        HomeScreenContent("Preview")
-    }
+//
+//    @Preview(showBackground = true)
+//    @Composable
+//    fun DefaultPreview() {
+//        HomeScreenContent((0..10).toList().map { "Item $it" })
+//    }
 
     override fun render(viewState: HomeViewState) {
-        (view as ComposeView).setContent {
-            when (viewState) {
-                is Initial -> HomeScreenContent("Initial")
-                is Loading -> HomeScreenContent("Loading...")
-                is HomeReady -> HomeScreenContent(viewState.data)
-            }
-        }
     }
 }
