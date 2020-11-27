@@ -5,15 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Text
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.emptyContent
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.ui.tooling.preview.Preview
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.NovusTheme
+import com.thiosin.novus.ui.common.ListView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
@@ -24,10 +31,12 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                HomeScreenContent()
+                NovusTheme {
+                    HomeInitialScreen()
+                }
             }
         }
     }
@@ -37,36 +46,78 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         viewModel.load()
     }
 
-    @Composable
-    private fun HomeScreenContent(text: String = "") {
-        NovusTheme {
-            // A surface container using the 'background' color from the theme
-            Surface(color = MaterialTheme.colors.background) {
-                Greeting(text)
+    override fun render(viewState: HomeViewState) {
+        (view as ComposeView).setContent {
+            NovusTheme {
+                when (viewState) {
+                    is HomeInitial -> HomeInitialScreen()
+                    is HomeContent -> HomeContentScreen(
+                        showLoading = viewState.showLoading,
+                        listState = viewState.listState,
+                        loadNext = viewModel::loadNext
+                    )
+                }
             }
         }
     }
 
     @Composable
-    fun Greeting(name: String) {
-        Text(text = "Hello $name!")
+    private fun HomeScreen(
+        topBar: @Composable () -> Unit = emptyContent(),
+        bodyContent: @Composable (PaddingValues) -> Unit
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxWidth(),
+            topBar = topBar,
+            bodyContent = bodyContent
+        )
+    }
+
+    @Composable
+    private fun HomeInitialScreen() {
+        HomeScreen(
+            topBar = {
+                Column {
+                    TopAppBar(title = { Text(text = "Initial") })
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                }
+            },
+            bodyContent = {
+
+            }
+        )
+    }
+
+    @Composable
+    private fun HomeContentScreen(
+        showLoading: Boolean,
+        listState: StateFlow<List<String>>,
+        loadNext: () -> Unit
+    ) {
+        HomeScreen(
+            topBar = {
+                Column {
+                    TopAppBar(title = { Text(text = "Title") })
+                    if (showLoading) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            },
+            bodyContent = {
+                Surface(color = MaterialTheme.colors.background) {
+                    ListView(
+                        listState = listState,
+                        onListEnd = loadNext
+                    )
+                }
+            }
+        )
     }
 
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        NovusTheme {
-            Greeting("Hello Compose")
-        }
-    }
-
-    override fun render(viewState: HomeViewState) {
-        (view as ComposeView).setContent {
-            when (viewState) {
-                is Initial -> HomeScreenContent("Initial")
-                is Loading -> HomeScreenContent("Loading...")
-                is HomeReady -> HomeScreenContent(viewState.data)
-            }
-        }
+        val listState = MutableStateFlow(listOf("One", "Two"))
+        HomeContentScreen(showLoading = true, listState = listState, loadNext = {})
     }
 }

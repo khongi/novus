@@ -1,9 +1,12 @@
 package com.thiosin.novus.ui.home
 
+import kotlinx.coroutines.flow.MutableStateFlow
+
 sealed class HomeViewState
 
-object Initial : HomeViewState()
+object HomeInitial : HomeViewState()
 
-object Loading : HomeViewState()
-
-data class HomeReady(val data: String) : HomeViewState()
+data class HomeContent(
+    val listState: MutableStateFlow<List<String>>,
+    val showLoading: Boolean = false
+) : HomeViewState()
