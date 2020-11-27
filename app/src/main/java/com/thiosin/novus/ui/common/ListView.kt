@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.list
+package com.thiosin.novus.ui.common
 
 import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.runtime.Composable
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
 @Composable
-fun ListPage(listState: StateFlow<List<String>>, onListEnd: () -> Unit) {
+fun ListView(listState: StateFlow<List<String>>, onListEnd: () -> Unit) {
     val state = listState.collectAsState()
     val lastIndex = state.value.lastIndex
     LazyColumnForIndexed(items = state.value) { index, item ->

@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 sealed class HomeViewState
 
-object Initial : HomeViewState()
+object HomeInitial : HomeViewState()
 
-data class Content(
+data class HomeContent(
     val listState: MutableStateFlow<List<String>>,
     val showLoading: Boolean = false
 ) : HomeViewState()

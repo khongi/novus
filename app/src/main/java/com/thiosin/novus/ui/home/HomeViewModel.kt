@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class HomeViewModel @ViewModelInject constructor(
     private val homePresenter: HomePresenter
-) : RainbowCakeViewModel<HomeViewState>(Initial) {
+) : RainbowCakeViewModel<HomeViewState>(HomeInitial) {
 
     fun load() = execute {
-        viewState = Content(
+        viewState = HomeContent(
             listState = MutableStateFlow(homePresenter.getData()),
             showLoading = false
         )
     }
 
     fun loadNext() = execute {
-        val oldState = viewState as? Content ?: return@execute
+        val oldState = viewState as? HomeContent ?: return@execute
         viewState = oldState.copy(showLoading = true)
 
         oldState.listState.value = oldState.listState.value + homePresenter.getNextData()
