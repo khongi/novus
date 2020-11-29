@@ -12,6 +12,7 @@ object Versions {
 
     const val compose = "1.0.0-alpha06"
     const val material = "1.2.1"
+    const val pagingCompose = "1.0.0-alpha02"
 
     const val ktxCore = "1.3.2"
     const val ktxLifecycle = "2.3.0-beta01"
