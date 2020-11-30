@@ -13,14 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.emptyContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.paging.PagingData
 import androidx.ui.tooling.preview.Preview
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.NovusTheme
 import com.thiosin.novus.ui.common.ListView
+import com.thiosin.novus.ui.common.PostItem
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 @AndroidEntryPoint
 class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
@@ -53,8 +54,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     is HomeInitial -> HomeInitialScreen()
                     is HomeContent -> HomeContentScreen(
                         showLoading = viewState.showLoading,
-                        listState = viewState.listState,
-                        loadNext = viewModel::loadNext
+                        listState = viewState.listFlow
                     )
                 }
             }
@@ -91,8 +91,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     @Composable
     private fun HomeContentScreen(
         showLoading: Boolean,
-        listState: StateFlow<List<String>>,
-        loadNext: () -> Unit
+        listState: Flow<PagingData<String>>
     ) {
         HomeScreen(
             topBar = {
@@ -106,8 +105,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             bodyContent = {
                 Surface(color = MaterialTheme.colors.background) {
                     ListView(
-                        listState = listState,
-                        onListEnd = loadNext
+                        listFlow = listState,
                     )
                 }
             }
@@ -117,7 +115,6 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        val listState = MutableStateFlow(listOf("One", "Two"))
-        HomeContentScreen(showLoading = true, listState = listState, loadNext = {})
+        PostItem(title = "Preview")
     }
 }

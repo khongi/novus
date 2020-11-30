@@ -1,17 +1,20 @@
 package com.thiosin.novus.ui.home
 
-import kotlinx.coroutines.delay
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.thiosin.novus.data.pager.PagerDataSource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class HomePresenter @Inject constructor() {
+class HomePresenter @Inject constructor(
+    private val pagerDataSource: PagerDataSource
+) {
 
-    suspend fun getData(): List<String> {
-        delay(2_000L)
-        return (0..100).toList().map { "Item $it" }
-    }
-
-    suspend fun getNextData(): List<String> {
-        delay(2000L)
-        return (101..200).toList().map { "Item $it" }
+    fun getList(): Flow<PagingData<String>> {
+        // TODO configure paging config
+        return Pager(PagingConfig(20)) {
+            pagerDataSource
+        }.flow
     }
 }

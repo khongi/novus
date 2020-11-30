@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PostCard(title: String) {
+fun PostItem(title: String?) {
     Card(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp).fillMaxWidth()) {
         Column {
             Column(Modifier.padding(8.dp)) {
-                Text(text = title, style = MaterialTheme.typography.h6)
+                Text(text = "$title", style = MaterialTheme.typography.h6)
             }
         }
     }
