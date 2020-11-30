@@ -10,7 +10,7 @@ object Versions {
 
     const val rainbowcake = "1.2.0"
 
-    const val compose = "1.0.0-alpha06"
+    const val compose = "1.0.0-alpha07"
     const val material = "1.2.1"
     const val pagingCompose = "1.0.0-alpha02"
 
