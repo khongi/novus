@@ -44,6 +44,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
 
     override fun onStart() {
         super.onStart()
+        viewModel.getToken()
         viewModel.load()
     }
 

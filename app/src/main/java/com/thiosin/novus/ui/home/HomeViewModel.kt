@@ -14,4 +14,8 @@ class HomeViewModel @ViewModelInject constructor(
         )
     }
 
+    fun getToken() = executeNonBlocking {
+        homePresenter.getToken()
+    }
+
 }

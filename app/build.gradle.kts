@@ -16,6 +16,8 @@ android {
         versionName = Versions.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String","CLIENT_ID","\"04WMjFYDMJFljQ\"")
     }
 
     buildTypes {
@@ -93,6 +95,8 @@ dependencies {
     implementation(Dependencies.AndroidX.ktxLifecycle)
 
     implementation(Dependencies.AndroidX.appCompat)
+
+    implementation(Dependencies.Reddit.auth)
 
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)
