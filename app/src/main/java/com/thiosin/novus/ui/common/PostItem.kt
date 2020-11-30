@@ -1,6 +1,6 @@
 package com.thiosin.novus.ui.common
 
-import androidx.compose.foundation.Text
+import androidx.compose.material.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
