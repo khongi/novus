@@ -87,6 +87,7 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.uiTooling)
     implementation(Dependencies.AndroidX.Compose.runtimeLivedata)
+    implementation(Dependencies.AndroidX.Compose.paging)
 
     implementation(Dependencies.AndroidX.ktxCore)
     implementation(Dependencies.AndroidX.ktxLifecycle)

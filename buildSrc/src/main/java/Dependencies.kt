@@ -29,12 +29,11 @@ object Dependencies {
         }
 
         object Compose {
-            private const val version = Versions.compose
-
-            const val ui = "androidx.compose.ui:ui:$version"
-            const val material = "androidx.compose.material:material:$version"
-            const val uiTooling = "androidx.ui:ui-tooling:$version"
-            const val runtimeLivedata = "androidx.compose.runtime:runtime-livedata:$version"
+            const val ui = "androidx.compose.ui:ui:${Versions.compose}"
+            const val material = "androidx.compose.material:material:${Versions.compose}"
+            const val uiTooling = "androidx.ui:ui-tooling:${Versions.compose}"
+            const val runtimeLivedata = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
+            const val paging = "androidx.paging:paging-compose:${Versions.pagingCompose}"
         }
     }
 
