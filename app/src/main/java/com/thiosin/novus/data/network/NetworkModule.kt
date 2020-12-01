@@ -1,6 +1,7 @@
 package com.thiosin.novus.data.network
 
 import android.content.Context
+import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
 import com.kirkbushman.auth.managers.SharedPrefsStorageManager
 import com.kirkbushman.auth.managers.StorageManager
@@ -14,6 +15,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 @Module
 @InstallIn(ActivityComponent::class)
 class NetworkModule {
+
+    @Provides
+    fun provideAuthUserlessHelper(@ApplicationContext context: Context): AuthUserlessHelper {
+        return AuthUserlessHelper(
+            context = context,
+            clientId = BuildConfig.CLIENT_ID,
+            deviceId = null,
+            scopes = arrayOf(),
+            logging = true
+        )
+    }
 
     @Provides
     fun provideSharedPrefsStorageManager(@ApplicationContext context: Context): StorageManager {

@@ -97,6 +97,7 @@ dependencies {
     implementation(Dependencies.AndroidX.appCompat)
 
     implementation(Dependencies.Reddit.auth)
+    implementation(Dependencies.Reddit.api)
 
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)
