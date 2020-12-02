@@ -11,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -32,19 +33,34 @@ class NetworkModule {
         return SharedPrefsStorageManager(context)
     }
 
+    @UserlessAuth
     @Provides
-    fun provideRedditAuth(storageManager: StorageManager): RedditAuth {
+    fun provideUserlessRedditAuth(storageManager: StorageManager): RedditAuth {
         return RedditAuth.Builder()
-            // specify the credentials you can find on your reddit app console,
-            // in this case only the client id is provided.
             .setUserlessCredentials(BuildConfig.CLIENT_ID)
-            // the api enpoints scopes this client will need
             .setScopes("*")
-            // to manage tokens info in memory
             .setStorageManager(storageManager)
-            // if you set this flag to 'true' it will add to the OkHttp Client a listener to log the
-            // Request and Response object, to make it easy to debug.
             .setLogging(true)
             .build()
     }
+
+    @UserAuth
+    @Provides
+    fun provideUserRedditAuth(storageManager: StorageManager): RedditAuth {
+        return RedditAuth.Builder()
+            .setApplicationCredentials(BuildConfig.CLIENT_ID, BuildConfig.REDIRECT_URL)
+            // TODO define scopes
+            .setScopes(arrayOf("read"))
+            .setStorageManager(storageManager)
+            .setLogging(true)
+            .build()
+    }
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UserlessAuth
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UserAuth
 }

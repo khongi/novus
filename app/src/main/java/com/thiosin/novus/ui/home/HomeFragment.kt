@@ -34,16 +34,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                NovusTheme {
-                    HomeInitialScreen()
-                }
+                NovusTheme { }
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.getToken()
         viewModel.load()
     }
 
@@ -60,6 +57,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             }
         }
     }
+
 
     @Composable
     private fun HomeScreen(

@@ -18,6 +18,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String","CLIENT_ID","\"04WMjFYDMJFljQ\"")
+        buildConfigField("String","REDIRECT_URL","\"novus-app://auth/reddit-redirect\"")
     }
 
     buildTypes {
