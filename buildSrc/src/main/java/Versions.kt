@@ -21,6 +21,9 @@ object Versions {
     const val hilt = "2.29-alpha"
     const val hiltAndroidx = "1.0.0-alpha02"
 
+    const val redditARAW = "v1.0.0"
+    const val redditAuth = "v1.2.2"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"

@@ -16,6 +16,9 @@ android {
         versionName = Versions.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String","CLIENT_ID","\"04WMjFYDMJFljQ\"")
+        buildConfigField("String","REDIRECT_URL","\"novus-app://auth/reddit-redirect\"")
     }
 
     buildTypes {
@@ -93,6 +96,9 @@ dependencies {
     implementation(Dependencies.AndroidX.ktxLifecycle)
 
     implementation(Dependencies.AndroidX.appCompat)
+
+    implementation(Dependencies.Reddit.auth)
+    implementation(Dependencies.Reddit.api)
 
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)

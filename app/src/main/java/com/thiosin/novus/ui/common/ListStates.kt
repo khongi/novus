@@ -1,7 +1,7 @@
 package com.thiosin.novus.ui.common
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton

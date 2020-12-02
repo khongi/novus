@@ -13,5 +13,4 @@ class HomeViewModel @ViewModelInject constructor(
             showLoading = false
         )
     }
-
 }
