@@ -1,5 +1,6 @@
 package com.thiosin.novus.domain.model
 
+import android.text.format.DateUtils
 import com.kirkbushman.araw.models.Submission
 
 data class SubmissionPreview(
@@ -9,11 +10,17 @@ data class SubmissionPreview(
     val relativeTime: String
 )
 
+const val SECONDS_TO_MILLISECONDS = 1000
+
 fun Submission.toSubmissionPreview(): SubmissionPreview {
     return SubmissionPreview(
         title = title,
         subreddit = subreddit,
         author = author,
-        relativeTime = "6h" // TODO calculate relative time
+        relativeTime = DateUtils.getRelativeTimeSpanString(
+            System.currentTimeMillis(),
+            created * SECONDS_TO_MILLISECONDS,
+            DateUtils.SECOND_IN_MILLIS
+        ).toString()
     )
 }
