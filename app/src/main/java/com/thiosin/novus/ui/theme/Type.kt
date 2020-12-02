@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui
+package com.thiosin.novus.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
@@ -12,6 +12,11 @@ val typography = Typography(
                 fontFamily = FontFamily.Default,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp
+        ),
+        subtitle2 = TextStyle(
+                fontFamily = FontFamily.Default,
+                fontWeight = FontWeight.Light,
+                fontSize = 12.sp,
         )
         /* Other default text styles to override
         button = TextStyle(

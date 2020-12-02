@@ -14,8 +14,8 @@ import androidx.paging.PagingData
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.SubmissionPreview
-import com.thiosin.novus.ui.NovusTheme
 import com.thiosin.novus.ui.common.SubredditView
+import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 

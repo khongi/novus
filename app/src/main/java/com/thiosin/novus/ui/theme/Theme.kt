@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui
+package com.thiosin.novus.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

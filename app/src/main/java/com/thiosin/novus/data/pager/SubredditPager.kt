@@ -3,8 +3,8 @@ package com.thiosin.novus.data.pager
 import androidx.paging.PagingSource
 import co.zsmb.rainbowcake.withIOContext
 import com.kirkbushman.araw.fetcher.SubmissionsFetcher
-import com.kirkbushman.araw.models.Submission
 import com.thiosin.novus.domain.model.SubmissionPreview
+import com.thiosin.novus.domain.model.toSubmissionPreview
 
 class SubredditPager constructor(
     private val submissionsFetcher: SubmissionsFetcher
@@ -31,9 +31,5 @@ class SubredditPager constructor(
         } catch (t: Throwable) {
             LoadResult.Error(t)
         }
-    }
-
-    private fun Submission.toSubmissionPreview(): SubmissionPreview {
-        return SubmissionPreview(title = title)
     }
 }
