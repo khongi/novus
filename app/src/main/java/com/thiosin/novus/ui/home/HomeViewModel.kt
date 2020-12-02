@@ -10,6 +10,7 @@ class HomeViewModel @ViewModelInject constructor(
     fun load() = execute {
         viewState = HomeContent(
             listFlow = homePresenter.getRedditAll(),
+            title = "All", // TODO get title
             showLoading = false
         )
     }

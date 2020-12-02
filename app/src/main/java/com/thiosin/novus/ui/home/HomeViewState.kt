@@ -10,5 +10,6 @@ object HomeInitial : HomeViewState()
 
 data class HomeContent(
     val listFlow: Flow<PagingData<SubmissionPreview>>,
+    val title: String,
     val showLoading: Boolean = false
 ) : HomeViewState()
