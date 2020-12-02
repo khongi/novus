@@ -13,12 +13,11 @@ import androidx.compose.runtime.emptyContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.paging.PagingData
-import androidx.ui.tooling.preview.Preview
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.domain.model.SubmissionPreview
 import com.thiosin.novus.ui.NovusTheme
 import com.thiosin.novus.ui.common.ListView
-import com.thiosin.novus.ui.common.PostItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 
@@ -89,7 +88,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     @Composable
     private fun HomeContentScreen(
         showLoading: Boolean,
-        listState: Flow<PagingData<String>>
+        listState: Flow<PagingData<SubmissionPreview>>
     ) {
         HomeScreen(
             topBar = {
@@ -108,11 +107,5 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 }
             }
         )
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        PostItem(title = "Preview")
     }
 }

@@ -1,6 +1,8 @@
 package com.thiosin.novus.data.network
 
 import android.content.Context
+import androidx.paging.PagingConfig
+import com.kirkbushman.araw.RedditClient
 import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
 import com.kirkbushman.auth.managers.SharedPrefsStorageManager
@@ -18,6 +20,15 @@ import javax.inject.Qualifier
 class NetworkModule {
 
     @Provides
+    fun provideSharedPrefsStorageManager(@ApplicationContext context: Context): StorageManager {
+        return SharedPrefsStorageManager(context)
+    }
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UserlessAuth
+
+    @Provides
     fun provideAuthUserlessHelper(@ApplicationContext context: Context): AuthUserlessHelper {
         return AuthUserlessHelper(
             context = context,
@@ -26,11 +37,6 @@ class NetworkModule {
             scopes = arrayOf(),
             logging = true
         )
-    }
-
-    @Provides
-    fun provideSharedPrefsStorageManager(@ApplicationContext context: Context): StorageManager {
-        return SharedPrefsStorageManager(context)
     }
 
     @UserlessAuth
@@ -42,6 +48,12 @@ class NetworkModule {
             .setStorageManager(storageManager)
             .setLogging(true)
             .build()
+    }
+
+    @UserlessAuth
+    @Provides
+    fun provideUserlessRedditClient(authUserlessHelper: AuthUserlessHelper): RedditClient {
+        return authUserlessHelper.getRedditClient() ?: throw IllegalStateException("No token")
     }
 
     @UserAuth
@@ -58,9 +70,22 @@ class NetworkModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class UserlessAuth
+    annotation class UserAuth
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class UserAuth
+    annotation class PageSize
+
+    @PageSize
+    @Provides
+    fun providePageSize(): Int = 25
+
+    @Provides
+    fun providePagerConfig(@PageSize pageSize: Int): PagingConfig {
+        return PagingConfig(
+            pageSize = pageSize,
+            prefetchDistance = 15,
+            initialLoadSize = pageSize
+        )
+    }
 }

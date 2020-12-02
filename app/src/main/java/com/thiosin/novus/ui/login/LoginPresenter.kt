@@ -7,6 +7,9 @@ import javax.inject.Inject
 class LoginPresenter @Inject constructor(
     private val authInteractor: AuthInteractor
 ) {
+    suspend fun acquireUserlessToken() = withIOContext {
+        authInteractor.acquireUserlessToken()
+    }
 
     suspend fun getUserAuthUrl(): String = withIOContext {
         authInteractor.getUserAuthUrl()
