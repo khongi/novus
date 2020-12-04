@@ -6,5 +6,7 @@ data class SubmissionPreview(
     val author: String,
     val relativeTime: String,
     val imageUrl: String? = null,
-    val videoUrl: String? = null
+    val videoUrl: String? = null,
+    val mediaWidth: Int? = null,
+    val mediaHeight: Int? = null,
 )

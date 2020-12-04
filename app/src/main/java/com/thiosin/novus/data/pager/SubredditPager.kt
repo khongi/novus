@@ -58,9 +58,19 @@ class SubredditPager constructor(
                     ).toString(),
                     imageUrl = getImageUrl(it),
                     videoUrl = getVideoUrl(it),
+                    mediaWidth = getMediaWidth(it),
+                    mediaHeight = getMediaHeight(it)
                 )
             }
         }
+    }
+
+    private fun getMediaWidth(it: ChildData): Int? {
+        return it.preview?.images?.get(0)?.source?.width?.toInt()
+    }
+
+    private fun getMediaHeight(it: ChildData): Int? {
+        return it.preview?.images?.get(0)?.source?.height?.toInt()
     }
 
     private fun getImageUrl(submission: ChildData): String? {

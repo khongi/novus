@@ -1,18 +1,15 @@
 package com.thiosin.novus.ui.common
 
 import android.net.Uri
-import android.util.TypedValue
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -53,14 +50,11 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                 style = MaterialTheme.typography.subtitle2,
             )
         }
-        if (submission.imageUrl != null) {
-            Text(
-                text = "${submission.imageUrl}",
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.subtitle2,
-            )
-        }
+        Text(
+            text = "${submission.imageUrl} ${submission.videoUrl} ${submission.mediaWidth} ${submission.mediaHeight}",
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.subtitle2,
+        )
         Text(text = submission.title, style = MaterialTheme.typography.h6)
         if (submission.imageUrl != null) {
             Column {
@@ -71,7 +65,7 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                     contentScale = ContentScale.FillWidth,
                     loading = {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                            LinearProgressIndicator(Modifier.fillMaxWidth())
                         }
                     },
                     modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium),
@@ -82,18 +76,16 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                         .build()
                 )
             }
-        } else if (submission.videoUrl != null) {
-            Column {
-                Spacer(modifier = Modifier.preferredHeight(8.dp))
-                VideoPlayer(submission.videoUrl)
-            }
+        }
+        if (submission.videoUrl != null) {
+            VideoPlayer(submission.videoUrl, submission.mediaHeight!!, submission.mediaWidth!!)
         }
         Divider(thickness = 1.dp, modifier = Modifier.padding(top = 8.dp))
     }
 }
 
 @Composable
-fun VideoPlayer(sourceUrl: String) {
+fun VideoPlayer(sourceUrl: String, mediaHeight: Int, mediaWidth: Int) {
     // This is the official way to access current context from Composable functions
     val context = ContextAmbient.current
     val displayMetrics = context.resources.displayMetrics
@@ -114,32 +106,32 @@ fun VideoPlayer(sourceUrl: String) {
 
         val source = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(
-                Uri.parse(
-                    // Big Buck Bunny from Blender Project
-                    sourceUrl
-                )
+                Uri.parse(sourceUrl)
             )
 
         exoPlayer.prepare(source)
     }
 
     AndroidView(viewBlock = {
-        val frameLayoutParams = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 250F, displayMetrics).toInt(),
-        )
-        FrameLayout(context).apply {
-            layoutParams = frameLayoutParams
-            addView(
-                PlayerView(context).apply {
-                    useController = true
-                    controllerAutoShow = false
-                    player = exoPlayer
-                }
+        PlayerView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                getCalculatedMediaHeight(
+                    displayMetrics.widthPixels,
+                    mediaWidth,
+                    mediaHeight),
             )
+            useController = true
+            controllerAutoShow = false
+            player = exoPlayer
             exoPlayer.playWhenReady = true
         }
     })
+}
+
+fun getCalculatedMediaHeight(displayWidth: Int, width: Int, height: Int): Int {
+    val ratio = displayWidth / width.toFloat()
+    return (ratio * height).toInt()
 }
 
 @Preview(showBackground = true)
