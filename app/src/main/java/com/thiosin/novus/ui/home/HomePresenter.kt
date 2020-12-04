@@ -7,6 +7,7 @@ import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.data.pager.SubredditPager
 import com.thiosin.novus.domain.interactor.SubredditInteractor
 import com.thiosin.novus.domain.model.SubmissionPreview
+import com.thiosin.novus.domain.model.SubmissionSort
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -16,12 +17,8 @@ class HomePresenter @Inject constructor(
 ) {
 
     suspend fun getRedditAll(): Flow<PagingData<SubmissionPreview>> = withIOContext {
-        val fetcher = subredditInteractor.getRedditAllFetcher()
+        val lister = subredditInteractor.getSubmissionsLister("all", sort = SubmissionSort.Hot)
 
-        Pager(pagingConfig) { SubredditPager(fetcher) }.flow
-    }
-
-    suspend fun test() = withIOContext {
-        subredditInteractor.test()
+        Pager(pagingConfig) { SubredditPager(lister) }.flow
     }
 }

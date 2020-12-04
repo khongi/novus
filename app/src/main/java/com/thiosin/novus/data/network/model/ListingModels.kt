@@ -30,7 +30,7 @@ data class ChildData(
     val approvedAtUTC: Any? = null,
 
     val subreddit: String,
-    val selftext: String,
+    val selftext: String? = null,
 
     @Json(name = "author_fullname")
     val authorFullname: String,
@@ -51,7 +51,7 @@ data class ChildData(
     val subredditNamePrefixed: String,
 
     val hidden: Boolean,
-    val pwls: Long,
+    val pwls: Long? = null,
 
     @Json(name = "link_flair_css_class")
     val linkFlairCSSClass: String? = null,
@@ -71,7 +71,7 @@ data class ChildData(
     val quarantine: Boolean,
 
     @Json(name = "link_flair_text_color")
-    val linkFlairTextColor: FlairTextColor,
+    val linkFlairTextColor: String? = null,
 
     @Json(name = "upvote_ratio")
     val upvoteRatio: Double,
@@ -130,7 +130,7 @@ data class ChildData(
     @Json(name = "author_premium")
     val authorPremium: Boolean,
 
-    val thumbnail: String,
+    val thumbnail: String? = null,
 
     @Json(name = "author_flair_css_class")
     val authorFlairCSSClass: String? = null,
@@ -152,12 +152,12 @@ data class ChildData(
     @Json(name = "mod_note")
     val modNote: Any? = null,
 
-    val created: Double,
+    val created: Long,
 
     @Json(name = "link_flair_type")
     val linkFlairType: AuthorFlairType,
 
-    val wls: Long,
+    val wls: Long? = null,
 
     @Json(name = "removed_by_category")
     val removedByCategory: Any? = null,
@@ -267,7 +267,7 @@ data class ChildData(
     val sendReplies: Boolean,
 
     @Json(name = "whitelist_status")
-    val whitelistStatus: WhitelistStatus,
+    val whitelistStatus: WhitelistStatus? = null,
 
     @Json(name = "contest_mode")
     val contestMode: Boolean,
@@ -279,12 +279,12 @@ data class ChildData(
     val authorPatreonFlair: Boolean,
 
     @Json(name = "author_flair_text_color")
-    val authorFlairTextColor: FlairTextColor? = null,
+    val authorFlairTextColor: String? = null,
 
     val permalink: String,
 
     @Json(name = "parent_whitelist_status")
-    val parentWhitelistStatus: WhitelistStatus,
+    val parentWhitelistStatus: WhitelistStatus? = null,
 
     val stickied: Boolean,
     val url: String,
@@ -450,14 +450,10 @@ data class AuthorFlairRichtext(
     val u: String? = null
 )
 
-enum class FlairTextColor {
-    dark,
-    light,
-}
-
 enum class AuthorFlairType {
     richtext,
     text,
+    emoji
 }
 
 @JsonClass(generateAdapter = true)
@@ -475,7 +471,7 @@ data class Gildings(
 @JsonClass(generateAdapter = true)
 data class LinkFlairRichtext(
     val e: AuthorFlairType,
-    val t: String
+    val t: String? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -490,33 +486,33 @@ data class Media(
 @JsonClass(generateAdapter = true)
 data class Oembed(
     @Json(name = "provider_url")
-    val providerURL: String,
+    val providerURL: String? = null,
 
-    val description: String,
-    val title: String,
+    val description: String? = null,
+    val title: String? = null,
 
     @Json(name = "author_name")
-    val authorName: String,
+    val authorName: String? = null,
 
-    val height: Long,
-    val width: Long,
-    val html: String,
+    val height: Long? = null,
+    val width: Long? = null,
+    val html: String? = null,
 
     @Json(name = "thumbnail_width")
-    val thumbnailWidth: Long,
+    val thumbnailWidth: Long? = null,
 
-    val version: String,
+    val version: String? = null,
 
     @Json(name = "provider_name")
-    val providerName: String,
+    val providerName: String? = null,
 
     @Json(name = "thumbnail_url")
-    val thumbnailURL: String,
+    val thumbnailURL: String? = null,
 
-    val type: String,
+    val type: String? = null,
 
     @Json(name = "thumbnail_height")
-    val thumbnailHeight: Long
+    val thumbnailHeight: Long? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -567,6 +563,8 @@ enum class WhitelistStatus {
     all_ads,
     no_ads,
     some_ads,
+    promo_adult_nsfw,
+    house_only
 }
 
 @JsonClass(generateAdapter = true)

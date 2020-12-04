@@ -3,6 +3,7 @@ package com.thiosin.novus.domain.interactor
 import com.kirkbushman.araw.fetcher.SubmissionsFetcher
 import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.thiosin.novus.data.network.NetworkDataSource
+import com.thiosin.novus.domain.model.SubmissionSort
 import javax.inject.Inject
 
 class SubredditInteractor @Inject constructor(
@@ -17,7 +18,14 @@ class SubredditInteractor @Inject constructor(
         return client.subredditsClient.all()
     }
 
-    suspend fun test() {
-        networkDataSource.getAll()
+    fun getSubmissionsLister(
+        subreddit: String,
+        sort: SubmissionSort = SubmissionSort.Hot
+    ): SubmissionsLister {
+        return SubmissionsLister(
+            subreddit = subreddit,
+            sort = sort,
+            networkDataSource = networkDataSource
+        )
     }
 }
