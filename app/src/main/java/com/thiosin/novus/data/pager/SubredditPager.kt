@@ -56,7 +56,8 @@ class SubredditPager constructor(
                         it.created * 1_000L,
                         DateUtils.SECOND_IN_MILLIS
                     ).toString(),
-                    imageUrl = getImageUrl(it)
+                    imageUrl = getImageUrl(it),
+                    videoUrl = getVideoUrl(it),
                 )
             }
         }
@@ -67,6 +68,20 @@ class SubredditPager constructor(
         return when (submission.postHint) {
             "image" -> submission.url
             "link" -> null
+            else -> null
+        }
+    }
+
+    private fun getVideoUrl(submission: ChildData): String? {
+        return when (submission.postHint) {
+            "link" -> {
+                when {
+                    submission.domain == "i.imgur.com" && submission.url.contains(".gifv") -> {
+                        submission.url.replace(".gifv", ".mp4")
+                    }
+                    else -> null
+                }
+            }
             else -> null
         }
     }
