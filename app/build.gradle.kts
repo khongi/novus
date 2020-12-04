@@ -100,6 +100,9 @@ dependencies {
     implementation(Dependencies.Reddit.auth)
     implementation(Dependencies.Reddit.api)
 
+    implementation(Dependencies.Accompanist.coil)
+    implementation(Dependencies.Coil.gif)
+
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)
     testImplementation(Dependencies.Tests.Framework.rainbowcake)

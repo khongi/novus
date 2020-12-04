@@ -24,6 +24,9 @@ object Versions {
     const val redditARAW = "v1.0.0"
     const val redditAuth = "v1.2.2"
 
+    const val accompanist = "0.3.3.1"
+    const val coil = "1.1.0"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"

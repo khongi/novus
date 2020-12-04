@@ -32,7 +32,8 @@ object Dependencies {
             const val ui = "androidx.compose.ui:ui:${Versions.compose}"
             const val material = "androidx.compose.material:material:${Versions.compose}"
             const val uiTooling = "androidx.ui:ui-tooling:${Versions.compose}"
-            const val runtimeLivedata = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
+            const val runtimeLivedata =
+                "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
             const val paging = "androidx.paging:paging-compose:${Versions.pagingCompose}"
         }
     }
@@ -40,6 +41,14 @@ object Dependencies {
     object Reddit {
         const val auth = "com.github.KirkBushman:Android-Reddit-OAuth2:${Versions.redditAuth}"
         const val api = "com.github.KirkBushman:ARAW:${Versions.redditARAW}"
+    }
+
+    object Accompanist {
+        const val coil = "dev.chrisbanes.accompanist:accompanist-coil:${Versions.accompanist}"
+    }
+
+    object Coil {
+        const val gif = "io.coil-kt:coil-gif:${Versions.coil}"
     }
 
     object Tests {
