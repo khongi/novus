@@ -27,6 +27,10 @@ object Versions {
     const val accompanist = "0.3.3.1"
     const val coil = "1.1.0"
 
+    const val okHttp = "4.8.1"
+    const val retrofit = "2.9.0"
+    const val moshi = "1.10.0"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"

@@ -103,6 +103,13 @@ dependencies {
     implementation(Dependencies.Accompanist.coil)
     implementation(Dependencies.Coil.gif)
 
+    implementation(Dependencies.Network.okHttp)
+    implementation(Dependencies.Network.okHttpLoggingInterceptor)
+    implementation(Dependencies.Network.retrofit)
+    implementation(Dependencies.Network.retrofitMoshiConverter)
+    implementation(Dependencies.Network.moshi)
+    kapt(Dependencies.Network.moshiCodegen)
+
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)
     testImplementation(Dependencies.Tests.Framework.rainbowcake)
