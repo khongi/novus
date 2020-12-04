@@ -19,6 +19,7 @@ android {
 
         buildConfigField("String","CLIENT_ID","\"04WMjFYDMJFljQ\"")
         buildConfigField("String","REDIRECT_URL","\"novus-app://auth/reddit-redirect\"")
+        buildConfigField("String","BASE_URL","\"https://oauth.reddit.com\"")
     }
 
     buildTypes {

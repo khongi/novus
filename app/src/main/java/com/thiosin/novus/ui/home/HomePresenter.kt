@@ -20,4 +20,8 @@ class HomePresenter @Inject constructor(
 
         Pager(pagingConfig) { SubredditPager(fetcher) }.flow
     }
+
+    suspend fun test() = withIOContext {
+        subredditInteractor.test()
+    }
 }

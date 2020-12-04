@@ -2,10 +2,12 @@ package com.thiosin.novus.domain.interactor
 
 import com.kirkbushman.araw.fetcher.SubmissionsFetcher
 import com.kirkbushman.araw.helpers.AuthUserlessHelper
+import com.thiosin.novus.data.network.NetworkDataSource
 import javax.inject.Inject
 
 class SubredditInteractor @Inject constructor(
-    private val userlessHelper: AuthUserlessHelper
+    private val userlessHelper: AuthUserlessHelper,
+    private val networkDataSource: NetworkDataSource
 ) {
 
     fun getRedditAllFetcher(): SubmissionsFetcher {
@@ -13,5 +15,9 @@ class SubredditInteractor @Inject constructor(
             ?: throw IllegalStateException("Reddit client null")
 
         return client.subredditsClient.all()
+    }
+
+    suspend fun test() {
+        networkDataSource.getAll()
     }
 }

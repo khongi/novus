@@ -13,7 +13,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityScoped
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -46,7 +52,7 @@ class NetworkModule {
             .setUserlessCredentials(BuildConfig.CLIENT_ID)
             .setScopes("*")
             .setStorageManager(storageManager)
-            .setLogging(true)
+            .setLogging(false)
             .build()
     }
 
@@ -64,7 +70,7 @@ class NetworkModule {
             // TODO define scopes
             .setScopes(arrayOf("read"))
             .setStorageManager(storageManager)
-            .setLogging(true)
+            .setLogging(false)
             .build()
     }
 
@@ -88,4 +94,33 @@ class NetworkModule {
             initialLoadSize = pageSize
         )
     }
+
+    @UserlessAuth
+    @Provides
+    @ActivityScoped
+    fun provideOkHttpClient(@UserlessAuth redditAuth: RedditAuth): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addNetworkInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
+            .addInterceptor(AuthInterceptor(redditAuth))
+            .build()
+    }
+
+    @UserlessAuth
+    @Provides
+    @ActivityScoped
+    fun provideRetrofit(@UserlessAuth okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+
+    @UserlessAuth
+    @Provides
+    @ActivityScoped
+    fun provideRedditApi(@UserlessAuth retrofit: Retrofit): RedditAPI = retrofit.create(RedditAPI::class.java)
+
 }
