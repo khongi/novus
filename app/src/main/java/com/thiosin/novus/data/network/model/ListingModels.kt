@@ -414,7 +414,7 @@ enum class AwardType {
 enum class Format {
     APNG,
     PNG,
-
+    JPG
 }
 
 @JsonClass(generateAdapter = true)

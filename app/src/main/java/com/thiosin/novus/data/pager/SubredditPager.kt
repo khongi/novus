@@ -7,8 +7,8 @@ import com.thiosin.novus.data.network.model.Child
 import com.thiosin.novus.data.network.model.ChildData
 import com.thiosin.novus.data.network.model.ListingResponse
 import com.thiosin.novus.domain.interactor.SubmissionsLister
-import com.thiosin.novus.domain.model.SECONDS_TO_MILLISECONDS
 import com.thiosin.novus.domain.model.SubmissionPreview
+import timber.log.Timber
 
 class SubredditPager constructor(
     private val submissionsLister: SubmissionsLister
@@ -53,7 +53,7 @@ class SubredditPager constructor(
                     author = it.author,
                     relativeTime = DateUtils.getRelativeTimeSpanString(
                         System.currentTimeMillis(),
-                        it.created * SECONDS_TO_MILLISECONDS,
+                        it.created * 1_000L,
                         DateUtils.SECOND_IN_MILLIS
                     ).toString(),
                     imageUrl = getImageUrl(it)
@@ -63,13 +63,11 @@ class SubredditPager constructor(
     }
 
     private fun getImageUrl(submission: ChildData): String? {
-        //        Timber.d("${submission.subreddit} ${submission.author}: $url")
-        return when {
-            submission.isVideo -> null
-            submission.media?.oembed != null -> null
-            submission.selftext.isNullOrBlank().not() -> null
-            submission.thumbnail.isNullOrBlank() -> null
-            else -> submission.url
+        Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
+        return when (submission.postHint) {
+            "image" -> submission.url
+            "link" -> null
+            else -> null
         }
     }
 }
