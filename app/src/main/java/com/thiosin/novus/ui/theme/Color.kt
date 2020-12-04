@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui
+package com.thiosin.novus.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

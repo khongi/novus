@@ -8,7 +8,10 @@ class LoginViewModel @ViewModelInject constructor(
 ): RainbowCakeViewModel<LoginViewState>(LoginInitial) {
 
    fun startLogin() = execute {
-      viewState = LoginStart(authUrl = loginPresenter.getUserAuthUrl())
+      loginPresenter.acquireUserlessToken()
+      viewState = LoginComplete
+
+//      viewState = LoginStart(authUrl = loginPresenter.getUserAuthUrl())
    }
 
    fun onAuthPageStart(url: String) = executeNonBlocking {

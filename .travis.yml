@@ -43,10 +43,10 @@ before_cache:
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 script:
-  - ./gradlew assembleDebug testDebugUnitTest lintDebug
   - export JAVA_HOME=$HOME/oraclejdk11
   - chmod +x $TRAVIS_BUILD_DIR/ci/install-jdk.sh
   - $TRAVIS_BUILD_DIR/ci/install-jdk.sh --target $JAVA_HOME --workspace "/home/travis/.cache/install-jdk" --feature "11" --license "BCL"
+  - ./gradlew assembleDebug testDebugUnitTest lintDebug
   - sonar-scanner
 
 cache:

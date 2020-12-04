@@ -14,8 +14,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
-import com.thiosin.novus.ui.NovusTheme
 import com.thiosin.novus.ui.home.HomeFragment
+import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

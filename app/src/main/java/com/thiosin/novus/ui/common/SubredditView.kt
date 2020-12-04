@@ -7,16 +7,17 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.thiosin.novus.domain.model.SubmissionPreview
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ListView(listFlow: Flow<PagingData<String>>) {
+fun SubredditView(listFlow: Flow<PagingData<SubmissionPreview>>) {
     val listItems = listFlow.collectAsLazyPagingItems()
 
     LazyColumn {
 
         items(listItems) { item ->
-            PostItem(title = item)
+            SubmissionPreviewItem(submission = item)
         }
 
         listItems.run {
