@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.thiosin.novus.domain.model.SubmissionMediaType
 import com.thiosin.novus.domain.model.SubmissionPreview
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -49,36 +50,62 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                 style = MaterialTheme.typography.subtitle2,
             )
         }
-        // TODO remove - for debug purposes
-        Text(
-            text = "${submission.imageUrl} ${submission.videoUrl} ${submission.mediaWidth} ${submission.mediaHeight}",
-            color = MaterialTheme.colors.error,
-            style = MaterialTheme.typography.subtitle2,
-        )
-        Text(text = submission.title,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 8.dp))
-        if (submission.imageUrl != null) {
-            Image(url = submission.imageUrl)
-        }
-        if (submission.videoUrl != null) {
-            Video(submission.videoUrl, submission.mediaHeight!!, submission.mediaWidth!!)
+        Row(modifier = Modifier.fillMaxWidth()) {
+            if (submission.media != null
+                && submission.media.type == SubmissionMediaType.Thumbnail
+            ) {
+                Image(
+                    url = submission.media.url,
+                    modifier = Modifier.size(100.dp).padding(top = 8.dp, end = 8.dp)
+                        .clip(MaterialTheme.shapes.medium),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(text = submission.title,
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(bottom = 8.dp))
+                if (submission.media != null) {
+                    // TODO remove - for debug purposes
+                    Text(
+                        text = "${submission.media.type} ${submission.media.url} ${submission.media.width} ${submission.media.height}",
+                        color = MaterialTheme.colors.error,
+                        style = MaterialTheme.typography.subtitle2,
+                    )
+                    when (submission.media.type) {
+                        SubmissionMediaType.Image -> {
+                            Image(
+                                url = submission.media.url,
+                                modifier = Modifier.fillMaxWidth()
+                                    .clip(MaterialTheme.shapes.medium),
+                                contentScale = ContentScale.FillWidth
+                            )
+                        }
+                        SubmissionMediaType.Video -> {
+                            Video(submission.media.url,
+                                submission.media.height,
+                                submission.media.width)
+                        }
+                        else -> Unit
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-fun Image(url: String) {
+fun Image(url: String, modifier: Modifier, contentScale: ContentScale) {
     CoilImage(
         data = url,
         fadeIn = true,
-        contentScale = ContentScale.FillWidth,
+        contentScale = contentScale,
         loading = {
             Box(modifier = Modifier.fillMaxSize()) {
                 LinearProgressIndicator(Modifier.fillMaxWidth())
             }
         },
-        modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium),
+        modifier = modifier,
         imageLoader = ImageLoader.Builder(ContextAmbient.current)
             .componentRegistry {
                 add(ImageDecoderDecoder())

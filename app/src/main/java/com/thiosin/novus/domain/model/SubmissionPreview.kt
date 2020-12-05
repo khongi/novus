@@ -5,8 +5,18 @@ data class SubmissionPreview(
     val subreddit: String,
     val author: String,
     val relativeTime: String,
-    val imageUrl: String? = null,
-    val videoUrl: String? = null,
-    val mediaWidth: Int? = null,
-    val mediaHeight: Int? = null,
+    val media: SubmissionMedia? = null,
 )
+
+data class SubmissionMedia(
+    val url: String,
+    val type: SubmissionMediaType,
+    val width: Int,
+    val height: Int,
+)
+
+enum class SubmissionMediaType {
+    Image,
+    Video,
+    Thumbnail
+}

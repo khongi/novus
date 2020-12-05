@@ -8,17 +8,19 @@ import com.thiosin.novus.data.network.model.ChildData
 import com.thiosin.novus.data.network.model.ListingResponse
 import com.thiosin.novus.data.network.model.PostHint
 import com.thiosin.novus.domain.interactor.SubmissionsLister
+import com.thiosin.novus.domain.model.SubmissionMedia
+import com.thiosin.novus.domain.model.SubmissionMediaType
 import com.thiosin.novus.domain.model.SubmissionPreview
 import timber.log.Timber
 
 class SubredditPager constructor(
-    private val submissionsLister: SubmissionsLister
+    private val submissionsLister: SubmissionsLister,
 ) : PagingSource<String, SubmissionPreview>() {
 
     private var loaded = 0
 
     override suspend fun load(
-        params: LoadParams<String>
+        params: LoadParams<String>,
     ): LoadResult<String, SubmissionPreview> = withIOContext {
         try {
             val nextKey = params.key ?: ""
@@ -53,10 +55,7 @@ class SubredditPager constructor(
                     subreddit = it.subreddit,
                     author = it.author,
                     relativeTime = getRelativeTime(it),
-                    imageUrl = getImageUrl(it),
-                    videoUrl = getVideoUrl(it),
-                    mediaWidth = getMediaWidth(it),
-                    mediaHeight = getMediaHeight(it)
+                    media = getSubmissionMedia(it),
                 )
             }
         }
@@ -70,38 +69,51 @@ class SubredditPager constructor(
         ).toString()
     }
 
-    private fun getImageUrl(submission: ChildData): String? {
+    private fun getSubmissionMedia(submission: ChildData): SubmissionMedia? {
         Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
-        return when (submission.postHint) {
-            PostHint.Image -> submission.url
-            PostHint.Link -> null
-            else -> null
-        }
-    }
 
-    private fun getVideoUrl(submission: ChildData): String? {
-        return when (submission.postHint) {
+        var url: String? = null
+        var type = SubmissionMediaType.Thumbnail
+        when (submission.postHint) {
             PostHint.Link -> {
                 when {
                     submission.domain == "i.imgur.com" && submission.url.contains(".gifv") -> {
-                        submission.url.replace(".gifv", ".mp4")
+                        url = submission.url.replace(".gifv", ".mp4")
+                        type = SubmissionMediaType.Video
                     }
-                    else -> null
+                    submission.thumbnail != null && submission.thumbnail.startsWith("http") -> {
+                        url = submission.thumbnail
+                        type = SubmissionMediaType.Thumbnail
+                    }
                 }
+            }
+            PostHint.Image -> {
+                url = submission.url
+                type = SubmissionMediaType.Image
             }
             PostHint.HostedVideo -> {
                 // Remove end of URL until .mp4
-                submission.media?.redditVideo?.fallbackURL?.dropLastWhile { it.isDigit().not() }
+                url =
+                    submission.media?.redditVideo?.fallbackURL?.dropLastWhile { it.isDigit().not() }
+                type = SubmissionMediaType.Video
             }
-            else -> null
+            PostHint.RichVideo -> {
+
+            }
+            null -> {
+
+            }
         }
-    }
 
-    private fun getMediaWidth(it: ChildData): Int? {
-        return it.preview?.images?.get(0)?.source?.width?.toInt()
-    }
+        val width = submission.thumbnailWidth?.toInt()
+            ?: submission.preview?.images?.get(0)?.source?.width?.toInt() ?: 0
+        val height = submission.thumbnailHeight?.toInt()
+            ?: submission.preview?.images?.get(0)?.source?.height?.toInt() ?: 0
 
-    private fun getMediaHeight(it: ChildData): Int? {
-        return it.preview?.images?.get(0)?.source?.height?.toInt()
+        if (url == null) {
+            return null
+        }
+
+        return SubmissionMedia(url = url, type = type, width = width, height = height)
     }
 }
