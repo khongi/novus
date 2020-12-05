@@ -2,21 +2,18 @@ package com.thiosin.novus.ui.common
 
 import android.net.Uri
 import android.view.ViewGroup
-import androidx.compose.foundation.ClickableText
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.res.loadVectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.ui.tooling.preview.Preview
@@ -28,6 +25,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.SubmissionMedia
 import com.thiosin.novus.domain.model.SubmissionMediaType
 import com.thiosin.novus.domain.model.SubmissionPreview
@@ -48,7 +46,7 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String
                 if (submission.media != null
                     && submission.media.type == SubmissionMediaType.Thumbnail
                 ) {
-                    Image(
+                    RemoteImage(
                         url = submission.media.url,
                         modifier = Modifier.size(100.dp).padding(8.dp)
                             .clip(MaterialTheme.shapes.medium),
@@ -59,14 +57,34 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String
                     Text(text = submission.title,
                         style = MaterialTheme.typography.h6,
                         modifier = Modifier.padding(4.dp))
+
                     if (submission.media != null) {
-                        // TODO remove - for debug purposes
-                        ClickableText(
-                            text = AnnotatedString("${submission.media.type} ${submission.media.url} ${submission.media.width} ${submission.media.height}"),
-                            onClick = { onLinkClicked(submission.link) },
-                            style = MaterialTheme.typography.subtitle2,
-                        )
                         Media(submission.media)
+                    }
+                    Row(modifier = Modifier.padding(horizontal = 4.dp)
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "16.4k",
+                            style = MaterialTheme.typography.caption,
+                            modifier = Modifier.padding(4.dp))
+
+                        loadVectorResource(id = R.drawable.ic_outline_mode_comment_24).resource.resource?.let {
+                            IconButton(onClick = { /* TODO */ }) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(asset = it)
+                                    Text(text = "79",
+                                        style = MaterialTheme.typography.caption,
+                                        modifier = Modifier.padding(start = 4.dp))
+                                }
+                            }
+                        }
+
+                        loadVectorResource(id = R.drawable.ic_outline_link_24).resource.resource?.let {
+                            IconButton(onClick = { onLinkClicked(submission.link) }) {
+                                Icon(asset = it)
+                            }
+                        }
                     }
                 }
             }
@@ -78,14 +96,14 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String
 private fun Media(media: SubmissionMedia) {
     when (media.type) {
         SubmissionMediaType.Image -> {
-            Image(
+            RemoteImage(
                 url = media.url,
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillWidth
             )
         }
         SubmissionMediaType.Video -> {
-            Video(media.url,
+            RemoteVideo(media.url,
                 media.height,
                 media.width)
         }
@@ -115,7 +133,7 @@ private fun SubtitleRow(submission: SubmissionPreview) {
 }
 
 @Composable
-fun Image(url: String, modifier: Modifier, contentScale: ContentScale) {
+fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
     CoilImage(
         data = url,
         fadeIn = true,
@@ -135,7 +153,7 @@ fun Image(url: String, modifier: Modifier, contentScale: ContentScale) {
 }
 
 @Composable
-fun Video(sourceUrl: String, mediaHeightPx: Int, mediaWidthPx: Int) {
+fun RemoteVideo(sourceUrl: String, mediaHeightPx: Int, mediaWidthPx: Int) {
     // This is the official way to access current context from Composable functions
     val context = ContextAmbient.current
     val screenWidthPx = remember { context.resources.displayMetrics.widthPixels }
