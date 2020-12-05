@@ -89,6 +89,10 @@ class SubredditPager constructor(
                     else -> null
                 }
             }
+            PostHint.HostedVideo -> {
+                // Remove end of URL until .mp4
+                submission.media?.redditVideo?.fallbackURL?.dropLastWhile { it.isDigit().not() }
+            }
             else -> null
         }
     }
