@@ -13,11 +13,17 @@ import javax.inject.Inject
 
 class HomePresenter @Inject constructor(
     private val subredditInteractor: SubredditInteractor,
-    private val pagingConfig: PagingConfig
+    private val pagingConfig: PagingConfig,
 ) {
 
-    suspend fun getRedditAll(): Flow<PagingData<SubmissionPreview>> = withIOContext {
-        val lister = subredditInteractor.getSubmissionsLister("all", sort = SubmissionSort.Hot)
+    suspend fun getSubreddit(
+        subreddit: String,
+        sort: SubmissionSort,
+    ): Flow<PagingData<SubmissionPreview>> = withIOContext {
+        val lister = subredditInteractor.getSubmissionsLister(
+            subreddit = subreddit,
+            sort = sort
+        )
 
         Pager(pagingConfig) { SubredditPager(lister) }.flow
     }

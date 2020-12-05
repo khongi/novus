@@ -6,18 +6,21 @@ import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.data.network.model.Child
 import com.thiosin.novus.data.network.model.ChildData
 import com.thiosin.novus.data.network.model.ListingResponse
+import com.thiosin.novus.data.network.model.PostHint
 import com.thiosin.novus.domain.interactor.SubmissionsLister
+import com.thiosin.novus.domain.model.SubmissionMedia
+import com.thiosin.novus.domain.model.SubmissionMediaType
 import com.thiosin.novus.domain.model.SubmissionPreview
 import timber.log.Timber
 
 class SubredditPager constructor(
-    private val submissionsLister: SubmissionsLister
+    private val submissionsLister: SubmissionsLister,
 ) : PagingSource<String, SubmissionPreview>() {
 
     private var loaded = 0
 
     override suspend fun load(
-        params: LoadParams<String>
+        params: LoadParams<String>,
     ): LoadResult<String, SubmissionPreview> = withIOContext {
         try {
             val nextKey = params.key ?: ""
@@ -51,48 +54,62 @@ class SubredditPager constructor(
                     title = it.title,
                     subreddit = it.subreddit,
                     author = it.author,
-                    relativeTime = DateUtils.getRelativeTimeSpanString(
-                        System.currentTimeMillis(),
-                        it.created * 1_000L,
-                        DateUtils.SECOND_IN_MILLIS
-                    ).toString(),
-                    imageUrl = getImageUrl(it),
-                    videoUrl = getVideoUrl(it),
-                    mediaWidth = getMediaWidth(it),
-                    mediaHeight = getMediaHeight(it)
+                    link = it.url,
+                    comments = it.numComments.toInt(),
+                    votes = it.ups.toVoteFormat(),
+                    relativeTime = getRelativeTime(it),
+                    media = getSubmissionMedia(it),
                 )
             }
         }
     }
 
-    private fun getMediaWidth(it: ChildData): Int? {
-        return it.preview?.images?.get(0)?.source?.width?.toInt()
-    }
-
-    private fun getMediaHeight(it: ChildData): Int? {
-        return it.preview?.images?.get(0)?.source?.height?.toInt()
-    }
-
-    private fun getImageUrl(submission: ChildData): String? {
-        Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
-        return when (submission.postHint) {
-            "image" -> submission.url
-            "link" -> null
-            else -> null
+    private fun Long.toVoteFormat(): String {
+        if (this < 1000) {
+            return this.toString()
         }
+        val k = this / 1000.0
+        return "%.${1}fk".format(k)
     }
 
-    private fun getVideoUrl(submission: ChildData): String? {
-        return when (submission.postHint) {
-            "link" -> {
+    private fun getRelativeTime(it: ChildData): String {
+        return DateUtils.getRelativeTimeSpanString(
+            System.currentTimeMillis(),
+            it.created * 1_000L,
+            DateUtils.SECOND_IN_MILLIS
+        ).toString()
+    }
+
+    private fun getSubmissionMedia(submission: ChildData): SubmissionMedia? {
+        Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
+
+        var url: String? = null
+        var type = SubmissionMediaType.Thumbnail
+        when (submission.postHint) {
+            PostHint.Link -> {
                 when {
                     submission.domain == "i.imgur.com" && submission.url.contains(".gifv") -> {
-                        submission.url.replace(".gifv", ".mp4")
+                        url = submission.url.replace(".gifv", ".mp4")
+                        type = SubmissionMediaType.Video
                     }
-                    else -> null
+                    submission.thumbnail != null && submission.thumbnail.startsWith("http") -> {
+                        url = submission.thumbnail
+                        type = SubmissionMediaType.Thumbnail
+                    }
                 }
             }
-            else -> null
+            PostHint.Image -> {
+                url = submission.url
+                type = SubmissionMediaType.Image
+            }
+            PostHint.HostedVideo -> {
+                // Remove end of URL until .mp4
+                url = submission.media?.redditVideo?.fallbackURL?.dropLastWhile { !it.isDigit() }
+                type = SubmissionMediaType.Video
+            }
+            else -> Unit
         }
+
+        return url?.let { SubmissionMedia(url = it, type = type) }
     }
 }

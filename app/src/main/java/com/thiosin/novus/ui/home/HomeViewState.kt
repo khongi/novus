@@ -8,8 +8,7 @@ sealed class HomeViewState
 
 object HomeInitial : HomeViewState()
 
-data class HomeContent(
-    val listFlow: Flow<PagingData<SubmissionPreview>>,
-    val title: String,
-    val showLoading: Boolean = false
+data class HomeReady(
+    val listState: Flow<PagingData<SubmissionPreview>>,
+    val subreddit: String,
 ) : HomeViewState()

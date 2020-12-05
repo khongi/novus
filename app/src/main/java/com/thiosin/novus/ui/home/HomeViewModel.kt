@@ -1,17 +1,27 @@
 package com.thiosin.novus.ui.home
 
 import androidx.hilt.lifecycle.ViewModelInject
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
+import com.thiosin.novus.domain.model.SubmissionSort
 
 class HomeViewModel @ViewModelInject constructor(
-    private val homePresenter: HomePresenter
+    private val homePresenter: HomePresenter,
 ) : RainbowCakeViewModel<HomeViewState>(HomeInitial) {
 
-    fun load() = execute {
-        viewState = HomeContent(
-            listFlow = homePresenter.getRedditAll(),
-            title = "All", // TODO get title
-            showLoading = false
+    fun load(subreddit: String) = execute {
+        viewState = HomeReady(
+            listState = homePresenter.getSubreddit(
+                subreddit = subreddit,
+                sort = SubmissionSort.Hot
+            ),
+            subreddit = subreddit,
         )
     }
+
+    fun showLink(url: String) = execute {
+        postEvent(ShowLinkEvent(url))
+    }
+
+    data class ShowLinkEvent(val url: String) : OneShotEvent
 }
