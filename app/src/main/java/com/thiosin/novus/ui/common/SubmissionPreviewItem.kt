@@ -4,6 +4,8 @@ import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.ClickableText
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -35,24 +37,37 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String) -> Unit) {
     requireNotNull(submission)
 
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth()) {
-        SubtitleRow(submission)
-        Row(modifier = Modifier.fillMaxWidth()) {
-            if (submission.media != null
-                && submission.media.type == SubmissionMediaType.Thumbnail
-            ) {
-                Thumbnail(submission.media)
-            }
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Title(submission.title)
-                if (submission.media != null) {
-                    // TODO remove - for debug purposes
-                    ClickableText(
-                        text = AnnotatedString("${submission.media.type} ${submission.media.url} ${submission.media.width} ${submission.media.height}"),
-                        onClick = { onLinkClicked(submission.link) },
-                        style = MaterialTheme.typography.subtitle2,
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).fillMaxWidth(),
+        elevation = 16.dp
+    ) {
+        Column(modifier = Modifier.padding(top = 4.dp)) {
+            SubtitleRow(submission)
+            Row(modifier = Modifier.fillMaxWidth()) {
+                if (submission.media != null
+                    && submission.media.type == SubmissionMediaType.Thumbnail
+                ) {
+                    Image(
+                        url = submission.media.url,
+                        modifier = Modifier.size(100.dp).padding(8.dp)
+                            .clip(MaterialTheme.shapes.medium),
+                        contentScale = ContentScale.Crop
                     )
-                    Media(submission.media)
+                }
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(text = submission.title,
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(4.dp))
+                    if (submission.media != null) {
+                        // TODO remove - for debug purposes
+                        ClickableText(
+                            text = AnnotatedString("${submission.media.type} ${submission.media.url} ${submission.media.width} ${submission.media.height}"),
+                            onClick = { onLinkClicked(submission.link) },
+                            style = MaterialTheme.typography.subtitle2,
+                        )
+                        Media(submission.media)
+                    }
                 }
             }
         }
@@ -65,8 +80,7 @@ private fun Media(media: SubmissionMedia) {
         SubmissionMediaType.Image -> {
             Image(
                 url = media.url,
-                modifier = Modifier.fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium),
+                modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillWidth
             )
         }
@@ -80,25 +94,8 @@ private fun Media(media: SubmissionMedia) {
 }
 
 @Composable
-private fun Title(title: String) {
-    Text(text = title,
-        style = MaterialTheme.typography.h6,
-        modifier = Modifier.padding(bottom = 8.dp))
-}
-
-@Composable
-private fun Thumbnail(media: SubmissionMedia) {
-    Image(
-        url = media.url,
-        modifier = Modifier.size(100.dp).padding(top = 8.dp, end = 8.dp)
-            .clip(MaterialTheme.shapes.medium),
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
 private fun SubtitleRow(submission: SubmissionPreview) {
-    Row {
+    Row(modifier = Modifier.padding(horizontal = 4.dp)) {
         Text(
             text = submission.subreddit,
             color = MaterialTheme.colors.primary,
