@@ -21,6 +21,7 @@ import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -109,9 +110,7 @@ private fun Media(media: SubmissionMedia) {
             )
         }
         SubmissionMediaType.Video -> {
-            RemoteVideo(media.url,
-                media.height,
-                media.width)
+            RemoteVideo(media.url)
         }
         else -> Unit
     }
@@ -138,10 +137,9 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
 }
 
 @Composable
-fun RemoteVideo(sourceUrl: String, mediaHeightPx: Int, mediaWidthPx: Int) {
+fun RemoteVideo(sourceUrl: String) {
     // This is the official way to access current context from Composable functions
     val context = ContextAmbient.current
-    val screenWidthPx = remember { context.resources.displayMetrics.widthPixels }
 
     // Do not recreate the player everytime this Composable commits
     val exoPlayer = remember {
@@ -169,19 +167,15 @@ fun RemoteVideo(sourceUrl: String, mediaHeightPx: Int, mediaWidthPx: Int) {
         PlayerView(context).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                getCalculatedMediaHeight(screenWidthPx, mediaWidthPx, mediaHeightPx),
+                ViewGroup.LayoutParams.WRAP_CONTENT,
             )
+            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
             useController = true
             controllerAutoShow = false
             player = exoPlayer
             exoPlayer.playWhenReady = true
         }
     })
-}
-
-private fun getCalculatedMediaHeight(displayWidth: Int, width: Int, height: Int): Int {
-    val ratio = displayWidth / width.toFloat()
-    return (ratio * height).toInt()
 }
 
 @Composable

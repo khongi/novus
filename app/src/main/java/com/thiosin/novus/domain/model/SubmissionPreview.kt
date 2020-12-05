@@ -14,8 +14,6 @@ data class SubmissionPreview(
 data class SubmissionMedia(
     val url: String,
     val type: SubmissionMediaType,
-    val width: Int,
-    val height: Int,
 )
 
 enum class SubmissionMediaType {

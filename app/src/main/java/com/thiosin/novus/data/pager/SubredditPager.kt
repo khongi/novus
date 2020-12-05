@@ -104,27 +104,12 @@ class SubredditPager constructor(
             }
             PostHint.HostedVideo -> {
                 // Remove end of URL until .mp4
-                url =
-                    submission.media?.redditVideo?.fallbackURL?.dropLastWhile { it.isDigit().not() }
+                url = submission.media?.redditVideo?.fallbackURL?.dropLastWhile { !it.isDigit() }
                 type = SubmissionMediaType.Video
             }
-            PostHint.RichVideo -> {
-
-            }
-            null -> {
-
-            }
+            else -> Unit
         }
 
-        val width = submission.thumbnailWidth?.toInt()
-            ?: submission.preview?.images?.get(0)?.source?.width?.toInt() ?: 0
-        val height = submission.thumbnailHeight?.toInt()
-            ?: submission.preview?.images?.get(0)?.source?.height?.toInt() ?: 0
-
-        if (url == null) {
-            return null
-        }
-
-        return SubmissionMedia(url = url, type = type, width = width, height = height)
+        return url?.let { SubmissionMedia(url = it, type = type) }
     }
 }
