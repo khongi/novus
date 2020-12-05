@@ -19,6 +19,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.ui.tooling.preview.Preview
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
@@ -173,6 +174,7 @@ fun RemoteVideo(sourceUrl: String) {
             useController = true
             controllerAutoShow = false
             player = exoPlayer
+            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
             exoPlayer.playWhenReady = true
         }
     })
