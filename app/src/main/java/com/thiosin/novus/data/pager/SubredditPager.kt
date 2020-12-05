@@ -55,11 +55,21 @@ class SubredditPager constructor(
                     subreddit = it.subreddit,
                     author = it.author,
                     link = it.url,
+                    comments = it.numComments.toInt(),
+                    votes = it.ups.toVoteFormat(),
                     relativeTime = getRelativeTime(it),
                     media = getSubmissionMedia(it),
                 )
             }
         }
+    }
+
+    private fun Long.toVoteFormat(): String {
+        if (this < 1000) {
+            return this.toString()
+        }
+        val k = this / 1000.0
+        return "%.${1}fk".format(k)
     }
 
     private fun getRelativeTime(it: ChildData): String {

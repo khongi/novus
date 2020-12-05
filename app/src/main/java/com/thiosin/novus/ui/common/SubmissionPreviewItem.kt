@@ -41,54 +41,60 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String
         elevation = 16.dp
     ) {
         Column(modifier = Modifier.padding(top = 4.dp)) {
-            SubtitleRow(submission)
-            Row(modifier = Modifier.fillMaxWidth()) {
-                if (submission.media != null
-                    && submission.media.type == SubmissionMediaType.Thumbnail
-                ) {
-                    RemoteImage(
-                        url = submission.media.url,
-                        modifier = Modifier.size(100.dp).padding(8.dp)
-                            .clip(MaterialTheme.shapes.medium),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = submission.title,
-                        style = MaterialTheme.typography.h6,
-                        modifier = Modifier.padding(4.dp))
-
-                    if (submission.media != null) {
-                        Media(submission.media)
-                    }
-                    Row(modifier = Modifier.padding(horizontal = 4.dp)
-                        .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "16.4k",
-                            style = MaterialTheme.typography.caption,
-                            modifier = Modifier.padding(4.dp))
-
-                        loadVectorResource(id = R.drawable.ic_outline_mode_comment_24).resource.resource?.let {
-                            IconButton(onClick = { /* TODO */ }) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(asset = it)
-                                    Text(text = "79",
-                                        style = MaterialTheme.typography.caption,
-                                        modifier = Modifier.padding(start = 4.dp))
-                                }
-                            }
-                        }
-
-                        loadVectorResource(id = R.drawable.ic_outline_link_24).resource.resource?.let {
-                            IconButton(onClick = { onLinkClicked(submission.link) }) {
-                                Icon(asset = it)
-                            }
-                        }
-                    }
-                }
-            }
+            InfoRow(submission)
+            TitleRow(submission)
+            MediaRow(submission)
+            ButtonRow(submission, onLinkClicked)
         }
+    }
+}
+
+@Composable
+private fun InfoRow(submission: SubmissionPreview) {
+    Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+        Text(
+            text = submission.subreddit,
+            color = MaterialTheme.colors.secondary,
+            style = MaterialTheme.typography.subtitle2,
+        )
+        Text(
+            text = submission.author,
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.subtitle2,
+        )
+        Text(
+            text = submission.relativeTime,
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.subtitle2,
+        )
+    }
+}
+
+@Composable
+private fun TitleRow(
+    submission: SubmissionPreview,
+) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        if (submission.media != null && submission.media.type == SubmissionMediaType.Thumbnail
+        ) {
+            RemoteImage(
+                url = submission.media.url,
+                modifier = Modifier.size(100.dp).padding(8.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
+            )
+        }
+        Text(text = submission.title,
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+
+    }
+}
+
+@Composable
+private fun MediaRow(submission: SubmissionPreview) {
+    if (submission.media != null && submission.media.type != SubmissionMediaType.Thumbnail) {
+        Media(submission.media)
     }
 }
 
@@ -108,27 +114,6 @@ private fun Media(media: SubmissionMedia) {
                 media.width)
         }
         else -> Unit
-    }
-}
-
-@Composable
-private fun SubtitleRow(submission: SubmissionPreview) {
-    Row(modifier = Modifier.padding(horizontal = 4.dp)) {
-        Text(
-            text = submission.subreddit,
-            color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.subtitle2,
-        )
-        Text(
-            text = submission.author,
-            modifier = Modifier.padding(start = 8.dp),
-            style = MaterialTheme.typography.subtitle2,
-        )
-        Text(
-            text = submission.relativeTime,
-            modifier = Modifier.padding(start = 8.dp),
-            style = MaterialTheme.typography.subtitle2,
-        )
     }
 }
 
@@ -199,6 +184,36 @@ private fun getCalculatedMediaHeight(displayWidth: Int, width: Int, height: Int)
     return (ratio * height).toInt()
 }
 
+@Composable
+private fun ButtonRow(
+    submission: SubmissionPreview,
+    onLinkClicked: (String) -> Unit,
+) {
+    Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically) {
+        Text(text = submission.votes,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(4.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            loadVectorResource(id = R.drawable.ic_outline_mode_comment_24).resource.resource?.let {
+                IconButton(onClick = { /* TODO */ }) {
+                    Icon(asset = it)
+                }
+            }
+            Text(text = "${submission.comments}",
+                style = MaterialTheme.typography.caption)
+        }
+
+        loadVectorResource(id = R.drawable.ic_outline_link_24).resource.resource?.let {
+            IconButton(onClick = { onLinkClicked(submission.link) }) {
+                Icon(asset = it)
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -207,6 +222,8 @@ fun DefaultPreview() {
         author = "thiosin",
         subreddit = "linux",
         relativeTime = "6h",
+        votes = "64.1k",
+        comments = 123,
         link = ""
     )
     SubmissionPreviewItem(submission = submission, onLinkClicked = {})

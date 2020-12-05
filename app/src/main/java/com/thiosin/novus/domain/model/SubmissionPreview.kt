@@ -6,6 +6,8 @@ data class SubmissionPreview(
     val author: String,
     val relativeTime: String,
     val link: String,
+    val votes: String,
+    val comments: Int,
     val media: SubmissionMedia? = null,
 )
 
