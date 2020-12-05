@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.thiosin.novus.domain.model.SubmissionMedia
 import com.thiosin.novus.domain.model.SubmissionMediaType
 import com.thiosin.novus.domain.model.SubmissionPreview
 import dev.chrisbanes.accompanist.coil.CoilImage
@@ -33,38 +34,15 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
     requireNotNull(submission)
 
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth()) {
-        Row {
-            Text(
-                text = submission.subreddit,
-                color = MaterialTheme.colors.primary,
-                style = MaterialTheme.typography.subtitle2,
-            )
-            Text(
-                text = submission.author,
-                modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.subtitle2,
-            )
-            Text(
-                text = submission.relativeTime,
-                modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.subtitle2,
-            )
-        }
+        SubtitleRow(submission)
         Row(modifier = Modifier.fillMaxWidth()) {
             if (submission.media != null
                 && submission.media.type == SubmissionMediaType.Thumbnail
             ) {
-                Image(
-                    url = submission.media.url,
-                    modifier = Modifier.size(100.dp).padding(top = 8.dp, end = 8.dp)
-                        .clip(MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Crop
-                )
+                Thumbnail(submission.media)
             }
             Column(modifier = Modifier.fillMaxWidth()) {
-                Text(text = submission.title,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(bottom = 8.dp))
+                Title(submission)
                 if (submission.media != null) {
                     // TODO remove - for debug purposes
                     Text(
@@ -72,25 +50,68 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                         color = MaterialTheme.colors.error,
                         style = MaterialTheme.typography.subtitle2,
                     )
-                    when (submission.media.type) {
-                        SubmissionMediaType.Image -> {
-                            Image(
-                                url = submission.media.url,
-                                modifier = Modifier.fillMaxWidth()
-                                    .clip(MaterialTheme.shapes.medium),
-                                contentScale = ContentScale.FillWidth
-                            )
-                        }
-                        SubmissionMediaType.Video -> {
-                            Video(submission.media.url,
-                                submission.media.height,
-                                submission.media.width)
-                        }
-                        else -> Unit
-                    }
+                    Media(submission.media)
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun Media(media: SubmissionMedia) {
+    when (media.type) {
+        SubmissionMediaType.Image -> {
+            Image(
+                url = media.url,
+                modifier = Modifier.fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.FillWidth
+            )
+        }
+        SubmissionMediaType.Video -> {
+            Video(media.url,
+                media.height,
+                media.width)
+        }
+        else -> Unit
+    }
+}
+
+@Composable
+private fun Title(submission: SubmissionPreview) {
+    Text(text = submission.title,
+        style = MaterialTheme.typography.h6,
+        modifier = Modifier.padding(bottom = 8.dp))
+}
+
+@Composable
+private fun Thumbnail(media: SubmissionMedia) {
+    Image(
+        url = media.url,
+        modifier = Modifier.size(100.dp).padding(top = 8.dp, end = 8.dp)
+            .clip(MaterialTheme.shapes.medium),
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
+private fun SubtitleRow(submission: SubmissionPreview) {
+    Row {
+        Text(
+            text = submission.subreddit,
+            color = MaterialTheme.colors.primary,
+            style = MaterialTheme.typography.subtitle2,
+        )
+        Text(
+            text = submission.author,
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.subtitle2,
+        )
+        Text(
+            text = submission.relativeTime,
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.subtitle2,
+        )
     }
 }
 
