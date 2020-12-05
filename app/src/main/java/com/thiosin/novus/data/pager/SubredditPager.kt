@@ -6,6 +6,7 @@ import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.data.network.model.Child
 import com.thiosin.novus.data.network.model.ChildData
 import com.thiosin.novus.data.network.model.ListingResponse
+import com.thiosin.novus.data.network.model.PostHint
 import com.thiosin.novus.domain.interactor.SubmissionsLister
 import com.thiosin.novus.domain.model.SubmissionPreview
 import timber.log.Timber
@@ -51,11 +52,7 @@ class SubredditPager constructor(
                     title = it.title,
                     subreddit = it.subreddit,
                     author = it.author,
-                    relativeTime = DateUtils.getRelativeTimeSpanString(
-                        System.currentTimeMillis(),
-                        it.created * 1_000L,
-                        DateUtils.SECOND_IN_MILLIS
-                    ).toString(),
+                    relativeTime = getRelativeTime(it),
                     imageUrl = getImageUrl(it),
                     videoUrl = getVideoUrl(it),
                     mediaWidth = getMediaWidth(it),
@@ -65,26 +62,26 @@ class SubredditPager constructor(
         }
     }
 
-    private fun getMediaWidth(it: ChildData): Int? {
-        return it.preview?.images?.get(0)?.source?.width?.toInt()
-    }
-
-    private fun getMediaHeight(it: ChildData): Int? {
-        return it.preview?.images?.get(0)?.source?.height?.toInt()
+    private fun getRelativeTime(it: ChildData): String {
+        return DateUtils.getRelativeTimeSpanString(
+            System.currentTimeMillis(),
+            it.created * 1_000L,
+            DateUtils.SECOND_IN_MILLIS
+        ).toString()
     }
 
     private fun getImageUrl(submission: ChildData): String? {
         Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
         return when (submission.postHint) {
-            "image" -> submission.url
-            "link" -> null
+            PostHint.Image -> submission.url
+            PostHint.Link -> null
             else -> null
         }
     }
 
     private fun getVideoUrl(submission: ChildData): String? {
         return when (submission.postHint) {
-            "link" -> {
+            PostHint.Link -> {
                 when {
                     submission.domain == "i.imgur.com" && submission.url.contains(".gifv") -> {
                         submission.url.replace(".gifv", ".mp4")
@@ -94,5 +91,13 @@ class SubredditPager constructor(
             }
             else -> null
         }
+    }
+
+    private fun getMediaWidth(it: ChildData): Int? {
+        return it.preview?.images?.get(0)?.source?.width?.toInt()
+    }
+
+    private fun getMediaHeight(it: ChildData): Int? {
+        return it.preview?.images?.get(0)?.source?.height?.toInt()
     }
 }

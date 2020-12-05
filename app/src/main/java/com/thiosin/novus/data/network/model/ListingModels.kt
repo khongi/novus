@@ -141,7 +141,7 @@ data class ChildData(
     val gildings: Gildings,
 
     @Json(name = "post_hint")
-    val postHint: String? = null,
+    val postHint: PostHint? = null,
 
     @Json(name = "content_categories")
     val contentCategories: List<String>? = null,
@@ -304,7 +304,7 @@ data class ChildData(
     val isVideo: Boolean,
 
     @Json(name = "link_flair_template_id")
-    val linkFlairTemplateID: String? = null
+    val linkFlairTemplateID: String? = null,
 )
 
 @JsonClass(generateAdapter = true)
@@ -603,4 +603,15 @@ enum class SubredditType {
 
 enum class Kind {
     t3,
+}
+
+enum class PostHint {
+    @Json(name = "link")
+    Link,
+    @Json(name = "image")
+    Image,
+    @Json(name = "hosted:video")
+    HostedVideo,
+    @Json(name = "rich:video")
+    RichVideo,
 }
