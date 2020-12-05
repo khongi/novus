@@ -10,7 +10,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 fun WebContent(url: String) {
     val context = ContextAmbient.current
     val browser = remember {
-        WebView(context)
+        WebView(context).apply {
+            settings.loadWithOverviewMode = true
+            settings.useWideViewPort = true
+        }
     }
 
     browser.loadUrl(url)
