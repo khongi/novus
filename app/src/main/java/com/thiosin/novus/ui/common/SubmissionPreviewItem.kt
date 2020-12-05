@@ -3,7 +3,6 @@ package com.thiosin.novus.ui.common
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -65,7 +64,6 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
         if (submission.videoUrl != null) {
             Video(submission.videoUrl, submission.mediaHeight!!, submission.mediaWidth!!)
         }
-        Divider(thickness = 1.dp, modifier = Modifier.padding(top = 8.dp))
     }
 }
 
