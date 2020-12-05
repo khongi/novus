@@ -19,6 +19,7 @@ android {
 
         buildConfigField("String","CLIENT_ID","\"04WMjFYDMJFljQ\"")
         buildConfigField("String","REDIRECT_URL","\"novus-app://auth/reddit-redirect\"")
+        buildConfigField("String","BASE_URL","\"https://oauth.reddit.com\"")
     }
 
     buildTypes {
@@ -102,6 +103,14 @@ dependencies {
 
     implementation(Dependencies.Accompanist.coil)
     implementation(Dependencies.Coil.gif)
+    implementation("com.google.android.exoplayer:exoplayer:2.11.7")
+
+    implementation(Dependencies.Network.okHttp)
+    implementation(Dependencies.Network.okHttpLoggingInterceptor)
+    implementation(Dependencies.Network.retrofit)
+    implementation(Dependencies.Network.retrofitMoshiConverter)
+    implementation(Dependencies.Network.moshi)
+    kapt(Dependencies.Network.moshiCodegen)
 
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)

@@ -1,35 +1,98 @@
 package com.thiosin.novus.data.pager
 
+import android.text.format.DateUtils
 import androidx.paging.PagingSource
 import co.zsmb.rainbowcake.withIOContext
-import com.kirkbushman.araw.fetcher.SubmissionsFetcher
+import com.thiosin.novus.data.network.model.Child
+import com.thiosin.novus.data.network.model.ChildData
+import com.thiosin.novus.data.network.model.ListingResponse
+import com.thiosin.novus.domain.interactor.SubmissionsLister
 import com.thiosin.novus.domain.model.SubmissionPreview
-import com.thiosin.novus.domain.model.toSubmissionPreview
+import timber.log.Timber
 
 class SubredditPager constructor(
-    private val submissionsFetcher: SubmissionsFetcher
-) : PagingSource<Int, SubmissionPreview>() {
+    private val submissionsLister: SubmissionsLister
+) : PagingSource<String, SubmissionPreview>() {
+
+    private var loaded = 0
 
     override suspend fun load(
-        params: LoadParams<Int>
-    ): LoadResult<Int, SubmissionPreview> = withIOContext {
+        params: LoadParams<String>
+    ): LoadResult<String, SubmissionPreview> = withIOContext {
         try {
-            val nextPage = submissionsFetcher.getPageNum() + 1
-            val prevPage = if (nextPage == 1) {
-                null
-            } else {
-                nextPage - 1
-            }
+            val nextKey = params.key ?: ""
 
-            val response = submissionsFetcher.fetchNext().map { it.toSubmissionPreview() }
+            val response = submissionsLister.getPage(count = loaded, after = nextKey, limit = 25)
+                ?: throw IllegalStateException("Could not fetch page ${params.key} ${params.loadSize}")
+
+            val result = response.toLoadResultData()
+
+            loaded += response.data.children.size
 
             LoadResult.Page(
-                data = response,
-                prevKey = prevPage,
-                nextKey = nextPage
+                data = result,
+                prevKey = null,
+                nextKey = getNextKey(response.data.children.last())
             )
         } catch (t: Throwable) {
             LoadResult.Error(t)
+        }
+    }
+
+    private fun getNextKey(item: Child): String {
+        return "${item.kind.name}_${item.data.id}"
+    }
+
+    private fun ListingResponse.toLoadResultData(): List<SubmissionPreview> {
+        val children = this.data.children
+        return children.map { child ->
+            child.data.let {
+                SubmissionPreview(
+                    title = it.title,
+                    subreddit = it.subreddit,
+                    author = it.author,
+                    relativeTime = DateUtils.getRelativeTimeSpanString(
+                        System.currentTimeMillis(),
+                        it.created * 1_000L,
+                        DateUtils.SECOND_IN_MILLIS
+                    ).toString(),
+                    imageUrl = getImageUrl(it),
+                    videoUrl = getVideoUrl(it),
+                    mediaWidth = getMediaWidth(it),
+                    mediaHeight = getMediaHeight(it)
+                )
+            }
+        }
+    }
+
+    private fun getMediaWidth(it: ChildData): Int? {
+        return it.preview?.images?.get(0)?.source?.width?.toInt()
+    }
+
+    private fun getMediaHeight(it: ChildData): Int? {
+        return it.preview?.images?.get(0)?.source?.height?.toInt()
+    }
+
+    private fun getImageUrl(submission: ChildData): String? {
+        Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
+        return when (submission.postHint) {
+            "image" -> submission.url
+            "link" -> null
+            else -> null
+        }
+    }
+
+    private fun getVideoUrl(submission: ChildData): String? {
+        return when (submission.postHint) {
+            "link" -> {
+                when {
+                    submission.domain == "i.imgur.com" && submission.url.contains(".gifv") -> {
+                        submission.url.replace(".gifv", ".mp4")
+                    }
+                    else -> null
+                }
+            }
+            else -> null
         }
     }
 }

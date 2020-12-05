@@ -2,7 +2,7 @@ package com.thiosin.novus
 
 import android.os.Bundle
 import co.zsmb.rainbowcake.navigation.SimpleNavActivity
-import com.thiosin.novus.ui.login.LoginFragment
+import com.thiosin.novus.ui.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -11,7 +11,7 @@ class MainActivity : SimpleNavActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            navigator.add(LoginFragment())
+            navigator.add(HomeFragment())
         }
     }
 }
