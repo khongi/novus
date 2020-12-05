@@ -15,7 +15,6 @@ class HomeViewModel @ViewModelInject constructor(
                 sort = SubmissionSort.Hot
             ),
             subreddit = subreddit,
-            showLoading = false
         )
     }
 }

@@ -38,7 +38,6 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 when (viewState) {
                     is HomeInitial -> Unit
                     is HomeReady -> HomeContent(
-                        showLoading = viewState.showLoading,
                         listState = viewState.listState,
                         subreddit = viewState.subreddit
                     )

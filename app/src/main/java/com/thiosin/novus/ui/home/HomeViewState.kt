@@ -11,5 +11,4 @@ object HomeInitial : HomeViewState()
 data class HomeReady(
     val listState: Flow<PagingData<SubmissionPreview>>,
     val subreddit: String,
-    val showLoading: Boolean = false,
 ) : HomeViewState()
