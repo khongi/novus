@@ -54,6 +54,7 @@ class SubredditPager constructor(
                     title = it.title,
                     subreddit = it.subreddit,
                     author = it.author,
+                    link = it.url,
                     relativeTime = getRelativeTime(it),
                     media = getSubmissionMedia(it),
                 )

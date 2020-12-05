@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 fun HomeContent(
     subreddit: String,
     listState: Flow<PagingData<SubmissionPreview>>,
+    onLinkClicked: (String) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -23,6 +24,7 @@ fun HomeContent(
             Surface(color = MaterialTheme.colors.background) {
                 SubmissionList(
                     listFlow = listState,
+                    onLinkClicked = onLinkClicked
                 )
             }
         }

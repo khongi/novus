@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
+import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.ui.home.HomeViewModel.ShowLinkEvent
 import com.thiosin.novus.ui.theme.NovusTheme
+import com.thiosin.novus.ui.web.WebFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,9 +43,20 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     is HomeInitial -> Unit
                     is HomeReady -> HomeContent(
                         listState = viewState.listState,
-                        subreddit = viewState.subreddit
+                        subreddit = viewState.subreddit,
+                        onLinkClicked = {
+                            viewModel.showLink(it)
+                        }
                     )
                 }
+            }
+        }
+    }
+
+    override fun onEvent(event: OneShotEvent) {
+        when (event) {
+            is ShowLinkEvent -> {
+                navigator?.add(WebFragment.newInstance(event.url))
             }
         }
     }

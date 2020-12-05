@@ -2,6 +2,7 @@ package com.thiosin.novus.ui.common
 
 import android.net.Uri
 import android.view.ViewGroup
+import androidx.compose.foundation.ClickableText
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.ui.tooling.preview.Preview
@@ -30,7 +32,7 @@ import com.thiosin.novus.domain.model.SubmissionPreview
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun SubmissionPreviewItem(submission: SubmissionPreview?) {
+fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String) -> Unit) {
     requireNotNull(submission)
 
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth()) {
@@ -45,9 +47,9 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                 Title(submission.title)
                 if (submission.media != null) {
                     // TODO remove - for debug purposes
-                    Text(
-                        text = "${submission.media.type} ${submission.media.url} ${submission.media.width} ${submission.media.height}",
-                        color = MaterialTheme.colors.error,
+                    ClickableText(
+                        text = AnnotatedString("${submission.media.type} ${submission.media.url} ${submission.media.width} ${submission.media.height}"),
+                        onClick = { onLinkClicked(submission.link) },
                         style = MaterialTheme.typography.subtitle2,
                     )
                     Media(submission.media)
@@ -190,6 +192,7 @@ fun DefaultPreview() {
         author = "thiosin",
         subreddit = "linux",
         relativeTime = "6h",
+        link = ""
     )
-    SubmissionPreviewItem(submission = submission)
+    SubmissionPreviewItem(submission = submission, onLinkClicked = {})
 }

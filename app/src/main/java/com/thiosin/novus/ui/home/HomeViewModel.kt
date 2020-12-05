@@ -1,6 +1,7 @@
 package com.thiosin.novus.ui.home
 
 import androidx.hilt.lifecycle.ViewModelInject
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import com.thiosin.novus.domain.model.SubmissionSort
 
@@ -17,4 +18,10 @@ class HomeViewModel @ViewModelInject constructor(
             subreddit = subreddit,
         )
     }
+
+    fun showLink(url: String) = execute {
+        postEvent(ShowLinkEvent(url))
+    }
+
+    data class ShowLinkEvent(val url: String) : OneShotEvent
 }
