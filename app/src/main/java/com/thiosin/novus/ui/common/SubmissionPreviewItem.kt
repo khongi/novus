@@ -42,7 +42,7 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                 Thumbnail(submission.media)
             }
             Column(modifier = Modifier.fillMaxWidth()) {
-                Title(submission)
+                Title(submission.title)
                 if (submission.media != null) {
                     // TODO remove - for debug purposes
                     Text(
@@ -78,8 +78,8 @@ private fun Media(media: SubmissionMedia) {
 }
 
 @Composable
-private fun Title(submission: SubmissionPreview) {
-    Text(text = submission.title,
+private fun Title(title: String) {
+    Text(text = title,
         style = MaterialTheme.typography.h6,
         modifier = Modifier.padding(bottom = 8.dp))
 }
