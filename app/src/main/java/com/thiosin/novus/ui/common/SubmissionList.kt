@@ -11,7 +11,7 @@ import com.thiosin.novus.domain.model.SubmissionPreview
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun SubredditView(listFlow: Flow<PagingData<SubmissionPreview>>) {
+fun SubmissionList(listFlow: Flow<PagingData<SubmissionPreview>>) {
     val listItems = listFlow.collectAsLazyPagingItems()
 
     LazyColumn {

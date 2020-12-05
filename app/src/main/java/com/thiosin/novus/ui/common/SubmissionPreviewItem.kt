@@ -50,45 +50,50 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?) {
                 style = MaterialTheme.typography.subtitle2,
             )
         }
+        // TODO remove - for debug purposes
         Text(
             text = "${submission.imageUrl} ${submission.videoUrl} ${submission.mediaWidth} ${submission.mediaHeight}",
             color = MaterialTheme.colors.error,
             style = MaterialTheme.typography.subtitle2,
         )
-        Text(text = submission.title, style = MaterialTheme.typography.h6)
+        Text(text = submission.title,
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(bottom = 8.dp))
         if (submission.imageUrl != null) {
-            Column {
-                Spacer(modifier = Modifier.preferredHeight(8.dp))
-                CoilImage(
-                    data = submission.imageUrl,
-                    fadeIn = true,
-                    contentScale = ContentScale.FillWidth,
-                    loading = {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            LinearProgressIndicator(Modifier.fillMaxWidth())
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium),
-                    imageLoader = ImageLoader.Builder(ContextAmbient.current)
-                        .componentRegistry {
-                            add(ImageDecoderDecoder())
-                        }
-                        .build()
-                )
-            }
+            Image(url = submission.imageUrl)
         }
         if (submission.videoUrl != null) {
-            VideoPlayer(submission.videoUrl, submission.mediaHeight!!, submission.mediaWidth!!)
+            Video(submission.videoUrl, submission.mediaHeight!!, submission.mediaWidth!!)
         }
         Divider(thickness = 1.dp, modifier = Modifier.padding(top = 8.dp))
     }
 }
 
 @Composable
-fun VideoPlayer(sourceUrl: String, mediaHeight: Int, mediaWidth: Int) {
+fun Image(url: String) {
+    CoilImage(
+        data = url,
+        fadeIn = true,
+        contentScale = ContentScale.FillWidth,
+        loading = {
+            Box(modifier = Modifier.fillMaxSize()) {
+                LinearProgressIndicator(Modifier.fillMaxWidth())
+            }
+        },
+        modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium),
+        imageLoader = ImageLoader.Builder(ContextAmbient.current)
+            .componentRegistry {
+                add(ImageDecoderDecoder())
+            }
+            .build()
+    )
+}
+
+@Composable
+fun Video(sourceUrl: String, mediaHeightPx: Int, mediaWidthPx: Int) {
     // This is the official way to access current context from Composable functions
     val context = ContextAmbient.current
-    val displayMetrics = context.resources.displayMetrics
+    val screenWidthPx = remember { context.resources.displayMetrics.widthPixels }
 
     // Do not recreate the player everytime this Composable commits
     val exoPlayer = remember {
@@ -116,10 +121,7 @@ fun VideoPlayer(sourceUrl: String, mediaHeight: Int, mediaWidth: Int) {
         PlayerView(context).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                getCalculatedMediaHeight(
-                    displayMetrics.widthPixels,
-                    mediaWidth,
-                    mediaHeight),
+                getCalculatedMediaHeight(screenWidthPx, mediaWidthPx, mediaHeightPx),
             )
             useController = true
             controllerAutoShow = false
@@ -129,7 +131,7 @@ fun VideoPlayer(sourceUrl: String, mediaHeight: Int, mediaWidth: Int) {
     })
 }
 
-fun getCalculatedMediaHeight(displayWidth: Int, width: Int, height: Int): Int {
+private fun getCalculatedMediaHeight(displayWidth: Int, width: Int, height: Int): Int {
     val ratio = displayWidth / width.toFloat()
     return (ratio * height).toInt()
 }

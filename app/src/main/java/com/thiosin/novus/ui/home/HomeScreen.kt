@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.PagingData
 import com.thiosin.novus.domain.model.SubmissionPreview
-import com.thiosin.novus.ui.common.SubredditView
+import com.thiosin.novus.ui.common.SubmissionList
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -21,7 +21,7 @@ fun HomeContent(
         },
         bodyContent = {
             Surface(color = MaterialTheme.colors.background) {
-                SubredditView(
+                SubmissionList(
                     listFlow = listState,
                 )
             }
