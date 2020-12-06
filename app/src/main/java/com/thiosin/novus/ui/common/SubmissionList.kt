@@ -19,7 +19,7 @@ fun SubmissionList(
     }
     val displayMetrics = ContextAmbient.current.resources.displayMetrics
     val displayWidth = remember { displayMetrics.widthPixels / displayMetrics.density }
-    LazyColumn() {
+    LazyColumn(state = listState) {
         items(submissions) { submission ->
             SubmissionPreviewItem(submission = submission, displayWidth, onLinkClick = onLinkClick)
         }
