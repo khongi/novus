@@ -1,14 +1,13 @@
 package com.thiosin.novus.domain.interactor
 
 import com.thiosin.novus.data.network.NetworkDataSource
-import com.thiosin.novus.data.network.NetworkModule
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.toSubreddit
 import javax.inject.Inject
 
 class SubredditInteractor @Inject constructor(
     private val networkDataSource: NetworkDataSource,
-    @NetworkModule.PageSize private val pageSize: Int,
 ) {
 
     fun getSubmissionsLister(
@@ -19,11 +18,22 @@ class SubredditInteractor @Inject constructor(
             subreddit = subreddit,
             sort = sort,
             networkDataSource = networkDataSource,
-            pageSize = pageSize
         )
     }
 
-    fun getSubreddits(): List<Subreddit> {
-        return networkDataSource.getUserlessSubreddits()
+    suspend fun getSubreddits(): List<Subreddit> {
+        val fetchedSubreddits = networkDataSource.getUserlessSubreddits()
+            ?.data?.children?.map { it.data.toSubreddit() }
+            ?: listOf()
+        val defaultSubreddits = getDefaultSubreddits()
+        return defaultSubreddits + fetchedSubreddits
+    }
+
+    private fun getDefaultSubreddits(): List<Subreddit> {
+        return listOf(
+            Subreddit("", "Frontpage", ""),
+            Subreddit("all", "All", ""),
+            Subreddit("popular", "Popular", ""),
+        )
     }
 }

@@ -8,7 +8,6 @@ class SubmissionsLister(
     private val subreddit: String,
     private val sort: SubmissionSort,
     private val networkDataSource: NetworkDataSource,
-    private val pageSize: Int,
 ) {
     suspend fun getPage(count: Int, after: String): SubmissionListingResponse? {
         return networkDataSource.getListing(
@@ -16,7 +15,6 @@ class SubmissionsLister(
             sort = sort.getApiValue(),
             count = count,
             after = after,
-            limit = pageSize
         )
     }
 }
