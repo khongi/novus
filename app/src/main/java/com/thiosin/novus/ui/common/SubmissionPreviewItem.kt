@@ -34,7 +34,7 @@ import com.thiosin.novus.domain.model.SubmissionPreview
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String) -> Unit) {
+fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClick: (String) -> Unit) {
     requireNotNull(submission)
 
     Card(
@@ -45,8 +45,8 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClicked: (String
         Column(modifier = Modifier.padding(top = 4.dp)) {
             InfoRow(submission)
             TitleRow(submission)
-            MediaRow(submission)
-            ButtonRow(submission, onLinkClicked)
+//            MediaRow(submission)
+            ButtonRow(submission, onLinkClick)
         }
     }
 }
@@ -214,6 +214,7 @@ private fun ButtonRow(
 @Composable
 fun DefaultPreview() {
     val submission = SubmissionPreview(
+        fullname = "t3_assdfio",
         title = "This is the title",
         author = "thiosin",
         subreddit = "linux",
@@ -222,5 +223,5 @@ fun DefaultPreview() {
         comments = 123,
         link = ""
     )
-    SubmissionPreviewItem(submission = submission, onLinkClicked = {})
+    SubmissionPreviewItem(submission = submission, onLinkClick = {})
 }

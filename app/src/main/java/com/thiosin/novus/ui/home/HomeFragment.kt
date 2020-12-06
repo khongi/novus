@@ -64,9 +64,10 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 when (viewState) {
                     is HomeReady -> {
                         SubmissionList(
-                            listFlow = viewState.listState,
+                            submissions = viewState.submissions,
                             listState = listState,
-                            onLinkClicked = { viewModel.showLink(it) },
+                            onLinkClick = { viewModel.showLink(it) },
+                            onListEnd = { viewModel.loadNextPage() }
                         )
                     }
                     else -> {
