@@ -3,6 +3,7 @@ package com.thiosin.novus.domain.interactor
 import com.thiosin.novus.data.network.NetworkDataSource
 import com.thiosin.novus.data.network.NetworkModule
 import com.thiosin.novus.domain.model.SubmissionSort
+import com.thiosin.novus.domain.model.Subreddit
 import javax.inject.Inject
 
 class SubredditInteractor @Inject constructor(
@@ -12,7 +13,7 @@ class SubredditInteractor @Inject constructor(
 
     fun getSubmissionsLister(
         subreddit: String,
-        sort: SubmissionSort = SubmissionSort.Hot
+        sort: SubmissionSort = SubmissionSort.Hot,
     ): SubmissionsLister {
         return SubmissionsLister(
             subreddit = subreddit,
@@ -20,5 +21,9 @@ class SubredditInteractor @Inject constructor(
             networkDataSource = networkDataSource,
             pageSize = pageSize
         )
+    }
+
+    fun getSubreddits(): List<Subreddit> {
+        return networkDataSource.getUserlessSubreddits()
     }
 }

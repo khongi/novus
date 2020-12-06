@@ -4,23 +4,33 @@ import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import com.thiosin.novus.domain.model.SubmissionSort
+import com.thiosin.novus.domain.model.Subreddit
 
 class HomeViewModel @ViewModelInject constructor(
     private val homePresenter: HomePresenter,
 ) : RainbowCakeViewModel<HomeViewState>(HomeInitial) {
 
-    fun load(subreddit: String) = execute {
+    fun load(subreddit: Subreddit? = null) = execute {
+        val subreddits: List<Subreddit> = getSubreddits()
+
+        val currentSubreddit = subreddit ?: subreddits[0]
+
         viewState = HomeReady(
             submissions = listOf(),
-            subreddit = subreddit,
-            loading = true
+            currentSubreddit = currentSubreddit,
+            subreddits = subreddits,
+            loading = true,
         )
+
+        val submissions = homePresenter.getSubredditPage(
+            subreddit = currentSubreddit.name,
+            sort = SubmissionSort.Hot
+        )
+
         viewState = HomeReady(
-            submissions = homePresenter.getSubredditPage(
-                subreddit = subreddit,
-                sort = SubmissionSort.Hot
-            ),
-            subreddit = subreddit,
+            submissions = submissions,
+            currentSubreddit = currentSubreddit,
+            subreddits = subreddits
         )
     }
 
@@ -28,7 +38,7 @@ class HomeViewModel @ViewModelInject constructor(
         val oldState = viewState as? HomeReady ?: return@execute
         viewState = oldState.copy(
             submissions = oldState.submissions + homePresenter.getSubredditPage(
-                subreddit = oldState.subreddit,
+                subreddit = oldState.currentSubreddit.name,
                 sort = SubmissionSort.Hot,
                 count = oldState.submissions.size,
                 after = oldState.submissions.last().fullname
@@ -38,6 +48,10 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun showLink(url: String) = execute {
         postEvent(ShowLinkEvent(url))
+    }
+
+    private suspend fun getSubreddits(): List<Subreddit> {
+        return homePresenter.getSubreddits()
     }
 
     data class ShowLinkEvent(val url: String) : OneShotEvent

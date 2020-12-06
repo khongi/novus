@@ -13,6 +13,14 @@ interface RedditAPI {
         @Path("sort") sort: String = "hot",
         @Query("limit") limit: Int,
         @Query("count") count: Int,
-        @Query("after") after: String? = ""
+        @Query("after") after: String? = "",
+    ): ListingResponse
+
+    @GET("{sort}.json")
+    suspend fun getFrontpage(
+        @Path("sort") sort: String = "hot",
+        @Query("limit") limit: Int,
+        @Query("count") count: Int,
+        @Query("after") after: String? = "",
     ): ListingResponse
 }

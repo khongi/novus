@@ -11,26 +11,26 @@ import androidx.compose.ui.Modifier
 import com.thiosin.novus.domain.model.Subreddit
 
 @Composable
-fun NovusDrawer(drawerItems: List<Subreddit>, onClick: (String) -> Unit) {
+fun NovusDrawer(subreddits: List<Subreddit>, onClick: (Subreddit) -> Unit) {
 
     ScrollableColumn() {
         Text(
             text = "Novus",
             style = MaterialTheme.typography.h2
         )
-        drawerItems.forEach {
-            DrawerItem(name = it.name, onClick = onClick)
+        subreddits.forEach {
+            DrawerItem(subreddit = it, onClick = onClick)
         }
     }
 }
 
 @Composable
-fun DrawerItem(name: String, onClick: (String) -> Unit) {
+fun DrawerItem(subreddit: Subreddit, onClick: (Subreddit) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(name) })
+        modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(subreddit) })
     ) {
         Text(
-            text = name,
+            text = subreddit.displayName,
             style = MaterialTheme.typography.h5,
         )
     }

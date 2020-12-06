@@ -1,6 +1,7 @@
 package com.thiosin.novus.data.network
 
 import com.thiosin.novus.data.network.model.ListingResponse
+import com.thiosin.novus.domain.model.Subreddit
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -16,16 +17,44 @@ class NetworkDataSource @Inject constructor(
         limit: Int,
     ): ListingResponse? {
         return try {
-            redditAPI.getSubmissions(
-                subreddit = subreddit,
-                count = count,
-                limit = limit,
-                sort = sort,
-                after = after
-            )
+            if (subreddit.isBlank()) {
+                redditAPI.getFrontpage(
+                    count = count,
+                    limit = limit,
+                    sort = sort,
+                    after = after
+                )
+            } else {
+                redditAPI.getSubmissions(
+                    subreddit = subreddit,
+                    count = count,
+                    limit = limit,
+                    sort = sort,
+                    after = after
+                )
+            }
         } catch (t: Throwable) {
             Timber.e(t)
             null
+        }
+    }
+
+    fun getUserlessSubreddits(): List<Subreddit> {
+        return listOf(
+            "",
+            "All",
+            "Popular",
+            "funny",
+            "worldnews",
+            "AskReddit",
+            "videos",
+            "Music"
+        ).map {
+            Subreddit(
+                name = it,
+                displayName = if (it.isBlank()) "Frontpage" else "/r/$it",
+                icon = ""
+            )
         }
     }
 }

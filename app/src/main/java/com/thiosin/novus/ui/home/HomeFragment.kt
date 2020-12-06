@@ -35,6 +35,11 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     override fun provideViewModel() = getViewModel()
     override fun render(viewState: HomeViewState) = Unit
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.load()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,9 +49,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
-                    val currentValue = state.value
-                    if (currentValue != null) {
-                        HomeScreen(currentValue)
+                    state.value?.let {
+                        HomeScreen(it)
                     }
                 }
             }
@@ -62,7 +66,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             modifier = Modifier.fillMaxWidth(),
             drawerContent = {
                 NovusDrawer(
-                    drawerItems = viewState.getSubreddits(),
+                    subreddits = viewState.getSubreddits(),
                     onClick = { subreddit ->
                         viewModel.load(subreddit)
                         scaffoldState.drawerState.close()
@@ -113,21 +117,16 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.load("all")
-    }
-
     private fun HomeViewState?.getTitle(): String {
         return when (this) {
-            is HomeReady -> "/r/${subreddit}"
-            else -> "Loading"
+            is HomeReady -> currentSubreddit.displayName
+            else -> "Loading..."
         }
     }
 
     private fun HomeViewState?.getSubreddits(): List<Subreddit> {
         return when (this) {
-            is HomeReady -> listOf(Subreddit("all"), Subreddit("funny"))
+            is HomeReady -> subreddits
             else -> listOf()
         }
     }

@@ -3,6 +3,7 @@ package com.thiosin.novus.ui.home
 import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.domain.interactor.SubredditInteractor
 import com.thiosin.novus.domain.model.SubmissionSort
+import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.domain.model.toLoadResultData
 import javax.inject.Inject
 
@@ -22,5 +23,9 @@ class HomePresenter @Inject constructor(
         )
 
         lister.getPage(count, after)?.toLoadResultData() ?: listOf()
+    }
+
+    suspend fun getSubreddits(): List<Subreddit> = withIOContext {
+        subredditInteractor.getSubreddits()
     }
 }
