@@ -19,41 +19,10 @@ fun SubmissionList(
     }
     val displayMetrics = ContextAmbient.current.resources.displayMetrics
     val displayWidth = remember { displayMetrics.widthPixels / displayMetrics.density }
-    LazyColumn(state = listState) {
+    LazyColumn() {
         items(submissions) { submission ->
             SubmissionPreviewItem(submission = submission, displayWidth, onLinkClick = onLinkClick)
         }
-
-//        listItems.run {
-//            when {
-//                loadState.refresh is LoadState.Loading -> {
-//                    item { LoadingScreen(modifier = Modifier.fillParentMaxSize()) }
-//                }
-//                loadState.append is LoadState.Loading -> {
-//                    item { LoadingItem() }
-//                }
-//                loadState.refresh is LoadState.Error -> {
-//                    val e = loadState.refresh as LoadState.Error
-//                    item {
-//                        ErrorItem(
-//                            message = e.error.localizedMessage ?: "",
-//                            modifier = Modifier.fillParentMaxSize(),
-//                            onClickRetry = { retry() }
-//                        )
-//                    }
-//                }
-//                loadState.append is LoadState.Error -> {
-//                    val e = loadState.append as LoadState.Error
-//                    item {
-//                        ErrorItem(
-//                            message = e.error.localizedMessage ?: "",
-//                            onClickRetry = { retry() }
-//                        )
-//                    }
-//                }
-//            }
-//        }
-
     }
 }
 

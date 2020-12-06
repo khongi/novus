@@ -8,10 +8,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -21,7 +22,9 @@ import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.ui.common.NavigationIcon
+import com.thiosin.novus.ui.common.NovusDrawer
 import com.thiosin.novus.ui.common.NovusTopAppBar
 import com.thiosin.novus.ui.common.SubmissionList
 import com.thiosin.novus.ui.home.HomeViewModel.ShowLinkEvent
@@ -44,22 +47,41 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
-                    val listState = rememberLazyListState()
-
-                    HomeScreen(state.value, listState)
+                    val currentValue = state.value
+                    if (currentValue != null) {
+                        HomeScreen(currentValue)
+                    }
                 }
             }
         }
     }
 
     @Composable
-    private fun HomeScreen(viewState: HomeViewState?, listState: LazyListState) {
+    private fun HomeScreen(viewState: HomeViewState) {
+        val scaffoldState = rememberScaffoldState()
+        val listState = rememberLazyListState()
+
         Scaffold(
             modifier = Modifier.fillMaxWidth(),
+            drawerContent = {
+                NovusDrawer(
+                    drawerItems = viewState.getSubreddits(),
+                    onClick = { subreddit ->
+                        viewModel.load(subreddit)
+                        scaffoldState.drawerState.close()
+                    }
+                )
+            },
+            drawerBackgroundColor = MaterialTheme.colors.background,
+            drawerContentColor = MaterialTheme.colors.onBackground,
+            scaffoldState = scaffoldState,
             topBar = {
                 NovusTopAppBar(
                     title = viewState.getTitle(),
-                    navIcon = NavigationIcon.Menu
+                    navIcon = NavigationIcon.Menu,
+                    onNavigationIconClick = {
+                        scaffoldState.drawerState.open()
+                    }
                 )
             },
             bodyContent = {
@@ -98,6 +120,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         return when (this) {
             is HomeReady -> "/r/${subreddit}"
             else -> "Loading"
+        }
+    }
+
+    private fun HomeViewState?.getSubreddits(): List<Subreddit> {
+        return when (this) {
+            is HomeReady -> listOf(Subreddit("all"), Subreddit("funny"))
+            else -> listOf()
         }
     }
 
