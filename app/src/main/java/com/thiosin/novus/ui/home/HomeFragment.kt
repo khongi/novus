@@ -21,6 +21,7 @@ import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.ui.common.NavigationIcon
 import com.thiosin.novus.ui.common.NovusTopAppBar
 import com.thiosin.novus.ui.common.SubmissionList
 import com.thiosin.novus.ui.home.HomeViewModel.ShowLinkEvent
@@ -57,7 +58,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             modifier = Modifier.fillMaxWidth(),
             topBar = {
                 NovusTopAppBar(
-                    title = viewState.getTitle()
+                    title = viewState.getTitle(),
+                    navIcon = NavigationIcon.Menu
                 )
             },
             bodyContent = {
