@@ -102,7 +102,7 @@ dependencies {
 
     implementation(Dependencies.Accompanist.coil)
     implementation(Dependencies.Coil.gif)
-    implementation("com.google.android.exoplayer:exoplayer:2.11.7")
+    implementation(Dependencies.Android.exoplayer)
 
     implementation(Dependencies.Network.okHttp)
     implementation(Dependencies.Network.okHttpLoggingInterceptor)

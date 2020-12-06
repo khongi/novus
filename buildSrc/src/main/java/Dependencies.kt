@@ -16,6 +16,7 @@ object Dependencies {
 
     object Android {
         const val material = "com.google.android.material:material:${Versions.material}"
+        const val exoplayer = "com.google.android.exoplayer:exoplayer:${Versions.exoplayer}"
     }
 
     object AndroidX {
