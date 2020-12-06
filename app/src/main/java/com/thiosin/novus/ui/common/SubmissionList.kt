@@ -1,6 +1,7 @@
 package com.thiosin.novus.ui.common
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.LoadState
@@ -11,10 +12,14 @@ import com.thiosin.novus.domain.model.SubmissionPreview
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun SubmissionList(listFlow: Flow<PagingData<SubmissionPreview>>, onLinkClicked: (String) -> Unit) {
+fun SubmissionList(
+    listFlow: Flow<PagingData<SubmissionPreview>>,
+    listState: LazyListState,
+    onLinkClicked: (String) -> Unit,
+) {
     val listItems = listFlow.collectAsLazyPagingItems()
 
-    LazyColumn {
+    LazyColumn(state = listState) {
 
         items(listItems) { item ->
             SubmissionPreviewItem(submission = item, onLinkClicked = onLinkClicked)

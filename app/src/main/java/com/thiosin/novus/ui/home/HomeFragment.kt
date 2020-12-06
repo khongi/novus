@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -41,14 +43,16 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
-                    HomeScreen(state.value)
+                    val listState = rememberLazyListState()
+
+                    HomeScreen(state.value, listState)
                 }
             }
         }
     }
 
     @Composable
-    private fun HomeScreen(viewState: HomeViewState?) {
+    private fun HomeScreen(viewState: HomeViewState?, listState: LazyListState) {
         Scaffold(
             modifier = Modifier.fillMaxWidth(),
             topBar = {
@@ -61,6 +65,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     is HomeReady -> {
                         SubmissionList(
                             listFlow = viewState.listState,
+                            listState = listState,
                             onLinkClicked = { viewModel.showLink(it) },
                         )
                     }
