@@ -1,7 +1,6 @@
 package com.thiosin.novus.data.network
 
 import android.content.Context
-import androidx.paging.PagingConfig
 import com.kirkbushman.araw.RedditClient
 import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
@@ -19,7 +18,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -85,15 +83,6 @@ class NetworkModule {
     @PageSize
     @Provides
     fun providePageSize(): Int = 25
-
-    @Provides
-    fun providePagerConfig(@PageSize pageSize: Int): PagingConfig {
-        return PagingConfig(
-            pageSize = pageSize,
-            prefetchDistance = 15,
-            initialLoadSize = pageSize
-        )
-    }
 
     @UserlessAuth
     @Provides
