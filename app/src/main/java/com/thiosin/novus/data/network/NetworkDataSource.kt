@@ -1,6 +1,6 @@
 package com.thiosin.novus.data.network
 
-import com.thiosin.novus.data.network.model.ListingResponse
+import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.domain.model.Subreddit
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class NetworkDataSource @Inject constructor(
         count: Int,
         after: String,
         limit: Int,
-    ): ListingResponse? {
+    ): SubmissionListingResponse? {
         return try {
             if (subreddit.isBlank()) {
                 redditAPI.getFrontpage(
