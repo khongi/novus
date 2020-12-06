@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -28,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
 
     override fun provideViewModel() = getViewModel()
+    override fun render(viewState: HomeViewState) = Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,8 +39,45 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                NovusTheme { }
+                NovusTheme {
+                    val state = viewModel.state.observeAsState()
+                    HomeScreen(state.value)
+                }
             }
+        }
+    }
+
+    @Composable
+    private fun HomeScreen(viewState: HomeViewState?) {
+        Scaffold(
+            modifier = Modifier.fillMaxWidth(),
+            topBar = {
+                NovusTopAppBar(
+                    title = viewState.getTitle()
+                )
+            },
+            bodyContent = {
+                when (viewState) {
+                    is HomeReady -> {
+                        SubmissionList(
+                            listFlow = viewState.listState,
+                            onLinkClicked = { viewModel.showLink(it) },
+                        )
+                    }
+                    else -> {
+                        LoadingScreen()
+                    }
+                }
+            }
+        )
+    }
+
+    @Composable
+    private fun LoadingScreen() {
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center) {
+            CircularProgressIndicator()
         }
     }
 
@@ -46,43 +86,10 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         viewModel.load("all")
     }
 
-    override fun render(viewState: HomeViewState) {
-        (view as ComposeView).setContent {
-            NovusTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxWidth(),
-                    topBar = {
-                        NovusTopAppBar(
-                            title = viewState.getTitle()
-                        )
-                    },
-                    bodyContent = {
-                        when (viewState) {
-                            is HomeInitial -> {
-                                Column(modifier = Modifier.fillMaxSize(),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center) {
-                                    CircularProgressIndicator()
-                                }
-                            }
-                            is HomeReady -> {
-                                SubmissionList(
-                                    listFlow = viewState.listState
-                                ) {
-                                    viewModel.showLink(it)
-                                }
-                            }
-                        }
-                    }
-                )
-            }
-        }
-    }
-
-    private fun HomeViewState.getTitle(): String {
+    private fun HomeViewState?.getTitle(): String {
         return when (this) {
-            HomeInitial -> "Loading"
             is HomeReady -> "/r/${subreddit}"
+            else -> "Loading"
         }
     }
 
