@@ -608,10 +608,16 @@ enum class Kind {
 enum class PostHint {
     @Json(name = "link")
     Link,
+
     @Json(name = "image")
     Image,
+
     @Json(name = "hosted:video")
     HostedVideo,
+
     @Json(name = "rich:video")
     RichVideo,
+
+    @Json(name = "self")
+    Self
 }
