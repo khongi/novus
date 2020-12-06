@@ -34,7 +34,11 @@ import com.thiosin.novus.domain.model.SubmissionPreview
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClick: (String) -> Unit) {
+fun SubmissionPreviewItem(
+    submission: SubmissionPreview?,
+    displayWidth: Float,
+    onLinkClick: (String) -> Unit,
+) {
     requireNotNull(submission)
 
     Card(
@@ -45,7 +49,7 @@ fun SubmissionPreviewItem(submission: SubmissionPreview?, onLinkClick: (String) 
         Column(modifier = Modifier.padding(top = 4.dp)) {
             InfoRow(submission)
             TitleRow(submission)
-//            MediaRow(submission)
+            MediaRow(submission, displayWidth)
             ButtonRow(submission, onLinkClick)
         }
     }
@@ -94,9 +98,14 @@ private fun TitleRow(
 }
 
 @Composable
-private fun MediaRow(submission: SubmissionPreview) {
+private fun MediaRow(submission: SubmissionPreview, displayWidth: Float) {
     if (submission.media != null && submission.media.type != SubmissionMediaType.Thumbnail) {
-        Media(submission.media)
+        val parentWidth = displayWidth - 2 * 8
+        val ratio = parentWidth / submission.media.width
+        val height = submission.media.height * ratio
+        Box(modifier = Modifier.width(parentWidth.dp).height(height.dp)) {
+            Media(submission.media)
+        }
     }
 }
 
@@ -124,8 +133,9 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
         fadeIn = true,
         contentScale = contentScale,
         loading = {
-            Box(modifier = Modifier.fillMaxSize()) {
-                LinearProgressIndicator(Modifier.fillMaxWidth())
+            Box(modifier = Modifier.fillMaxSize(),
+                alignment = Alignment.Center) {
+                CircularProgressIndicator(Modifier.size(48.dp))
             }
         },
         modifier = modifier,
@@ -170,12 +180,12 @@ fun RemoteVideo(sourceUrl: String) {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
             )
-            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
+            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
             useController = true
-            controllerAutoShow = false
+            controllerAutoShow = true
             player = exoPlayer
             exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
-            exoPlayer.playWhenReady = true
+            exoPlayer.playWhenReady = false
         }
     })
 }
@@ -223,5 +233,5 @@ fun DefaultPreview() {
         comments = 123,
         link = ""
     )
-    SubmissionPreviewItem(submission = submission, onLinkClick = {})
+    SubmissionPreviewItem(submission = submission, displayWidth = 300F) {}
 }

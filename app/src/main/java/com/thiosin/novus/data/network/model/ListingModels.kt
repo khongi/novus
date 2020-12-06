@@ -59,7 +59,7 @@ data class ChildData(
     val downs: Long,
 
     @Json(name = "thumbnail_height")
-    val thumbnailHeight: Long? = null,
+    val thumbnailHeight: Int? = null,
 
     @Json(name = "top_awarded_type")
     val topAwardedType: String? = null,
@@ -91,7 +91,7 @@ data class ChildData(
     val mediaEmbed: MediaEmbed,
 
     @Json(name = "thumbnail_width")
-    val thumbnailWidth: Long? = null,
+    val thumbnailWidth: Int? = null,
 
     @Json(name = "author_flair_template_id")
     val authorFlairTemplateID: String? = null,

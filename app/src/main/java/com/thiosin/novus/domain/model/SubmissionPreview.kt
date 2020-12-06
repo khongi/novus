@@ -22,6 +22,8 @@ data class SubmissionPreview(
 data class SubmissionMedia(
     val url: String,
     val type: SubmissionMediaType,
+    val width: Int,
+    val height: Int,
 )
 
 enum class SubmissionMediaType {
@@ -99,5 +101,9 @@ private fun getSubmissionMedia(submission: ChildData): SubmissionMedia? {
         else -> Unit
     }
 
-    return url?.let { SubmissionMedia(url = it, type = type) }
+    val sourcePreview = submission.preview?.images?.get(0)?.source
+    val width = sourcePreview?.width?.toInt() ?: submission.thumbnailWidth ?: 200
+    val height = sourcePreview?.height?.toInt() ?: submission.thumbnailHeight ?: 200
+
+    return url?.let { SubmissionMedia(url = it, type = type, width = width, height = height) }
 }
