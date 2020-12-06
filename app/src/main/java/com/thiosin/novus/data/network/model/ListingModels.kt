@@ -599,6 +599,7 @@ data class Nsfw(
 enum class SubredditType {
     public,
     restricted,
+    user
 }
 
 enum class Kind {
