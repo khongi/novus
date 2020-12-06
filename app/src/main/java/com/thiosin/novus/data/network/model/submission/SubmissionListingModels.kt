@@ -2,6 +2,7 @@ package com.thiosin.novus.data.network.model.submission
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.thiosin.novus.data.network.model.common.Kind
 
 @JsonClass(generateAdapter = true)
 data class SubmissionListingResponse(
@@ -600,10 +601,6 @@ enum class SubredditType {
     public,
     restricted,
     user
-}
-
-enum class Kind {
-    t3,
 }
 
 enum class PostHint {
