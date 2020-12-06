@@ -15,13 +15,12 @@ class HomePresenter @Inject constructor(
         sort: SubmissionSort,
         count: Int = 0,
         after: String = "",
-        limit: Int = 25,
     ) = withIOContext {
         val lister = subredditInteractor.getSubmissionsLister(
             subreddit = subreddit,
             sort = sort
         )
 
-        lister.getPage(count, after, limit)?.toLoadResultData() ?: listOf()
+        lister.getPage(count, after)?.toLoadResultData() ?: listOf()
     }
 }

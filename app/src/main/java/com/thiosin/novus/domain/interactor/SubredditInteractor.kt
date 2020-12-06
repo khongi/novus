@@ -1,11 +1,13 @@
 package com.thiosin.novus.domain.interactor
 
 import com.thiosin.novus.data.network.NetworkDataSource
+import com.thiosin.novus.data.network.NetworkModule
 import com.thiosin.novus.domain.model.SubmissionSort
 import javax.inject.Inject
 
 class SubredditInteractor @Inject constructor(
-    private val networkDataSource: NetworkDataSource
+    private val networkDataSource: NetworkDataSource,
+    @NetworkModule.PageSize private val pageSize: Int,
 ) {
 
     fun getSubmissionsLister(
@@ -15,7 +17,8 @@ class SubredditInteractor @Inject constructor(
         return SubmissionsLister(
             subreddit = subreddit,
             sort = sort,
-            networkDataSource = networkDataSource
+            networkDataSource = networkDataSource,
+            pageSize = pageSize
         )
     }
 }
