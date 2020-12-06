@@ -1,54 +1,58 @@
 package com.thiosin.novus.ui.common
 
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.ContextAmbient
 import com.thiosin.novus.domain.model.SubmissionPreview
-import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun SubmissionList(listFlow: Flow<PagingData<SubmissionPreview>>, onLinkClicked: (String) -> Unit) {
-    val listItems = listFlow.collectAsLazyPagingItems()
-
-    LazyColumn {
-
-        items(listItems) { item ->
-            SubmissionPreviewItem(submission = item, onLinkClicked = onLinkClicked)
+fun SubmissionList(
+    submissions: List<SubmissionPreview>,
+    listState: LazyListState,
+    onLinkClick: (String) -> Unit,
+    onListEnd: () -> Unit,
+) {
+    if (listState.firstVisibleItemIndex >= submissions.size - 10) {
+        onListEnd()
+    }
+    val displayMetrics = ContextAmbient.current.resources.displayMetrics
+    val displayWidth = remember { displayMetrics.widthPixels / displayMetrics.density }
+    LazyColumn(state = listState) {
+        items(submissions) { submission ->
+            SubmissionPreviewItem(submission = submission, displayWidth, onLinkClick = onLinkClick)
         }
 
-        listItems.run {
-            when {
-                loadState.refresh is LoadState.Loading -> {
-                    item { LoadingScreen(modifier = Modifier.fillParentMaxSize()) }
-                }
-                loadState.append is LoadState.Loading -> {
-                    item { LoadingItem() }
-                }
-                loadState.refresh is LoadState.Error -> {
-                    val e = loadState.refresh as LoadState.Error
-                    item {
-                        ErrorItem(
-                            message = e.error.localizedMessage ?: "",
-                            modifier = Modifier.fillParentMaxSize(),
-                            onClickRetry = { retry() }
-                        )
-                    }
-                }
-                loadState.append is LoadState.Error -> {
-                    val e = loadState.append as LoadState.Error
-                    item {
-                        ErrorItem(
-                            message = e.error.localizedMessage ?: "",
-                            onClickRetry = { retry() }
-                        )
-                    }
-                }
-            }
-        }
+//        listItems.run {
+//            when {
+//                loadState.refresh is LoadState.Loading -> {
+//                    item { LoadingScreen(modifier = Modifier.fillParentMaxSize()) }
+//                }
+//                loadState.append is LoadState.Loading -> {
+//                    item { LoadingItem() }
+//                }
+//                loadState.refresh is LoadState.Error -> {
+//                    val e = loadState.refresh as LoadState.Error
+//                    item {
+//                        ErrorItem(
+//                            message = e.error.localizedMessage ?: "",
+//                            modifier = Modifier.fillParentMaxSize(),
+//                            onClickRetry = { retry() }
+//                        )
+//                    }
+//                }
+//                loadState.append is LoadState.Error -> {
+//                    val e = loadState.append as LoadState.Error
+//                    item {
+//                        ErrorItem(
+//                            message = e.error.localizedMessage ?: "",
+//                            onClickRetry = { retry() }
+//                        )
+//                    }
+//                }
+//            }
+//        }
 
     }
 }

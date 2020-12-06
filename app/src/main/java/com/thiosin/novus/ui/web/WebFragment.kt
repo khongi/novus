@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
 import androidx.compose.ui.platform.ComposeView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.extensions.applyArgs
+import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.ui.common.NavigationIcon
+import com.thiosin.novus.ui.common.NovusTopAppBar
 import com.thiosin.novus.ui.common.WebContent
 import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,13 +47,17 @@ class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel> {
                 NovusTheme {
                     Scaffold(
                         topBar = {
-                            TopAppBar() {
-
-                            }
+                            NovusTopAppBar(
+                                title = "",
+                                navIcon = NavigationIcon.Back,
+                                onNavigationIconClick = { navigator?.pop() }
+                            )
                         },
                         bodyContent = {
-                            WebContent(url = requireArguments().getString(URL_KEY)
-                                ?: throw IllegalStateException("URL is null"))
+                            WebContent(
+                                url = requireArguments().getString(URL_KEY)
+                                    ?: throw IllegalStateException("URL is null")
+                            )
                         }
                     )
                 }

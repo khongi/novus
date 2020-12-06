@@ -11,11 +11,23 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun load(subreddit: String) = execute {
         viewState = HomeReady(
-            listState = homePresenter.getSubreddit(
+            submissions = homePresenter.getSubredditPage(
                 subreddit = subreddit,
                 sort = SubmissionSort.Hot
             ),
             subreddit = subreddit,
+        )
+    }
+
+    fun loadNextPage() = execute {
+        val oldState = viewState as? HomeReady ?: return@execute
+        viewState = oldState.copy(
+            submissions = oldState.submissions + homePresenter.getSubredditPage(
+                subreddit = oldState.subreddit,
+                sort = SubmissionSort.Hot,
+                count = oldState.submissions.size,
+                after = oldState.submissions.last().fullname
+            )
         )
     }
 
