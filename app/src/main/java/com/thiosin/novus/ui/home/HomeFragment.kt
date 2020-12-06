@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -85,17 +82,22 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 )
             },
             bodyContent = {
-                when (viewState) {
-                    is HomeReady -> {
-                        SubmissionList(
-                            submissions = viewState.submissions,
-                            listState = listState,
-                            onLinkClick = { viewModel.showLink(it) },
-                            onListEnd = { viewModel.loadNextPage() }
-                        )
-                    }
-                    else -> {
-                        LoadingScreen()
+                Column(modifier = Modifier.fillMaxSize()) {
+                    when (viewState) {
+                        is HomeReady -> {
+                            if (viewState.loading) {
+                                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                            }
+                            SubmissionList(
+                                submissions = viewState.submissions,
+                                listState = listState,
+                                onLinkClick = { viewModel.showLink(it) },
+                                onListEnd = { viewModel.loadNextPage() }
+                            )
+                        }
+                        else -> {
+                            LoadingScreen()
+                        }
                     }
                 }
             }

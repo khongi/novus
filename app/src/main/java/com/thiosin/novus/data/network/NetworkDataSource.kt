@@ -5,7 +5,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class NetworkDataSource @Inject constructor(
-    @NetworkModule.UserlessAuth private val redditAPI: RedditAPI
+    @NetworkModule.UserlessAuth private val redditAPI: RedditAPI,
 ) {
 
     suspend fun getListing(
@@ -13,7 +13,7 @@ class NetworkDataSource @Inject constructor(
         sort: String,
         count: Int,
         after: String,
-        limit: Int
+        limit: Int,
     ): ListingResponse? {
         return try {
             redditAPI.getSubmissions(

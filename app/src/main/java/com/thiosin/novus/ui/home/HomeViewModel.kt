@@ -11,6 +11,11 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun load(subreddit: String) = execute {
         viewState = HomeReady(
+            submissions = listOf(),
+            subreddit = subreddit,
+            loading = true
+        )
+        viewState = HomeReady(
             submissions = homePresenter.getSubredditPage(
                 subreddit = subreddit,
                 sort = SubmissionSort.Hot
