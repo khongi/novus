@@ -70,7 +70,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     onClick = { subreddit ->
                         viewModel.load(subreddit)
                         scaffoldState.drawerState.close()
-                    }
+                    },
+                    selected = viewState.getCurrentSubreddit()
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,
@@ -128,6 +129,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         return when (this) {
             is HomeReady -> subreddits
             else -> listOf()
+        }
+    }
+
+    private fun HomeViewState?.getCurrentSubreddit(): Subreddit? {
+        return when (this) {
+            is HomeReady -> currentSubreddit
+            else -> null
         }
     }
 

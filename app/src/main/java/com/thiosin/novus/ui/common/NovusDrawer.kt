@@ -22,7 +22,7 @@ import com.thiosin.novus.domain.model.Subreddit
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun NovusDrawer(subreddits: List<Subreddit>, onClick: (Subreddit) -> Unit) {
+fun NovusDrawer(subreddits: List<Subreddit>, selected: Subreddit?, onClick: (Subreddit) -> Unit) {
     Column {
         Box(
             modifier = Modifier
@@ -42,19 +42,28 @@ fun NovusDrawer(subreddits: List<Subreddit>, onClick: (Subreddit) -> Unit) {
         }
         ScrollableColumn() {
             subreddits.forEach {
-                DrawerItem(subreddit = it, onClick = onClick)
+                DrawerItem(
+                    subreddit = it,
+                    isSelected = it.name == selected?.name,
+                    onClick = onClick
+                )
             }
         }
     }
 }
 
 @Composable
-fun DrawerItem(subreddit: Subreddit, onClick: (Subreddit) -> Unit) {
+fun DrawerItem(subreddit: Subreddit, isSelected: Boolean, onClick: (Subreddit) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .clickable(onClick = { onClick(subreddit) }),
+        backgroundColor = if (isSelected) {
+            MaterialTheme.colors.secondary
+        } else {
+            MaterialTheme.colors.background
+        },
         elevation = 8.dp
     ) {
         Row(
