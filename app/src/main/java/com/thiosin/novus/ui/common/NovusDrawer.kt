@@ -1,12 +1,12 @@
 package com.thiosin.novus.ui.common
 
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,26 +19,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.ui.theme.redditOrange
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun NovusDrawer(subreddits: List<Subreddit>, selected: Subreddit?, onClick: (Subreddit) -> Unit) {
     Column {
-        Box(
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colors.primaryVariant)
+                .preferredHeight(56.dp),
+            elevation = 8.dp
         ) {
-            Text(
-                text = annotatedString {
-                    pushStyle(SpanStyle(color = MaterialTheme.colors.onPrimary))
+            Box(modifier = Modifier.fillMaxSize(), alignment = Alignment.CenterStart) {
+                val title = annotatedString {
+                    pushStyle(SpanStyle(color = MaterialTheme.colors.onSurface))
                     append("Novus for ")
-                    pushStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                    pushStyle(SpanStyle(fontWeight = FontWeight.Bold, color = redditOrange))
                     append("Reddit")
-                },
-                style = MaterialTheme.typography.h1,
-                modifier = Modifier.padding(8.dp)
-            )
+                    pop()
+                }
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h1,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
         }
         ScrollableColumn() {
             subreddits.forEach {
