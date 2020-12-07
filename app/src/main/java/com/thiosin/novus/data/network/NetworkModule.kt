@@ -6,7 +6,9 @@ import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
 import com.kirkbushman.auth.managers.SharedPrefsStorageManager
 import com.kirkbushman.auth.managers.StorageManager
+import com.squareup.moshi.Moshi
 import com.thiosin.novus.BuildConfig
+import com.thiosin.novus.data.network.json.CResponseDataChildListAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -91,7 +93,7 @@ class NetworkModule {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(
                 HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
+                    level = HttpLoggingInterceptor.Level.BASIC
                 }
             )
             .addInterceptor(AuthInterceptor(redditAuth))
@@ -101,11 +103,18 @@ class NetworkModule {
     @UserlessAuth
     @Provides
     @ActivityScoped
-    fun provideRetrofit(@UserlessAuth okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
+    fun provideRetrofit(@UserlessAuth okHttpClient: OkHttpClient): Retrofit {
+        val innerMoshi = Moshi.Builder().build()
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(
+                Moshi.Builder()
+                    .add(CResponseDataChildListAdapter(innerMoshi))
+                    .build()
+            ))
+            .build()
+    }
 
     @UserlessAuth
     @Provides

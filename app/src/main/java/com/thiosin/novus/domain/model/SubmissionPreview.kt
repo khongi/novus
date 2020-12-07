@@ -5,7 +5,6 @@ import com.thiosin.novus.data.network.model.submission.PostHint
 import com.thiosin.novus.data.network.model.submission.SubmissionListingChild
 import com.thiosin.novus.data.network.model.submission.SubmissionListingChildData
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
-import timber.log.Timber
 
 data class SubmissionPreview(
     val fullname: String,
@@ -72,7 +71,7 @@ private fun getRelativeTime(it: SubmissionListingChildData): String {
 }
 
 private fun getSubmissionMedia(submission: SubmissionListingChildData): SubmissionMedia? {
-    Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
+//    Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
 
     var url: String? = null
     var type = SubmissionMediaType.Thumbnail
