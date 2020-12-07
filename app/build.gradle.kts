@@ -91,7 +91,6 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.uiTooling)
     implementation(Dependencies.AndroidX.Compose.runtimeLivedata)
-    implementation(Dependencies.AndroidX.Compose.paging)
 
     implementation(Dependencies.AndroidX.ktxCore)
     implementation(Dependencies.AndroidX.ktxLifecycle)
@@ -103,7 +102,7 @@ dependencies {
 
     implementation(Dependencies.Accompanist.coil)
     implementation(Dependencies.Coil.gif)
-    implementation("com.google.android.exoplayer:exoplayer:2.11.7")
+    implementation(Dependencies.Android.exoplayer)
 
     implementation(Dependencies.Network.okHttp)
     implementation(Dependencies.Network.okHttpLoggingInterceptor)

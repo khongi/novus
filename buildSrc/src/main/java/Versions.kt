@@ -12,7 +12,6 @@ object Versions {
 
     const val compose = "1.0.0-alpha07"
     const val material = "1.2.1"
-    const val pagingCompose = "1.0.0-alpha02"
 
     const val ktxCore = "1.3.2"
     const val ktxLifecycle = "2.3.0-beta01"
@@ -26,6 +25,8 @@ object Versions {
 
     const val accompanist = "0.3.3.1"
     const val coil = "1.1.0"
+
+    const val exoplayer = "2.11.8"
 
     const val okHttp = "4.8.1"
     const val retrofit = "2.9.0"

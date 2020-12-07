@@ -1,21 +1,22 @@
-package com.thiosin.novus.data.network.model
+package com.thiosin.novus.data.network.model.submission
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.thiosin.novus.data.network.model.common.Kind
 
 @JsonClass(generateAdapter = true)
-data class ListingResponse(
+data class SubmissionListingResponse(
     val kind: String,
-    val data: ListingData
+    val data: SubmissionListingData,
 )
 
 @JsonClass(generateAdapter = true)
-data class ListingData(
+data class SubmissionListingData(
     val modhash: String,
     val dist: Long,
     val children: List<Child>,
     val after: String,
-    val before: Any? = null
+    val before: Any? = null,
 )
 
 @JsonClass(generateAdapter = true)
@@ -599,10 +600,7 @@ data class Nsfw(
 enum class SubredditType {
     public,
     restricted,
-}
-
-enum class Kind {
-    t3,
+    user
 }
 
 enum class PostHint {

@@ -1,6 +1,7 @@
 package com.thiosin.novus.ui.common
 
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,41 +20,23 @@ fun SubmissionList(
     }
     val displayMetrics = ContextAmbient.current.resources.displayMetrics
     val displayWidth = remember { displayMetrics.widthPixels / displayMetrics.density }
-    LazyColumn(state = listState) {
-        items(submissions) { submission ->
-            SubmissionPreviewItem(submission = submission, displayWidth, onLinkClick = onLinkClick)
+
+    LazyColumnForIndexed(state = listState, items = submissions) { index, submission ->
+        if (index == submissions.size - 1) {
+            Column {
+                SubmissionPreviewItem(
+                    submission = submission,
+                    displayWidth = displayWidth,
+                    onLinkClick = onLinkClick)
+                LoadingItem()
+            }
+        } else {
+            SubmissionPreviewItem(
+                submission = submission,
+                displayWidth = displayWidth,
+                onLinkClick = onLinkClick
+            )
         }
-
-//        listItems.run {
-//            when {
-//                loadState.refresh is LoadState.Loading -> {
-//                    item { LoadingScreen(modifier = Modifier.fillParentMaxSize()) }
-//                }
-//                loadState.append is LoadState.Loading -> {
-//                    item { LoadingItem() }
-//                }
-//                loadState.refresh is LoadState.Error -> {
-//                    val e = loadState.refresh as LoadState.Error
-//                    item {
-//                        ErrorItem(
-//                            message = e.error.localizedMessage ?: "",
-//                            modifier = Modifier.fillParentMaxSize(),
-//                            onClickRetry = { retry() }
-//                        )
-//                    }
-//                }
-//                loadState.append is LoadState.Error -> {
-//                    val e = loadState.append as LoadState.Error
-//                    item {
-//                        ErrorItem(
-//                            message = e.error.localizedMessage ?: "",
-//                            onClickRetry = { retry() }
-//                        )
-//                    }
-//                }
-//            }
-//        }
-
     }
 }
 

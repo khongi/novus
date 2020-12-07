@@ -1,10 +1,10 @@
 package com.thiosin.novus.domain.model
 
 import android.text.format.DateUtils
-import com.thiosin.novus.data.network.model.Child
-import com.thiosin.novus.data.network.model.ChildData
-import com.thiosin.novus.data.network.model.ListingResponse
-import com.thiosin.novus.data.network.model.PostHint
+import com.thiosin.novus.data.network.model.submission.Child
+import com.thiosin.novus.data.network.model.submission.ChildData
+import com.thiosin.novus.data.network.model.submission.PostHint
+import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import timber.log.Timber
 
 data class SubmissionPreview(
@@ -32,7 +32,7 @@ enum class SubmissionMediaType {
     Thumbnail
 }
 
-fun ListingResponse.toLoadResultData(): List<SubmissionPreview> {
+fun SubmissionListingResponse.toLoadResultData(): List<SubmissionPreview> {
     val children = this.data.children
     return children.map { child ->
         child.data.let {
