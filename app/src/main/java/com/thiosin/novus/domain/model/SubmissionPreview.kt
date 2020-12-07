@@ -1,9 +1,9 @@
 package com.thiosin.novus.domain.model
 
 import android.text.format.DateUtils
-import com.thiosin.novus.data.network.model.submission.Child
-import com.thiosin.novus.data.network.model.submission.ChildData
 import com.thiosin.novus.data.network.model.submission.PostHint
+import com.thiosin.novus.data.network.model.submission.SubmissionListingChild
+import com.thiosin.novus.data.network.model.submission.SubmissionListingChildData
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import timber.log.Timber
 
@@ -51,7 +51,7 @@ fun SubmissionListingResponse.toLoadResultData(): List<SubmissionPreview> {
     }
 }
 
-fun getFullName(it: Child): String {
+fun getFullName(it: SubmissionListingChild): String {
     return "${it.kind.name}_${it.data.id}"
 }
 
@@ -63,7 +63,7 @@ private fun Long.toVoteFormat(): String {
     return "%.${1}fk".format(k)
 }
 
-private fun getRelativeTime(it: ChildData): String {
+private fun getRelativeTime(it: SubmissionListingChildData): String {
     return DateUtils.getRelativeTimeSpanString(
         System.currentTimeMillis(),
         it.created * 1_000L,
@@ -71,7 +71,7 @@ private fun getRelativeTime(it: ChildData): String {
     ).toString()
 }
 
-private fun getSubmissionMedia(submission: ChildData): SubmissionMedia? {
+private fun getSubmissionMedia(submission: SubmissionListingChildData): SubmissionMedia? {
     Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
 
     var url: String? = null

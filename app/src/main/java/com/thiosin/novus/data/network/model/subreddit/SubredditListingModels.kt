@@ -14,19 +14,19 @@ data class SubredditListingResponse(
 data class SubredditListingData(
     val modhash: String,
     val dist: Long,
-    val children: List<Child>,
+    val children: List<SubredditListingChild>,
     val after: String,
     val before: Any? = null,
 )
 
 @JsonClass(generateAdapter = true)
-data class Child(
+data class SubredditListingChild(
     val kind: Kind,
-    val data: ChildData,
+    val data: SubredditListingChildData,
 )
 
 @JsonClass(generateAdapter = true)
-data class ChildData(
+data class SubredditListingChildData(
     @Json(name = "display_name")
     val displayName: String,
 

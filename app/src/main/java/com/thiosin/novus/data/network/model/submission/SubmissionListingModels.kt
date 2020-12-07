@@ -14,19 +14,19 @@ data class SubmissionListingResponse(
 data class SubmissionListingData(
     val modhash: String,
     val dist: Long,
-    val children: List<Child>,
+    val children: List<SubmissionListingChild>,
     val after: String,
     val before: Any? = null,
 )
 
 @JsonClass(generateAdapter = true)
-data class Child(
+data class SubmissionListingChild(
     val kind: Kind,
-    val data: ChildData
+    val data: SubmissionListingChildData,
 )
 
 @JsonClass(generateAdapter = true)
-data class ChildData(
+data class SubmissionListingChildData(
     @Json(name = "approved_at_utc")
     val approvedAtUTC: Any? = null,
 
