@@ -55,7 +55,7 @@ class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel> {
                         },
                         bodyContent = {
                             WebContent(
-                                url = requireArguments().getString(URL_KEY)
+                                sourceUrl = requireArguments().getString(URL_KEY)
                                     ?: throw IllegalStateException("URL is null")
                             )
                         }
