@@ -1,5 +1,6 @@
 package com.thiosin.novus.data.network
 
+import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
 import timber.log.Timber
@@ -49,6 +50,15 @@ class NetworkDataSource @Inject constructor(
         } catch (t: Throwable) {
             Timber.e(t)
             null
+        }
+    }
+
+    suspend fun getComments(submissionId: String): List<CResponse> {
+        return try {
+            redditAPI.getComments(submissionId)
+        } catch (t: Throwable) {
+            Timber.e(t)
+            emptyList()
         }
     }
 }

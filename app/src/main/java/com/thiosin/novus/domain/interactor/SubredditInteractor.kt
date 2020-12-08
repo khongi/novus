@@ -1,9 +1,7 @@
 package com.thiosin.novus.domain.interactor
 
 import com.thiosin.novus.data.network.NetworkDataSource
-import com.thiosin.novus.domain.model.SubmissionSort
-import com.thiosin.novus.domain.model.Subreddit
-import com.thiosin.novus.domain.model.toSubreddit
+import com.thiosin.novus.domain.model.*
 import javax.inject.Inject
 
 class SubredditInteractor @Inject constructor(
@@ -27,6 +25,11 @@ class SubredditInteractor @Inject constructor(
             ?: listOf()
         val defaultSubreddits = getDefaultSubreddits()
         return defaultSubreddits + fetchedSubreddits
+    }
+
+    suspend fun getComments(submissionId: String): List<Comment> {
+        val commentsResult = networkDataSource.getComments(submissionId)
+        return commentsResult.toCommentList()
     }
 
     private fun getDefaultSubreddits(): List<Subreddit> {
