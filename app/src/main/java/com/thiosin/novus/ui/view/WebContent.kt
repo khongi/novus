@@ -56,7 +56,7 @@ fun WebContentScreen(sourceUrl: String, onClose: () -> Unit) {
         topBar = {
             NovusTopAppBar(
                 title = host.value,
-                navIcon = NavigationIcon.Back,
+                navIcon = NavigationIcon.Close,
                 onNavigationIconClick = onClose
             )
         },

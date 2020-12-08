@@ -23,6 +23,7 @@ fun NovusTopAppBar(
                         when (navIcon) {
                             NavigationIcon.Back -> Icon(asset = vectorResource(id = R.drawable.ic_baseline_arrow_back_24))
                             NavigationIcon.Menu -> Icon(asset = vectorResource(id = R.drawable.ic_baseline_menu_24))
+                            NavigationIcon.Close -> Icon(asset = vectorResource(id = R.drawable.ic_baseline_close_24))
                             NavigationIcon.NoIcon -> Unit
                         }
                     },
@@ -36,5 +37,6 @@ fun NovusTopAppBar(
 enum class NavigationIcon {
     Back,
     Menu,
+    Close,
     NoIcon
 }
