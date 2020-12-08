@@ -12,15 +12,7 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun load(subreddit: Subreddit? = null) = execute {
         val subreddits: List<Subreddit> = getSubreddits()
-
         val currentSubreddit = subreddit ?: subreddits[0]
-
-        viewState = HomeReady(
-            submissions = listOf(),
-            currentSubreddit = currentSubreddit,
-            subreddits = subreddits,
-            loading = true,
-        )
 
         val submissions = homePresenter.getSubredditPage(
             subreddit = currentSubreddit.name,
@@ -43,6 +35,28 @@ class HomeViewModel @ViewModelInject constructor(
                 count = oldState.submissions.size,
                 after = oldState.submissions.last().fullname
             )
+        )
+    }
+
+    fun switchSubreddit(subreddit: Subreddit) = execute {
+        val oldState = viewState as? HomeReady ?: return@execute
+
+        viewState = HomeReady(
+            submissions = listOf(),
+            currentSubreddit = subreddit,
+            subreddits = oldState.subreddits,
+            loading = true,
+        )
+
+        val submissions = homePresenter.getSubredditPage(
+            subreddit = subreddit.name,
+            sort = SubmissionSort.Hot
+        )
+
+        viewState = HomeReady(
+            submissions = submissions,
+            currentSubreddit = subreddit,
+            subreddits = oldState.subreddits
         )
     }
 

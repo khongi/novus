@@ -68,7 +68,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 NovusDrawer(
                     subreddits = viewState.getSubreddits(),
                     onClick = { subreddit ->
-                        viewModel.load(subreddit)
+                        viewModel.switchSubreddit(subreddit)
                         scaffoldState.drawerState.close()
                     },
                     selected = viewState.getCurrentSubreddit()
