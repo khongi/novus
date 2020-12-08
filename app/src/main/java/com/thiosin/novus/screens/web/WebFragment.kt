@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.Scaffold
 import androidx.compose.ui.platform.ComposeView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.extensions.applyArgs
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.theme.NovusTheme
-import com.thiosin.novus.ui.view.NavigationIcon
-import com.thiosin.novus.ui.view.NovusTopAppBar
-import com.thiosin.novus.ui.view.WebContent
+import com.thiosin.novus.ui.view.WebContentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,20 +42,10 @@ class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel> {
         return ComposeView(requireContext()).apply {
             setContent {
                 NovusTheme {
-                    Scaffold(
-                        topBar = {
-                            NovusTopAppBar(
-                                title = "",
-                                navIcon = NavigationIcon.Back,
-                                onNavigationIconClick = { navigator?.pop() }
-                            )
-                        },
-                        bodyContent = {
-                            WebContent(
-                                sourceUrl = requireArguments().getString(URL_KEY)
-                                    ?: throw IllegalStateException("URL is null")
-                            )
-                        }
+                    WebContentScreen(
+                        sourceUrl = requireArguments().getString(URL_KEY)
+                            ?: throw IllegalStateException("URL is null"),
+                        onClose = { navigator?.pop() }
                     )
                 }
             }
