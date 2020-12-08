@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton

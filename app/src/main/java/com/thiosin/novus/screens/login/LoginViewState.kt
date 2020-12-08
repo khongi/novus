@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.login
+package com.thiosin.novus.screens.login
 
 sealed class LoginViewState
 

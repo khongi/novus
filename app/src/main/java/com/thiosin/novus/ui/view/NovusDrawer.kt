@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable

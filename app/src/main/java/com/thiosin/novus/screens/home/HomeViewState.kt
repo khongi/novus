@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.home
+package com.thiosin.novus.screens.home
 
 import com.thiosin.novus.domain.model.SubmissionPreview
 import com.thiosin.novus.domain.model.Subreddit

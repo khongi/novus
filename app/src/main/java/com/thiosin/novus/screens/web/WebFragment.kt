@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.web
+package com.thiosin.novus.screens.web
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,10 +10,10 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.extensions.applyArgs
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
-import com.thiosin.novus.ui.common.NavigationIcon
-import com.thiosin.novus.ui.common.NovusTopAppBar
-import com.thiosin.novus.ui.common.WebContent
 import com.thiosin.novus.ui.theme.NovusTheme
+import com.thiosin.novus.ui.view.NavigationIcon
+import com.thiosin.novus.ui.view.NovusTopAppBar
+import com.thiosin.novus.ui.view.WebContent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

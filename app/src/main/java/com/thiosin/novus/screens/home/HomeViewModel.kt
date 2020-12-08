@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.home
+package com.thiosin.novus.screens.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.OneShotEvent

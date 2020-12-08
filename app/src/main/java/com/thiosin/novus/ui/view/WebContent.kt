@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import android.webkit.WebResourceRequest
 import android.webkit.WebView

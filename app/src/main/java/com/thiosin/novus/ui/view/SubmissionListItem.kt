@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import android.net.Uri
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.home
+package com.thiosin.novus.screens.home
 
 import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.domain.interactor.SubredditInteractor

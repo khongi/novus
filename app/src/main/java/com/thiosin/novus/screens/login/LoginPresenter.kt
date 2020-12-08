@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.login
+package com.thiosin.novus.screens.login
 
 import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.domain.interactor.AuthInteractor

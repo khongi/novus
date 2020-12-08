@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumnForIndexed

@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.login
+package com.thiosin.novus.screens.login
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -14,7 +14,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
-import com.thiosin.novus.ui.home.HomeFragment
+import com.thiosin.novus.screens.home.HomeFragment
 import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
 

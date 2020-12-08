@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.home
+package com.thiosin.novus.screens.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,13 +20,13 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.Subreddit
-import com.thiosin.novus.ui.common.NavigationIcon
-import com.thiosin.novus.ui.common.NovusDrawer
-import com.thiosin.novus.ui.common.NovusTopAppBar
-import com.thiosin.novus.ui.common.SubmissionList
-import com.thiosin.novus.ui.home.HomeViewModel.ShowLinkEvent
+import com.thiosin.novus.screens.home.HomeViewModel.ShowLinkEvent
+import com.thiosin.novus.screens.web.WebFragment
 import com.thiosin.novus.ui.theme.NovusTheme
-import com.thiosin.novus.ui.web.WebFragment
+import com.thiosin.novus.ui.view.NavigationIcon
+import com.thiosin.novus.ui.view.NovusDrawer
+import com.thiosin.novus.ui.view.NovusTopAppBar
+import com.thiosin.novus.ui.view.SubmissionList
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
