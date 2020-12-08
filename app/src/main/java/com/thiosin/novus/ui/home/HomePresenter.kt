@@ -28,4 +28,8 @@ class HomePresenter @Inject constructor(
     suspend fun getSubreddits(): List<Subreddit> = withIOContext {
         subredditInteractor.getSubreddits()
     }
+
+    suspend fun getComments(submissionId: String) = withIOContext {
+        subredditInteractor.getComments(submissionId)
+    }
 }

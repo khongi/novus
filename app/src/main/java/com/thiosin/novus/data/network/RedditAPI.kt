@@ -36,7 +36,7 @@ interface RedditAPI {
 
     @GET("/comments/{article}.json")
     suspend fun getComments(
-        @Path("article") article: String = "k894rv",
+        @Path("article") article: String,
         @Query("sort") sort: String = "best",
         @Query("context") context: Int = 0,
         @Query("showedits") showEdits: Boolean = false,
