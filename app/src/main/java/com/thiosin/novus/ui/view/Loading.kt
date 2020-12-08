@@ -18,7 +18,7 @@ fun LoadingItem() {
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+fun LoadingScreen(modifier: Modifier = Modifier.fillMaxSize()) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Top,

@@ -4,11 +4,9 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.viewinterop.AndroidView
 import timber.log.Timber
@@ -53,7 +51,7 @@ fun WebContent(sourceUrl: String) {
     Box {
         AndroidView({ browser })
         if (isLoading.value) {
-            LoadingScreen(Modifier.fillMaxSize())
+            LoadingScreen()
         }
     }
 }
