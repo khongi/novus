@@ -5,14 +5,23 @@ import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
+import timber.log.Timber
 
 class HomeViewModel @ViewModelInject constructor(
     private val homePresenter: HomePresenter,
 ) : RainbowCakeViewModel<HomeViewState>(HomeInitial) {
 
     fun load(subreddit: Subreddit? = null) = execute {
-        val subreddits: List<Subreddit> = getSubreddits()
-        val currentSubreddit = subreddit ?: subreddits[0]
+        val readyState = viewState as? HomeReady
+
+        val (subreddits, currentSubreddit) = if (readyState == null) {
+            val subreddits: List<Subreddit> = getSubreddits()
+            val currentSubreddit = subreddit ?: subreddits[0]
+            Pair(subreddits, currentSubreddit)
+        } else {
+            Timber.d("Reusing previous state :)")
+            Pair(readyState.subreddits, readyState.currentSubreddit)
+        }
 
         val submissions = homePresenter.getSubredditPage(
             subreddit = currentSubreddit.name,
