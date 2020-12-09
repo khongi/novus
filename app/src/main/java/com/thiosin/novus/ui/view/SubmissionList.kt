@@ -19,8 +19,8 @@ fun SubmissionList(
     if (listState.firstVisibleItemIndex >= submissions.size - 10) {
         onListEnd()
     }
-    val displayMetrics = AmbientContext.current.resources.displayMetrics
-    val displayWidth = remember { displayMetrics.widthPixels / displayMetrics.density }
+    val displayWidthDp = AmbientContext.current.getDisplayWidthDp()
+    val displayWidth = remember { displayWidthDp }
 
     LazyColumnForIndexed(state = listState, items = submissions) { index, submission ->
         if (index == submissions.size - 1) {

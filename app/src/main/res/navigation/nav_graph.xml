@@ -30,5 +30,8 @@
         <argument
             android:name="submission"
             app:argType="com.thiosin.novus.domain.model.SubmissionPreview" />
+        <action
+            android:id="@+id/action_submissionFragment_to_webFragment"
+            app:destination="@id/webFragment" />
     </fragment>
 </navigation>

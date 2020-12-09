@@ -1,5 +1,6 @@
 package com.thiosin.novus.ui.view
 
+import android.content.Context
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
@@ -254,4 +255,9 @@ fun DefaultPreview() {
         onLinkClick = {},
         onDetailsClick = {}
     )
+}
+
+fun Context.getDisplayWidthDp(): Float {
+    val displayMetrics = resources.displayMetrics
+    return displayMetrics.widthPixels / displayMetrics.density
 }

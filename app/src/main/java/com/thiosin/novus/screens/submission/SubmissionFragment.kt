@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -17,12 +16,21 @@ import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.NavigationIcon
 import com.thiosin.novus.ui.view.NovusTopAppBar
+import com.thiosin.novus.ui.view.SubmissionDetails
+import com.thiosin.novus.ui.view.getDisplayWidthDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionViewModel>() {
     override fun provideViewModel() = getViewModel()
     override fun render(viewState: SubmissionViewState) = Unit
+
+    override fun onStart() {
+        super.onStart()
+        val displayWidthDp = requireContext().getDisplayWidthDp()
+        val submissionPreview = SubmissionFragmentArgs.fromBundle(requireArguments()).submission
+        viewModel.load(submissionPreview, displayWidthDp)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +41,23 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
-                    state.value?.let {
-                        SubmissionScreen(viewState = it)
+                    state.value?.let { viewState ->
+                        when (viewState) {
+                            is SubmissionInitial -> {
+                                // TODO
+                            }
+                            is SubmissionReadyState -> {
+                                SubmissionScreen(
+                                    viewState = viewState,
+                                    onLinkClick = { url ->
+                                        findNavController().navigate(
+                                            SubmissionFragmentDirections
+                                                .actionSubmissionFragmentToWebFragment(url)
+                                        )
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -42,18 +65,25 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
     }
 
     @Composable
-    private fun SubmissionScreen(viewState: SubmissionViewState) {
+    private fun SubmissionScreen(
+        viewState: SubmissionReadyState,
+        onLinkClick: (String) -> Unit,
+    ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 NovusTopAppBar(
-                    title = "TODO",
+                    title = "Comments",
                     navIcon = NavigationIcon.Back,
                     onNavigationIconClick = { findNavController().popBackStack() }
                 )
             },
             bodyContent = {
-                Text(text = SubmissionFragmentArgs.fromBundle(requireArguments()).submission.title)
+                SubmissionDetails(
+                    submissionPreview = viewState.submissionPreview,
+                    displayWidthDp = viewState.displayWidthDp,
+                    onLinkClick = onLinkClick
+                )
             }
         )
     }
