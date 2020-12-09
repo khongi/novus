@@ -6,14 +6,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.AmbientContext
-import com.thiosin.novus.domain.model.SubmissionPreview
+import com.thiosin.novus.domain.model.Submission
 
 @Composable
 fun SubmissionList(
-    submissions: List<SubmissionPreview>,
+    submissions: List<Submission>,
     listState: LazyListState,
     onLinkClick: (String) -> Unit,
-    onDetailsClick: (SubmissionPreview) -> Unit,
+    onDetailsClick: (Submission) -> Unit,
     onListEnd: () -> Unit,
 ) {
     if (listState.firstVisibleItemIndex >= submissions.size - 10) {
@@ -25,7 +25,7 @@ fun SubmissionList(
     LazyColumnForIndexed(state = listState, items = submissions) { index, submission ->
         if (index == submissions.size - 1) {
             Column {
-                SubmissionPreviewItem(
+                SubmissionPreview(
                     submission = submission,
                     displayWidth = displayWidth,
                     onLinkClick = onLinkClick,
@@ -34,7 +34,7 @@ fun SubmissionList(
                 LoadingItem()
             }
         } else {
-            SubmissionPreviewItem(
+            SubmissionPreview(
                 submission = submission,
                 displayWidth = displayWidth,
                 onLinkClick = onLinkClick,

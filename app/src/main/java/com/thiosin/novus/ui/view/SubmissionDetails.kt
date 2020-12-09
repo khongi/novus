@@ -1,16 +1,16 @@
 package com.thiosin.novus.ui.view
 
 import androidx.compose.runtime.Composable
-import com.thiosin.novus.domain.model.SubmissionPreview
+import com.thiosin.novus.domain.model.Submission
 
 @Composable
 fun SubmissionDetails(
-    submissionPreview: SubmissionPreview,
+    submission: Submission,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
 ) {
-    SubmissionPreviewItem(
-        submission = submissionPreview,
+    SubmissionPreview(
+        submission = submission,
         displayWidth = displayWidthDp,
         onLinkClick = onLinkClick,
         onDetailsClick = { /*TODO*/ }

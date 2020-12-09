@@ -29,7 +29,7 @@
         android:label="SubmissionFragment">
         <argument
             android:name="submission"
-            app:argType="com.thiosin.novus.domain.model.SubmissionPreview" />
+            app:argType="com.thiosin.novus.domain.model.Submission" />
         <action
             android:id="@+id/action_submissionFragment_to_webFragment"
             app:destination="@id/webFragment" />

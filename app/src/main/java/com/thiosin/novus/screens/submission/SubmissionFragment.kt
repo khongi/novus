@@ -28,8 +28,8 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
     override fun onStart() {
         super.onStart()
         val displayWidthDp = requireContext().getDisplayWidthDp()
-        val submissionPreview = SubmissionFragmentArgs.fromBundle(requireArguments()).submission
-        viewModel.load(submissionPreview, displayWidthDp)
+        val submission = SubmissionFragmentArgs.fromBundle(requireArguments()).submission
+        viewModel.load(submission, displayWidthDp)
     }
 
     override fun onCreateView(
@@ -80,7 +80,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
             },
             bodyContent = {
                 SubmissionDetails(
-                    submissionPreview = viewState.submissionPreview,
+                    submission = viewState.submission,
                     displayWidthDp = viewState.displayWidthDp,
                     onLinkClick = onLinkClick
                 )
