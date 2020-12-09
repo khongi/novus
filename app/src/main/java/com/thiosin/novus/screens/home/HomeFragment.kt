@@ -41,10 +41,6 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         savedInstanceState: Bundle?,
     ): View {
         return ComposeView(inflater.context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
@@ -100,8 +96,12 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                                         HomeFragmentDirections.actionHomeFragmentToWebFragment(it)
                                     )
                                 },
-                                onListEnd = { viewModel.loadNextPage() }
-                            )
+                                onDetailsClick = {
+                                    val navDirections = HomeFragmentDirections
+                                        .actionHomeFragmentToSubmissionFragment(it)
+                                    findNavController().navigate(navDirections)
+                                }
+                            ) { viewModel.loadNextPage() }
                         }
                         else -> {
                             LoadingScreen()

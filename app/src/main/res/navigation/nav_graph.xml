@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_homeFragment_to_webFragment"
             app:destination="@id/webFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_submissionFragment"
+            app:destination="@id/submissionFragment" />
     </fragment>
     <fragment
         android:id="@+id/webFragment"
@@ -18,6 +21,14 @@
         android:label="WebFragment">
         <argument
             android:name="url"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/submissionFragment"
+        android:name="com.thiosin.novus.screens.submission.SubmissionFragment"
+        android:label="SubmissionFragment">
+        <argument
+            android:name="submissionFullname"
             app:argType="string" />
     </fragment>
 </navigation>

@@ -40,6 +40,7 @@ fun SubmissionPreviewItem(
     submission: SubmissionPreview?,
     displayWidth: Float,
     onLinkClick: (String) -> Unit,
+    onDetailsClick: (String) -> Unit,
 ) {
     requireNotNull(submission)
 
@@ -52,7 +53,7 @@ fun SubmissionPreviewItem(
             InfoRow(submission)
             TitleRow(submission)
             MediaRow(submission, displayWidth)
-            ButtonRow(submission, onLinkClick)
+            ButtonRow(submission, onLinkClick, onDetailsClick)
         }
     }
 }
@@ -200,6 +201,7 @@ fun RemoteVideo(sourceUrl: String) {
 private fun ButtonRow(
     submission: SubmissionPreview,
     onLinkClicked: (String) -> Unit,
+    onDetailsClick: (String) -> Unit,
 ) {
     Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -212,10 +214,8 @@ private fun ButtonRow(
             modifier = Modifier
                 .height(48.dp)
                 .padding(horizontal = 8.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .clickable(onClick = {
-                    /*TODO*/
-                })
+                .clip(RoundedCornerShape(16.dp))
+                .clickable(onClick = { onDetailsClick(submission.fullname) })
         ) {
             Spacer(Modifier.size(8.dp))
             Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
@@ -248,5 +248,10 @@ fun DefaultPreview() {
             0,
             0)
     )
-    SubmissionPreviewItem(submission = submission, displayWidth = 300F) {}
+    SubmissionPreviewItem(
+        submission = submission,
+        displayWidth = 300F,
+        onLinkClick = {},
+        onDetailsClick = {}
+    )
 }
