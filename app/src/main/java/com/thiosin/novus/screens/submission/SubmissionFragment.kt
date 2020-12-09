@@ -81,6 +81,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
             bodyContent = {
                 SubmissionDetails(
                     submission = viewState.submission,
+                    comments = viewState.comments,
                     displayWidthDp = viewState.displayWidthDp,
                     onLinkClick = onLinkClick
                 )

@@ -30,7 +30,8 @@ fun SubmissionPreview(
             InfoRow(submission)
             TitleRow(submission)
             submission.media?.let {
-                MediaRow(it, displayWidthDp)
+                // Screen width - Horizontal padding
+                MediaRow(it, displayWidthDp.dp - 16.dp)
             }
             PreviewButtonRow(submission, onLinkClick, onDetailsClick)
         }
@@ -42,6 +43,7 @@ fun SubmissionPreview(
 @Composable
 fun DefaultPreview() {
     val submission = Submission(
+        id = "jqnn6m",
         fullname = "t3_jqnn6m",
         title = "Kotlin plugin updated to add data class, sealed class, annotations quicker",
         author = "VincentJoshuaET",

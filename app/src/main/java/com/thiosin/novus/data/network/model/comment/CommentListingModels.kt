@@ -240,7 +240,13 @@ enum class AwardSubType {
     GLOBAL,
 
     @Json(name = "GROUP")
-    GROUP
+    GROUP,
+
+    @Json(name = "APPRECIATION")
+    APPRECIATION,
+
+    @Json(name = "PREMIUM")
+    PREMIUM
 }
 
 enum class AwardType {

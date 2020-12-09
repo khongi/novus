@@ -1,11 +1,16 @@
 package com.thiosin.novus.domain.model
 
 import com.thiosin.novus.data.network.model.comment.CResponse
-import com.thiosin.novus.data.network.model.comment.CResponseDataChild
+import com.thiosin.novus.data.network.model.comment.CommentData
 import timber.log.Timber
 
 data class Comment(
     val body: String,
+    val author: String,
+    val isOP: Boolean,
+    val votes: Int,
+    val depth: Int,
+    val relativeTime: String,
     val replies: List<Comment>,
 )
 
@@ -14,7 +19,7 @@ fun List<CResponse>.toCommentList(): List<Comment> {
 
     forEach { responseWrapper ->
         responseWrapper.data.children.forEach { dataChild ->
-            val comment = dataChild.toComment()
+            val comment = dataChild.data.toComment()
             resultList.add(comment)
         }
     }
@@ -22,18 +27,30 @@ fun List<CResponse>.toCommentList(): List<Comment> {
     return resultList
 }
 
-fun CResponseDataChild.toComment(): Comment {
-    fun getDepthString(depth: Long): String {
-        return "--  ".repeat(1 + depth.toInt())
+private fun getDepthString(depth: Long): String {
+    return "--  ".repeat(1 + depth.toInt())
+}
+
+fun CommentData.toComment(): Comment {
+    Timber.v("${getDepthString(depth)} $score ${
+        body.trim().substringBefore('\n').take(40)
+    }")
+
+    val repliedComments = mutableListOf<Comment>()
+
+    this.replies.data?.forEach {
+        val reply = it.data.toComment()
+        repliedComments.add(reply)
     }
 
-    Timber.v("${getDepthString(this.data.depth)} ${this.data.score} ${
-        this.data.body.trim().substringBefore('\n').take(40)
-    }")
-    val replies = mutableListOf<Comment>()
-    this.data.replies.data?.forEach {
-        val reply = it.toComment()
-        replies.add(reply)
-    }
-    return Comment(this.data.body, replies)
+    return Comment(
+        body = body.trim(),
+        author = author,
+        isOP = isSubmitter,
+        votes = score.toInt(),
+        depth = depth.toInt(),
+        relativeTime = getRelativeTime(created.toInt()),
+        replies = repliedComments
+    )
 }
+
