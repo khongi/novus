@@ -33,8 +33,13 @@ object Dependencies {
             const val ui = "androidx.compose.ui:ui:${Versions.compose}"
             const val material = "androidx.compose.material:material:${Versions.compose}"
             const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
-            const val runtimeLivedata =
-                "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
+            const val livedata = "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
+            const val viewBinding = "androidx.compose.ui:ui-viewbinding:${Versions.compose}"
+        }
+
+        object Navigation {
+            const val ktxFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav}"
+            const val ktxUi = "androidx.navigation:navigation-ui-ktx:${Versions.nav}"
         }
     }
 

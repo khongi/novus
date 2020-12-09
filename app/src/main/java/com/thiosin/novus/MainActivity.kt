@@ -1,17 +1,19 @@
 package com.thiosin.novus
 
 import android.os.Bundle
-import co.zsmb.rainbowcake.navigation.SimpleNavActivity
-import com.thiosin.novus.screens.home.HomeFragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.viewinterop.AndroidViewBinding
+import com.thiosin.novus.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : SimpleNavActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            navigator.add(HomeFragment())
+        setContent {
+            AndroidViewBinding(ActivityMainBinding::inflate)
         }
     }
 }

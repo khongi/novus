@@ -1,7 +1,6 @@
 package com.thiosin.novus.screens.home
 
 import androidx.hilt.lifecycle.ViewModelInject
-import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
@@ -77,13 +76,7 @@ class HomeViewModel @ViewModelInject constructor(
         )
     }
 
-    fun showLink(url: String) = execute {
-        postEvent(ShowLinkEvent(url))
-    }
-
     private suspend fun getSubreddits(): List<Subreddit> {
         return homePresenter.getSubreddits()
     }
-
-    data class ShowLinkEvent(val url: String) : OneShotEvent
 }

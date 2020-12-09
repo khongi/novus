@@ -16,13 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import co.zsmb.rainbowcake.base.OneShotEvent
+import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
-import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.Subreddit
-import com.thiosin.novus.screens.home.HomeViewModel.ShowLinkEvent
-import com.thiosin.novus.screens.web.WebFragment
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +40,11 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return ComposeView(requireContext()).apply {
+        return ComposeView(inflater.context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
@@ -94,7 +95,11 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                             SubmissionList(
                                 submissions = viewState.submissions,
                                 listState = listState,
-                                onLinkClick = { viewModel.showLink(it) },
+                                onLinkClick = {
+                                    findNavController().navigate(
+                                        HomeFragmentDirections.actionHomeFragmentToWebFragment(it)
+                                    )
+                                },
                                 onListEnd = { viewModel.loadNextPage() }
                             )
                         }
@@ -125,14 +130,6 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         return when (this) {
             is HomeReady -> currentSubreddit
             else -> null
-        }
-    }
-
-    override fun onEvent(event: OneShotEvent) {
-        when (event) {
-            is ShowLinkEvent -> {
-                navigator?.add(WebFragment.newInstance(event.url))
-            }
         }
     }
 }

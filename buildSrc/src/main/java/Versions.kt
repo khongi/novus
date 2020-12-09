@@ -32,6 +32,8 @@ object Versions {
     const val retrofit = "2.9.0"
     const val moshi = "1.10.0"
 
+    const val nav = "2.3.2"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"

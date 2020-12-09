@@ -3,6 +3,7 @@ plugins {
     id(Plugins.hilt)
     kotlin(Plugins.Kotlin.android)
     kotlin(Plugins.Kotlin.kapt)
+    id(Plugins.safeArgs)
 }
 
 android {
@@ -30,6 +31,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     compileOptions {
@@ -77,7 +82,6 @@ dependencies {
     implementation(Dependencies.Kotlin.stdLib)
 
     implementation(Dependencies.RainbowCake.core)
-    implementation(Dependencies.RainbowCake.navigation)
     implementation(Dependencies.RainbowCake.timber)
 
     implementation(Dependencies.Hilt.android)
@@ -90,13 +94,11 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.uiTooling)
-    implementation(Dependencies.AndroidX.Compose.runtimeLivedata)
-//
-//    val nav_version = "2.3.2"
-//    val nav_compose_version = "1.0.0-alpha03"
-//    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-//    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-//    implementation("androidx.navigation:navigation-compose:$nav_compose_version")
+    implementation(Dependencies.AndroidX.Compose.livedata)
+    implementation(Dependencies.AndroidX.Compose.viewBinding)
+
+    implementation(Dependencies.AndroidX.Navigation.ktxFragment)
+    implementation(Dependencies.AndroidX.Navigation.ktxUi)
 
     implementation(Dependencies.AndroidX.ktxCore)
     implementation(Dependencies.AndroidX.ktxLifecycle)

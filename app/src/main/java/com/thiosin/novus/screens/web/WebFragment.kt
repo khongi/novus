@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.navigation.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
-import co.zsmb.rainbowcake.navigation.extensions.applyArgs
-import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.WebContentScreen
@@ -21,16 +20,6 @@ class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel> {
         replaceWith = ReplaceWith("WebFragment.newInstance()"))
     constructor()
 
-    companion object {
-        private const val URL_KEY = "URL_KEY"
-        fun newInstance(url: String): WebFragment {
-            @Suppress("DEPRECATION")
-            return WebFragment().applyArgs {
-                putString(URL_KEY, url)
-            }
-        }
-    }
-
     override fun provideViewModel() = getViewModel()
     override fun render(viewState: WebViewState) = Unit
 
@@ -43,9 +32,8 @@ class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel> {
             setContent {
                 NovusTheme {
                     WebContentScreen(
-                        sourceUrl = requireArguments().getString(URL_KEY)
-                            ?: throw IllegalStateException("URL is null"),
-                        onClose = { navigator?.pop() }
+                        sourceUrl = WebFragmentArgs.fromBundle(requireArguments()).url,
+                        onClose = { findNavController().popBackStack() }
                     )
                 }
             }
