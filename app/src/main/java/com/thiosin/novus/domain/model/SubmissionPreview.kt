@@ -2,7 +2,6 @@ package com.thiosin.novus.domain.model
 
 import android.text.format.DateUtils
 import com.thiosin.novus.data.network.model.submission.PostHint
-import com.thiosin.novus.data.network.model.submission.SubmissionListingChild
 import com.thiosin.novus.data.network.model.submission.SubmissionListingChildData
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 
@@ -36,7 +35,7 @@ fun SubmissionListingResponse.toLoadResultData(): List<SubmissionPreview> {
     return children.map { child ->
         child.data.let {
             SubmissionPreview(
-                fullname = getFullName(child),
+                fullname = child.data.name,
                 title = it.title,
                 subreddit = it.subreddit,
                 author = it.author,
@@ -48,10 +47,6 @@ fun SubmissionListingResponse.toLoadResultData(): List<SubmissionPreview> {
             )
         }
     }
-}
-
-fun getFullName(it: SubmissionListingChild): String {
-    return "${it.kind.name}_${it.data.id}"
 }
 
 private fun Long.toVoteFormat(): String {

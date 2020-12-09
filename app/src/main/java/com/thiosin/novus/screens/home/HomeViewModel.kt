@@ -37,13 +37,21 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun loadNextPage() = execute {
         val oldState = viewState as? HomeReady ?: return@execute
+
+        val newSubmissions = homePresenter.getSubredditPage(
+            subreddit = oldState.currentSubreddit.name,
+            sort = SubmissionSort.Hot,
+            count = oldState.submissions.size,
+            after = oldState.submissions.last().fullname
+        )
+
+        val submissions = oldState.submissions + newSubmissions
+        submissions.forEach {
+            Timber.d("${it.subreddit} ${it.author} ${it.relativeTime} ${it.votes}")
+        }
+
         viewState = oldState.copy(
-            submissions = oldState.submissions + homePresenter.getSubredditPage(
-                subreddit = oldState.currentSubreddit.name,
-                sort = SubmissionSort.Hot,
-                count = oldState.submissions.size,
-                after = oldState.submissions.last().fullname
-            )
+            submissions = submissions
         )
     }
 
