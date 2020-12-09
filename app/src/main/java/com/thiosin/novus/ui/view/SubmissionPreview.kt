@@ -15,7 +15,7 @@ import com.thiosin.novus.domain.model.Submission
 @Composable
 fun SubmissionPreview(
     submission: Submission?,
-    displayWidth: Float,
+    displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
 ) {
@@ -30,7 +30,7 @@ fun SubmissionPreview(
             InfoRow(submission)
             TitleRow(submission)
             submission.media?.let {
-                MediaRow(it, displayWidth)
+                MediaRow(it, displayWidthDp)
             }
             PreviewButtonRow(submission, onLinkClick, onDetailsClick)
         }
@@ -54,7 +54,7 @@ fun DefaultPreview() {
     )
     SubmissionPreview(
         submission = submission,
-        displayWidth = 300F,
+        displayWidthDp = 300F,
         onLinkClick = {},
         onDetailsClick = {}
     )

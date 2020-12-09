@@ -27,7 +27,7 @@ fun SubmissionList(
             Column {
                 SubmissionPreview(
                     submission = submission,
-                    displayWidth = displayWidth,
+                    displayWidthDp = displayWidth,
                     onLinkClick = onLinkClick,
                     onDetailsClick = onDetailsClick
                 )
@@ -36,7 +36,7 @@ fun SubmissionList(
         } else {
             SubmissionPreview(
                 submission = submission,
-                displayWidth = displayWidth,
+                displayWidthDp = displayWidth,
                 onLinkClick = onLinkClick,
                 onDetailsClick = onDetailsClick
             )
