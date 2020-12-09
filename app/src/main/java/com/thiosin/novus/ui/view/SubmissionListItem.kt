@@ -40,7 +40,7 @@ fun SubmissionPreviewItem(
     submission: SubmissionPreview?,
     displayWidth: Float,
     onLinkClick: (String) -> Unit,
-    onDetailsClick: (String) -> Unit,
+    onDetailsClick: (SubmissionPreview) -> Unit,
 ) {
     requireNotNull(submission)
 
@@ -201,7 +201,7 @@ fun RemoteVideo(sourceUrl: String) {
 private fun ButtonRow(
     submission: SubmissionPreview,
     onLinkClicked: (String) -> Unit,
-    onDetailsClick: (String) -> Unit,
+    onDetailsClick: (SubmissionPreview) -> Unit,
 ) {
     Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -215,7 +215,7 @@ private fun ButtonRow(
                 .height(48.dp)
                 .padding(horizontal = 8.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .clickable(onClick = { onDetailsClick(submission.fullname) })
+                .clickable(onClick = { onDetailsClick(submission) })
         ) {
             Spacer(Modifier.size(8.dp))
             Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))

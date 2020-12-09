@@ -3,6 +3,7 @@ plugins {
     id(Plugins.hilt)
     kotlin(Plugins.Kotlin.android)
     kotlin(Plugins.Kotlin.kapt)
+    id(Plugins.kotlinAndroidExtensions)
     id(Plugins.safeArgs)
 }
 
@@ -80,6 +81,7 @@ kapt {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
+//    implementation("org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}")
 
     implementation(Dependencies.RainbowCake.core)
     implementation(Dependencies.RainbowCake.timber)

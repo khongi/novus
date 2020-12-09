@@ -28,7 +28,7 @@
         android:name="com.thiosin.novus.screens.submission.SubmissionFragment"
         android:label="SubmissionFragment">
         <argument
-            android:name="submissionFullname"
-            app:argType="string" />
+            android:name="submission"
+            app:argType="com.thiosin.novus.domain.model.SubmissionPreview" />
     </fragment>
 </navigation>

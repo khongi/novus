@@ -1,10 +1,13 @@
 package com.thiosin.novus.domain.model
 
+import android.os.Parcelable
 import android.text.format.DateUtils
 import com.thiosin.novus.data.network.model.submission.PostHint
 import com.thiosin.novus.data.network.model.submission.SubmissionListingChildData
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class SubmissionPreview(
     val fullname: String,
     val title: String,
@@ -15,16 +18,18 @@ data class SubmissionPreview(
     val votes: String,
     val comments: Int,
     val media: SubmissionMedia? = null,
-)
+) : Parcelable
 
+@Parcelize
 data class SubmissionMedia(
     val url: String,
     val type: SubmissionMediaType,
     val width: Int,
     val height: Int,
-)
+) : Parcelable
 
-enum class SubmissionMediaType {
+@Parcelize
+enum class SubmissionMediaType : Parcelable {
     Image,
     Video,
     Thumbnail

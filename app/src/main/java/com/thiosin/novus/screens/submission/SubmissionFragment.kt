@@ -53,7 +53,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                 )
             },
             bodyContent = {
-                Text(text = SubmissionFragmentArgs.fromBundle(requireArguments()).submissionFullname)
+                Text(text = SubmissionFragmentArgs.fromBundle(requireArguments()).submission.title)
             }
         )
     }

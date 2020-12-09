@@ -13,7 +13,7 @@ fun SubmissionList(
     submissions: List<SubmissionPreview>,
     listState: LazyListState,
     onLinkClick: (String) -> Unit,
-    onDetailsClick: (String) -> Unit,
+    onDetailsClick: (SubmissionPreview) -> Unit,
     onListEnd: () -> Unit,
 ) {
     if (listState.firstVisibleItemIndex >= submissions.size - 10) {
