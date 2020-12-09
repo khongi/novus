@@ -1,5 +1,6 @@
 package com.thiosin.novus.ui.view
 
+//import androidx.ui.tooling.preview.Preview
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
@@ -13,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.res.loadVectorResource
+import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.ui.tooling.preview.Preview
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import com.google.android.exoplayer2.Player
@@ -135,12 +136,12 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
         contentScale = contentScale,
         loading = {
             Box(modifier = Modifier.fillMaxSize(),
-                alignment = Alignment.Center) {
+                contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(Modifier.size(48.dp))
             }
         },
         modifier = modifier,
-        imageLoader = ImageLoader.Builder(ContextAmbient.current)
+        imageLoader = ImageLoader.Builder(AmbientContext.current)
             .componentRegistry {
                 add(ImageDecoderDecoder())
             }
@@ -151,7 +152,7 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
 @Composable
 fun RemoteVideo(sourceUrl: String) {
     // This is the official way to access current context from Composable functions
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
 
     // Do not recreate the player everytime this Composable commits
     val exoPlayer = remember {
@@ -208,19 +209,15 @@ private fun ButtonRow(
             modifier = Modifier.padding(4.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            loadVectorResource(id = R.drawable.ic_outline_mode_comment_24).resource.resource?.let {
-                IconButton(onClick = { /* TODO */ }) {
-                    Icon(asset = it)
-                }
+            IconButton(onClick = { /* TODO */ }) {
+                Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
             }
             Text(text = "${submission.comments}",
                 style = MaterialTheme.typography.caption)
         }
 
-        loadVectorResource(id = R.drawable.ic_outline_link_24).resource.resource?.let {
-            IconButton(onClick = { onLinkClicked(submission.link) }) {
-                Icon(asset = it)
-            }
+        IconButton(onClick = { onLinkClicked(submission.link) }) {
+            Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
         }
     }
 }

@@ -91,6 +91,12 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.uiTooling)
     implementation(Dependencies.AndroidX.Compose.runtimeLivedata)
+//
+//    val nav_version = "2.3.2"
+//    val nav_compose_version = "1.0.0-alpha03"
+//    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+//    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+//    implementation("androidx.navigation:navigation-compose:$nav_compose_version")
 
     implementation(Dependencies.AndroidX.ktxCore)
     implementation(Dependencies.AndroidX.ktxLifecycle)

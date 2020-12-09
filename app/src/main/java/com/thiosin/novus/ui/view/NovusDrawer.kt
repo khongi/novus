@@ -31,7 +31,7 @@ fun NovusDrawer(subreddits: List<Subreddit>, selected: Subreddit?, onClick: (Sub
                 .preferredHeight(56.dp),
             elevation = 8.dp
         ) {
-            Box(modifier = Modifier.fillMaxSize(), alignment = Alignment.CenterStart) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
                 val title = annotatedString {
                     pushStyle(SpanStyle(color = MaterialTheme.colors.onSurface))
                     append("Novus for ")

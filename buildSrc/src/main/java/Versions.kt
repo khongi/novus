@@ -6,11 +6,11 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val kotlin = "1.4.10"
+    const val kotlin = "1.4.20"
 
     const val rainbowcake = "1.3.0"
 
-    const val compose = "1.0.0-alpha07"
+    const val compose = "1.0.0-alpha08"
     const val material = "1.2.1"
 
     const val ktxCore = "1.3.2"
@@ -23,7 +23,7 @@ object Versions {
     const val redditARAW = "v1.0.0"
     const val redditAuth = "v1.2.2"
 
-    const val accompanist = "0.3.3.1"
+    const val accompanist = "0.4.0"
     const val coil = "1.1.0"
 
     const val exoplayer = "2.11.8"

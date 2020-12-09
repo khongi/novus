@@ -9,13 +9,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.viewinterop.AndroidView
 import timber.log.Timber
 
 @Composable
 fun WebContentScreen(sourceUrl: String, onClose: () -> Unit) {
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
     val isLoading = remember { mutableStateOf(true) }
     val host = remember { mutableStateOf("") }
 
