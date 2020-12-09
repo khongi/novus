@@ -1,8 +1,8 @@
 package com.thiosin.novus.ui.view
 
-//import androidx.ui.tooling.preview.Preview
 import android.net.Uri
 import android.view.ViewGroup
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -201,19 +201,28 @@ private fun ButtonRow(
     submission: SubmissionPreview,
     onLinkClicked: (String) -> Unit,
 ) {
-    Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth(),
+    Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically) {
         Text(text = submission.votes,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.padding(4.dp))
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { /* TODO */ }) {
-                Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
-            }
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .height(48.dp)
+                .padding(horizontal = 8.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(onClick = {
+                    /*TODO*/
+                })
+        ) {
+            Spacer(Modifier.size(8.dp))
+            Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
             Text(text = "${submission.comments}",
+                modifier = Modifier.padding(start = 4.dp),
                 style = MaterialTheme.typography.caption)
+            Spacer(Modifier.size(8.dp))
         }
 
         IconButton(onClick = { onLinkClicked(submission.link) }) {
@@ -226,14 +235,18 @@ private fun ButtonRow(
 @Composable
 fun DefaultPreview() {
     val submission = SubmissionPreview(
-        fullname = "t3_assdfio",
-        title = "This is the title",
-        author = "thiosin",
-        subreddit = "linux",
-        relativeTime = "6h",
-        votes = "64.1k",
-        comments = 123,
-        link = ""
+        fullname = "t3_jqnn6m",
+        title = "Kotlin plugin updated to add data class, sealed class, annotations quicker",
+        author = "VincentJoshuaET",
+        subreddit = "androiddev",
+        relativeTime = "1 month ago",
+        votes = "205",
+        comments = 9,
+        link = "https://www.reddit.com/r/androiddev/comments/jqnn6m/kotlin_plugin_updated_to_add_data_class_sealed/",
+        media = SubmissionMedia("https://i.redd.it/ysedmnny44y51.png",
+            SubmissionMediaType.Thumbnail,
+            0,
+            0)
     )
     SubmissionPreviewItem(submission = submission, displayWidth = 300F) {}
 }

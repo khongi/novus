@@ -66,8 +66,6 @@ private fun getRelativeTime(it: SubmissionListingChildData): String {
 }
 
 private fun getSubmissionMedia(submission: SubmissionListingChildData): SubmissionMedia? {
-//    Timber.d("${submission.subreddit} ${submission.author}: ${submission.url}")
-
     var url: String? = null
     var type = SubmissionMediaType.Thumbnail
     when (submission.postHint) {
