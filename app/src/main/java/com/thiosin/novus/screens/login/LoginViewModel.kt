@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.login
+package com.thiosin.novus.screens.login
 
 import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel

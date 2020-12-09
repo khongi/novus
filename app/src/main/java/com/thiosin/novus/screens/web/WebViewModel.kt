@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.web
+package com.thiosin.novus.screens.web
 
 import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel

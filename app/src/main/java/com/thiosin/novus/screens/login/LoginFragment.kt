@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.login
+package com.thiosin.novus.screens.login
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -12,9 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidView
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
-import co.zsmb.rainbowcake.navigation.navigator
 import com.thiosin.novus.di.getViewModel
-import com.thiosin.novus.ui.home.HomeFragment
 import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +24,7 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
@@ -51,7 +49,7 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
                         }
                     }
                     is LoginComplete -> {
-                        navigator?.replace(HomeFragment())
+//                        navigator?.replace(HomeFragment())
                     }
                 }
             }

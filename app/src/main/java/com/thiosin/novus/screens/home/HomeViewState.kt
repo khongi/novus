@@ -1,6 +1,6 @@
-package com.thiosin.novus.ui.home
+package com.thiosin.novus.screens.home
 
-import com.thiosin.novus.domain.model.SubmissionPreview
+import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.Subreddit
 
 sealed class HomeViewState
@@ -8,7 +8,7 @@ sealed class HomeViewState
 object HomeInitial : HomeViewState()
 
 data class HomeReady(
-    val submissions: List<SubmissionPreview>,
+    val submissions: List<Submission>,
     val currentSubreddit: Subreddit,
     val subreddits: List<Subreddit>,
     val loading: Boolean = false,

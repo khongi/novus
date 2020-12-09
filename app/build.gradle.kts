@@ -3,6 +3,8 @@ plugins {
     id(Plugins.hilt)
     kotlin(Plugins.Kotlin.android)
     kotlin(Plugins.Kotlin.kapt)
+    id(Plugins.kotlinAndroidExtensions)
+    id(Plugins.safeArgs)
 }
 
 android {
@@ -30,6 +32,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     compileOptions {
@@ -75,9 +81,9 @@ kapt {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
+//    implementation("org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}")
 
     implementation(Dependencies.RainbowCake.core)
-    implementation(Dependencies.RainbowCake.navigation)
     implementation(Dependencies.RainbowCake.timber)
 
     implementation(Dependencies.Hilt.android)
@@ -90,7 +96,11 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.ui)
     implementation(Dependencies.AndroidX.Compose.material)
     implementation(Dependencies.AndroidX.Compose.uiTooling)
-    implementation(Dependencies.AndroidX.Compose.runtimeLivedata)
+    implementation(Dependencies.AndroidX.Compose.livedata)
+    implementation(Dependencies.AndroidX.Compose.viewBinding)
+
+    implementation(Dependencies.AndroidX.Navigation.ktxFragment)
+    implementation(Dependencies.AndroidX.Navigation.ktxUi)
 
     implementation(Dependencies.AndroidX.ktxCore)
     implementation(Dependencies.AndroidX.ktxLifecycle)

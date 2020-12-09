@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.thiosin.novus.screens.home.HomeFragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/action_homeFragment_to_webFragment"
+            app:destination="@id/webFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_submissionFragment"
+            app:destination="@id/submissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webFragment"
+        android:name="com.thiosin.novus.screens.web.WebFragment"
+        android:label="WebFragment">
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/submissionFragment"
+        android:name="com.thiosin.novus.screens.submission.SubmissionFragment"
+        android:label="SubmissionFragment">
+        <argument
+            android:name="submission"
+            app:argType="com.thiosin.novus.domain.model.Submission" />
+        <action
+            android:id="@+id/action_submissionFragment_to_webFragment"
+            app:destination="@id/webFragment" />
+    </fragment>
+</navigation>

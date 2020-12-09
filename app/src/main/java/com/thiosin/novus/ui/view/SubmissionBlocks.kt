@@ -1,7 +1,8 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import android.net.Uri
 import android.view.ViewGroup
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -13,11 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.res.loadVectorResource
+import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.ui.tooling.preview.Preview
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import com.google.android.exoplayer2.Player
@@ -29,35 +29,14 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.thiosin.novus.R
+import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.SubmissionMedia
 import com.thiosin.novus.domain.model.SubmissionMediaType
-import com.thiosin.novus.domain.model.SubmissionPreview
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@Composable
-fun SubmissionPreviewItem(
-    submission: SubmissionPreview?,
-    displayWidth: Float,
-    onLinkClick: (String) -> Unit,
-) {
-    requireNotNull(submission)
-
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).fillMaxWidth(),
-        elevation = 16.dp
-    ) {
-        Column(modifier = Modifier.padding(top = 4.dp)) {
-            InfoRow(submission)
-            TitleRow(submission)
-            MediaRow(submission, displayWidth)
-            ButtonRow(submission, onLinkClick)
-        }
-    }
-}
 
 @Composable
-private fun InfoRow(submission: SubmissionPreview) {
+fun InfoRow(submission: Submission) {
     Row(modifier = Modifier.padding(horizontal = 8.dp)) {
         Text(
             text = submission.subreddit,
@@ -78,40 +57,44 @@ private fun InfoRow(submission: SubmissionPreview) {
 }
 
 @Composable
-private fun TitleRow(
-    submission: SubmissionPreview,
-) {
+fun TitleRow(submission: Submission) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        if (submission.media != null && submission.media.type == SubmissionMediaType.Thumbnail
-        ) {
-            RemoteImage(
-                url = submission.media.url,
-                modifier = Modifier.size(100.dp).padding(8.dp)
-                    .clip(MaterialTheme.shapes.medium),
-                contentScale = ContentScale.Crop
-            )
+        if (submission.media == null && submission.thumbnail != null) {
+            Thumbnail(submission.thumbnail)
         }
-        Text(text = submission.title,
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
-
+        Title(submission.title)
     }
 }
 
 @Composable
-private fun MediaRow(submission: SubmissionPreview, displayWidth: Float) {
-    if (submission.media != null && submission.media.type != SubmissionMediaType.Thumbnail) {
-        val parentWidth = displayWidth - 2 * 8
-        val ratio = parentWidth / submission.media.width
-        val height = submission.media.height * ratio
-        Box(modifier = Modifier.width(parentWidth.dp).height(height.dp)) {
-            Media(submission.media)
-        }
+private fun Title(title: String) {
+    Text(text = title,
+        style = MaterialTheme.typography.h6,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+}
+
+@Composable
+fun Thumbnail(url: String) {
+    RemoteImage(
+        url = url,
+        modifier = Modifier.size(100.dp).padding(8.dp)
+            .clip(MaterialTheme.shapes.medium),
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
+fun MediaRow(media: SubmissionMedia, displayWidth: Float) {
+    val parentWidth = displayWidth - 2 * 8
+    val ratio = parentWidth / media.width
+    val height = media.height * ratio
+    Box(modifier = Modifier.width(parentWidth.dp).height(height.dp)) {
+        Media(media = media)
     }
 }
 
 @Composable
-private fun Media(media: SubmissionMedia) {
+fun Media(media: SubmissionMedia) {
     when (media.type) {
         SubmissionMediaType.Image -> {
             RemoteImage(
@@ -121,9 +104,8 @@ private fun Media(media: SubmissionMedia) {
             )
         }
         SubmissionMediaType.Video -> {
-            RemoteVideo(media.url)
+            RemoteVideo(url = media.url)
         }
-        else -> Unit
     }
 }
 
@@ -135,12 +117,12 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
         contentScale = contentScale,
         loading = {
             Box(modifier = Modifier.fillMaxSize(),
-                alignment = Alignment.Center) {
+                contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(Modifier.size(48.dp))
             }
         },
         modifier = modifier,
-        imageLoader = ImageLoader.Builder(ContextAmbient.current)
+        imageLoader = ImageLoader.Builder(AmbientContext.current)
             .componentRegistry {
                 add(ImageDecoderDecoder())
             }
@@ -149,9 +131,9 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
 }
 
 @Composable
-fun RemoteVideo(sourceUrl: String) {
+fun RemoteVideo(url: String) {
     // This is the official way to access current context from Composable functions
-    val context = ContextAmbient.current
+    val context = AmbientContext.current
 
     // Do not recreate the player everytime this Composable commits
     val exoPlayer = remember {
@@ -161,7 +143,7 @@ fun RemoteVideo(sourceUrl: String) {
     // We only want to react to changes in sourceUrl.
     // This callback will be execute at each commit phase if
     // [sourceUrl] has changed.
-    onCommit(sourceUrl) {
+    onCommit(url) {
         val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
             context,
             Util.getUserAgent(context, context.packageName)
@@ -169,7 +151,7 @@ fun RemoteVideo(sourceUrl: String) {
 
         val source = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(
-                Uri.parse(sourceUrl)
+                Uri.parse(url)
             )
 
         exoPlayer.prepare(source)
@@ -196,47 +178,56 @@ fun RemoteVideo(sourceUrl: String) {
 }
 
 @Composable
-private fun ButtonRow(
-    submission: SubmissionPreview,
-    onLinkClicked: (String) -> Unit,
+fun PreviewButtonRow(
+    submission: Submission,
+    onLinkClick: (String) -> Unit,
+    onCommentsClick: (Submission) -> Unit,
 ) {
-    Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth(),
+    Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically) {
-        Text(text = submission.votes,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(4.dp))
+        Votes(submission.votes)
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            loadVectorResource(id = R.drawable.ic_outline_mode_comment_24).resource.resource?.let {
-                IconButton(onClick = { /* TODO */ }) {
-                    Icon(asset = it)
-                }
-            }
-            Text(text = "${submission.comments}",
-                style = MaterialTheme.typography.caption)
-        }
+        CommentsButton(submission, onCommentsClick)
 
-        loadVectorResource(id = R.drawable.ic_outline_link_24).resource.resource?.let {
-            IconButton(onClick = { onLinkClicked(submission.link) }) {
-                Icon(asset = it)
-            }
-        }
+        LinkButton(submission.link, onLinkClick)
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    val submission = SubmissionPreview(
-        fullname = "t3_assdfio",
-        title = "This is the title",
-        author = "thiosin",
-        subreddit = "linux",
-        relativeTime = "6h",
-        votes = "64.1k",
-        comments = 123,
-        link = ""
-    )
-    SubmissionPreviewItem(submission = submission, displayWidth = 300F) {}
+fun LinkButton(
+    url: String,
+    onClick: (String) -> Unit,
+) {
+    IconButton(onClick = { onClick(url) }) {
+        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
+    }
+}
+
+@Composable
+fun CommentsButton(
+    submission: Submission,
+    onClick: (Submission) -> Unit,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .height(48.dp)
+            .padding(horizontal = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = { onClick(submission) })
+    ) {
+        Spacer(Modifier.size(8.dp))
+        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
+        Text(text = "${submission.comments}",
+            modifier = Modifier.padding(start = 4.dp),
+            style = MaterialTheme.typography.caption)
+        Spacer(Modifier.size(8.dp))
+    }
+}
+
+@Composable
+fun Votes(votes: String) {
+    Text(text = votes,
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.padding(4.dp))
 }

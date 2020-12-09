@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -19,15 +19,15 @@ fun NovusTopAppBar(
         navigationIcon = {
             if (navIcon != NavigationIcon.NoIcon) {
                 IconButton(
-                    icon = {
-                        when (navIcon) {
-                            NavigationIcon.Back -> Icon(asset = vectorResource(id = R.drawable.ic_baseline_arrow_back_24))
-                            NavigationIcon.Menu -> Icon(asset = vectorResource(id = R.drawable.ic_baseline_menu_24))
-                            NavigationIcon.NoIcon -> Unit
-                        }
-                    },
                     onClick = onNavigationIconClick
-                )
+                ) {
+                    when (navIcon) {
+                        NavigationIcon.Back -> Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_arrow_back_24))
+                        NavigationIcon.Menu -> Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_menu_24))
+                        NavigationIcon.Close -> Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_close_24))
+                        NavigationIcon.NoIcon -> Unit
+                    }
+                }
             }
         }
     )
@@ -36,5 +36,6 @@ fun NovusTopAppBar(
 enum class NavigationIcon {
     Back,
     Menu,
+    Close,
     NoIcon
 }

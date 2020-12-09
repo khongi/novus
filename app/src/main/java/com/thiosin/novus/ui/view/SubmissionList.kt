@@ -1,40 +1,44 @@
-package com.thiosin.novus.ui.common
+package com.thiosin.novus.ui.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.ContextAmbient
-import com.thiosin.novus.domain.model.SubmissionPreview
+import androidx.compose.ui.platform.AmbientContext
+import com.thiosin.novus.domain.model.Submission
 
 @Composable
 fun SubmissionList(
-    submissions: List<SubmissionPreview>,
+    submissions: List<Submission>,
     listState: LazyListState,
     onLinkClick: (String) -> Unit,
+    onDetailsClick: (Submission) -> Unit,
     onListEnd: () -> Unit,
 ) {
     if (listState.firstVisibleItemIndex >= submissions.size - 10) {
         onListEnd()
     }
-    val displayMetrics = ContextAmbient.current.resources.displayMetrics
-    val displayWidth = remember { displayMetrics.widthPixels / displayMetrics.density }
+    val displayWidthDp = AmbientContext.current.getDisplayWidthDp()
+    val displayWidth = remember { displayWidthDp }
 
     LazyColumnForIndexed(state = listState, items = submissions) { index, submission ->
         if (index == submissions.size - 1) {
             Column {
-                SubmissionPreviewItem(
+                SubmissionPreview(
                     submission = submission,
                     displayWidth = displayWidth,
-                    onLinkClick = onLinkClick)
+                    onLinkClick = onLinkClick,
+                    onDetailsClick = onDetailsClick
+                )
                 LoadingItem()
             }
         } else {
-            SubmissionPreviewItem(
+            SubmissionPreview(
                 submission = submission,
                 displayWidth = displayWidth,
-                onLinkClick = onLinkClick
+                onLinkClick = onLinkClick,
+                onDetailsClick = onDetailsClick
             )
         }
     }
