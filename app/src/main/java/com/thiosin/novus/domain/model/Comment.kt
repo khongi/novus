@@ -2,6 +2,7 @@ package com.thiosin.novus.domain.model
 
 import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.comment.CommentData
+import com.thiosin.novus.data.network.model.comment.Distinguished
 import timber.log.Timber
 
 data class Comment(
@@ -12,8 +13,15 @@ data class Comment(
     val depth: Int,
     val isCollapsed: Boolean,
     val relativeTime: String,
+    val authorType: AuthorType,
     val replies: List<Comment>,
 )
+
+enum class AuthorType {
+    NORMAL,
+    MODERATOR,
+    ADMIN
+}
 
 fun List<CResponse>.toCommentList(): List<Comment> {
     val resultList = mutableListOf<Comment>()
@@ -52,7 +60,16 @@ fun CommentData.toComment(): Comment {
         depth = depth.toInt(),
         isCollapsed = collapsed,
         relativeTime = getRelativeTime(createdUTC.toLong()),
+        authorType = getDistinguished(distinguished),
         replies = repliedComments
     )
+}
+
+fun getDistinguished(distinguished: Distinguished?): AuthorType {
+    return when (distinguished) {
+        Distinguished.MODERATOR -> AuthorType.MODERATOR
+        Distinguished.ADMIN -> AuthorType.ADMIN
+        null -> AuthorType.NORMAL
+    }
 }
 

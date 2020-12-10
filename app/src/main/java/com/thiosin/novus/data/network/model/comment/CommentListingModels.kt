@@ -110,6 +110,8 @@ data class CommentData(
 
     @Json(name = "author_cakeday")
     val authorCakeday: Boolean? = null,
+
+    val distinguished: Distinguished? = null,
 )
 
 @JsonClass(generateAdapter = true)
@@ -257,4 +259,12 @@ enum class AwardType {
 enum class AuthorFlairType {
     @Json(name = "text")
     TEXT
+}
+
+enum class Distinguished {
+    @Json(name = "moderator")
+    MODERATOR,
+
+    @Json(name = "admin")
+    ADMIN,
 }

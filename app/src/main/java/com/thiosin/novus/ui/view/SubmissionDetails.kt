@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.thiosin.novus.domain.model.AuthorType
 import com.thiosin.novus.domain.model.Comment
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.ui.modifiers.Border
@@ -63,6 +64,7 @@ fun CommentItem(comment: Comment) {
 
 @Composable
 private fun CommentContent(comment: Comment) {
+    val authorColor = getAuthorColor(comment)
     Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)) {
         Spacer(modifier = Modifier.width((comment.depth * 8).dp))
         val border = getMarkerBorder(comment.depth)
@@ -76,11 +78,7 @@ private fun CommentContent(comment: Comment) {
                     Text(
                         text = comment.author,
                         style = MaterialTheme.typography.subtitle1,
-                        color = if (comment.isOP) {
-                            MaterialTheme.colors.primary
-                        } else {
-                            Color.Unspecified
-                        }
+                        color = authorColor
                     )
                     Text(
                         text = "↑ ${comment.votes}",
@@ -104,7 +102,21 @@ private fun CommentContent(comment: Comment) {
     }
 }
 
-fun getMarkerBorder(depth: Int): Border? {
+private fun getAuthorColor(comment: Comment): Color {
+    return when (comment.authorType) {
+        AuthorType.NORMAL -> {
+            if (comment.isOP) {
+                purple700
+            } else {
+                Color.Unspecified
+            }
+        }
+        AuthorType.MODERATOR -> green500
+        AuthorType.ADMIN -> redditOrange
+    }
+}
+
+private fun getMarkerBorder(depth: Int): Border? {
     val color = when (depth) {
         0 -> return null
         1 -> deepPurple500
@@ -136,6 +148,7 @@ private fun CommentContentPreview() {
         depth = 1,
         isCollapsed = false,
         relativeTime = "1h ago",
+        authorType = AuthorType.MODERATOR,
         replies = emptyList()
     )
 
