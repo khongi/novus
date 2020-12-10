@@ -1,7 +1,6 @@
 package com.thiosin.novus.domain.model
 
 import android.os.Parcelable
-import android.text.format.DateUtils
 import com.thiosin.novus.data.network.model.submission.PostHint
 import com.thiosin.novus.data.network.model.submission.SubmissionListingChildData
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
@@ -9,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Submission(
+    val id: String,
     val fullname: String,
     val title: String,
     val subreddit: String,
@@ -40,35 +40,20 @@ fun SubmissionListingResponse.toLoadResultData(): List<Submission> {
     return children.map { child ->
         child.data.let {
             Submission(
+                id = it.id,
                 fullname = child.data.name,
                 title = it.title,
                 subreddit = it.subreddit,
                 author = it.author,
                 link = it.url,
                 comments = it.numComments.toInt(),
-                votes = it.ups.toVoteFormat(),
-                relativeTime = getRelativeTime(it.created),
+                votes = getVotesFormat(it.score),
+                relativeTime = getRelativeTime(it.createdUTC.toLong()),
                 thumbnail = getThumbnail(it.thumbnail),
                 media = getSubmissionMedia(it),
             )
         }
     }
-}
-
-private fun Long.toVoteFormat(): String {
-    if (this < 1000) {
-        return this.toString()
-    }
-    val k = this / 1000.0
-    return "%.${1}fk".format(k)
-}
-
-private fun getRelativeTime(epochSec: Long): String {
-    return DateUtils.getRelativeTimeSpanString(
-        System.currentTimeMillis(),
-        epochSec * 1_000L,
-        DateUtils.SECOND_IN_MILLIS
-    ).toString()
 }
 
 private fun getThumbnail(url: String?): String? {

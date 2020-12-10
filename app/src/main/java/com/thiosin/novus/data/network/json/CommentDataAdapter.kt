@@ -2,10 +2,7 @@ package com.thiosin.novus.data.network.json
 
 import com.squareup.moshi.*
 import com.squareup.moshi.internal.Util
-import com.thiosin.novus.data.network.model.comment.AllAwarding
-import com.thiosin.novus.data.network.model.comment.CReplies
-import com.thiosin.novus.data.network.model.comment.CommentData
-import com.thiosin.novus.data.network.model.comment.Gildings
+import com.thiosin.novus.data.network.model.comment.*
 import java.lang.reflect.Constructor
 import kotlin.Boolean
 import kotlin.Double
@@ -51,7 +48,8 @@ class CommentDataAdapter(
         "subreddit_name_prefixed",
         "controversiality",
         "depth",
-        "author_cakeday")
+        "author_cakeday",
+        "distinguished")
 
     private val longAdapter: JsonAdapter<Long> = moshi.adapter(Long::class.java, emptySet(),
         "totalAwardsReceived")
@@ -78,6 +76,9 @@ class CommentDataAdapter(
 
     private val nullableBooleanAdapter: JsonAdapter<Boolean?> =
         moshi.adapter(Boolean::class.javaObjectType, emptySet(), "authorCakeday")
+
+    private val nullableDistinguishedAdapter: JsonAdapter<Distinguished?> =
+        moshi.adapter(Distinguished::class.java, emptySet(), "distinguished")
 
     @Volatile
     private var constructorRef: Constructor<CommentData>? = null
@@ -120,6 +121,7 @@ class CommentDataAdapter(
         var controversiality: Long? = null
         var depth: Long? = null
         var authorCakeday: Boolean? = null
+        var distinguished: Distinguished? = null
         var mask0 = -1
         var mask1 = -1
         reader.beginObject()
@@ -230,6 +232,11 @@ class CommentDataAdapter(
                     // $mask = $mask and (1 shl 0).inv()
                     mask1 = mask1 and 0xfffffffe.toInt()
                 }
+                33 -> {
+                    distinguished = nullableDistinguishedAdapter.fromJson(reader)
+                    // $mask = $mask and (1 shl 1).inv()
+                    mask1 = mask1 and 0xfffffffd.toInt()
+                }
                 -1 -> {
                     // Unknown name, skip it.
                     reader.skipName()
@@ -273,11 +280,11 @@ class CommentDataAdapter(
                 Long::class.javaPrimitiveType,
                 Long::class.javaPrimitiveType,
                 Boolean::class.javaObjectType,
+                Distinguished::class.java,
                 Int::class.javaPrimitiveType,
                 Int::class.javaPrimitiveType,
                 Util.DEFAULT_CONSTRUCTOR_MARKER).also {
-                this.constructorRef =
-                    it
+                this.constructorRef = it
             }
         return localConstructor.newInstance(
             totalAwardsReceived ?: throw Util.missingProperty("totalAwardsReceived",
@@ -316,6 +323,7 @@ class CommentDataAdapter(
                 reader),
             depth ?: throw Util.missingProperty("depth", "depth", reader),
             authorCakeday,
+            distinguished,
             mask0, mask1,
             null
         )
@@ -392,6 +400,8 @@ class CommentDataAdapter(
         longAdapter.toJson(writer, value.depth)
         writer.name("author_cakeday")
         nullableBooleanAdapter.toJson(writer, value.authorCakeday)
+        writer.name("distinguished")
+        nullableDistinguishedAdapter.toJson(writer, value.distinguished)
         writer.endObject()
     }
 }

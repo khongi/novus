@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.ImageLoader
@@ -84,11 +85,10 @@ fun Thumbnail(url: String) {
 }
 
 @Composable
-fun MediaRow(media: SubmissionMedia, displayWidth: Float) {
-    val parentWidth = displayWidth - 2 * 8
-    val ratio = parentWidth / media.width
-    val height = media.height * ratio
-    Box(modifier = Modifier.width(parentWidth.dp).height(height.dp)) {
+fun MediaRow(media: SubmissionMedia, availableWidth: Dp) {
+    val ratio = availableWidth.div(media.width)
+    val height = ratio.times(media.height)
+    Box(modifier = Modifier.width(availableWidth).height(height)) {
         Media(media = media)
     }
 }

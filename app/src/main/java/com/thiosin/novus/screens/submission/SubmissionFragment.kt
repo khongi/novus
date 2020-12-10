@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -79,8 +81,12 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                 )
             },
             bodyContent = {
+                if (viewState.loading) {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                }
                 SubmissionDetails(
                     submission = viewState.submission,
+                    comments = viewState.comments,
                     displayWidthDp = viewState.displayWidthDp,
                     onLinkClick = onLinkClick
                 )
