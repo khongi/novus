@@ -41,6 +41,6 @@ interface RedditAPI {
         @Query("context") context: Int = 0,
         @Query("showedits") showEdits: Boolean = false,
         @Query("showmore") showMore: Boolean = false,
-        @Query("depth") depth: Int = 5,
+        @Query("depth") depth: Int = 10,
     ): List<CResponse>
 }

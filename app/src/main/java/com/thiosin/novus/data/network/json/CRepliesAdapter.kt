@@ -18,7 +18,15 @@ class CRepliesAdapter(
             reader.skipValue()
             return CReplies(data = null)
         }
-        // This should be a CResponse
+        // Next node should be a CResponse
+        val replies = parseReplies(reader, adapter)
+        return CReplies(data = replies)
+    }
+
+    private fun parseReplies(
+        reader: JsonReader,
+        adapter: CResponseDataChildAdapter,
+    ): List<CResponseDataChild> {
         reader.beginObject()
         val replies = mutableListOf<CResponseDataChild>()
 
@@ -26,35 +34,7 @@ class CRepliesAdapter(
         while (reader.hasNext()) {
             when (reader.selectName(JsonReader.Options.of("data"))) {
                 0 -> {
-                    reader.beginObject()
-
-                    while (reader.hasNext()) {
-                        when (reader.selectName(JsonReader.Options.of("children"))) {
-                            0 -> {
-                                reader.beginArray()
-
-                                while (reader.hasNext()) {
-                                    val cResponseDataChild = adapter.fromJson(reader)
-                                    if (cResponseDataChild == null) {
-                                        Timber.e("CResponseDataChild was NULL")
-                                        throw Util.unexpectedNull(
-                                            "nested data",
-                                            "nested data",
-                                            reader)
-                                    }
-                                    replies.add(cResponseDataChild)
-                                }
-
-                                reader.endArray()
-                            }
-                            -1 -> {
-                                reader.skipName()
-                                reader.skipValue()
-                            }
-                        }
-                    }
-
-                    reader.endObject()
+                    parseRepliesFromData(reader, adapter, replies)
                 }
                 -1 -> {
                     reader.skipName()
@@ -64,7 +44,59 @@ class CRepliesAdapter(
         }
 
         reader.endObject()
-        return CReplies(data = replies)
+        return replies
+    }
+
+    private fun parseRepliesFromData(
+        reader: JsonReader,
+        adapter: CResponseDataChildAdapter,
+        replies: MutableList<CResponseDataChild>,
+    ) {
+        reader.beginObject()
+
+        while (reader.hasNext()) {
+            when (reader.selectName(JsonReader.Options.of("children"))) {
+                0 -> {
+                    parseRepliesFromChildren(reader, adapter, replies)
+                }
+                -1 -> {
+                    reader.skipName()
+                    reader.skipValue()
+                }
+            }
+        }
+
+        reader.endObject()
+    }
+
+    private fun parseRepliesFromChildren(
+        reader: JsonReader,
+        adapter: CResponseDataChildAdapter,
+        replies: MutableList<CResponseDataChild>,
+    ) {
+        reader.beginArray()
+
+        while (reader.hasNext()) {
+            parseReply(adapter, reader, replies)
+        }
+
+        reader.endArray()
+    }
+
+    private fun parseReply(
+        adapter: CResponseDataChildAdapter,
+        reader: JsonReader,
+        replies: MutableList<CResponseDataChild>,
+    ) {
+        val cResponseDataChild = adapter.fromJson(reader)
+        if (cResponseDataChild == null) {
+            Timber.e("CResponseDataChild was NULL")
+            throw Util.unexpectedNull(
+                "nested data",
+                "nested data",
+                reader)
+        }
+        replies.add(cResponseDataChild)
     }
 
     @ToJson

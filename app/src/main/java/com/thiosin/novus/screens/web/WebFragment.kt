@@ -13,12 +13,7 @@ import com.thiosin.novus.ui.view.WebContentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel> {
-
-    @Suppress("ConvertSecondaryConstructorToPrimary")
-    @Deprecated(message = "Use newInstance instead",
-        replaceWith = ReplaceWith("WebFragment.newInstance()"))
-    constructor()
+class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel>() {
 
     override fun provideViewModel() = getViewModel()
     override fun render(viewState: WebViewState) = Unit

@@ -49,10 +49,11 @@ fun DefaultPreview() {
         author = "VincentJoshuaET",
         subreddit = "androiddev",
         relativeTime = "1 month ago",
-        votes = "205",
+        votes = 1234,
         comments = 9,
         link = "https://www.reddit.com/r/androiddev/comments/jqnn6m/kotlin_plugin_updated_to_add_data_class_sealed/",
-        thumbnail = ""
+        thumbnail = "",
+        selfText = "This is the self text"
     )
     SubmissionPreview(
         submission = submission,

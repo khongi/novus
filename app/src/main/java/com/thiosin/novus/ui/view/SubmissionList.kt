@@ -11,18 +11,18 @@ import com.thiosin.novus.domain.model.Submission
 @Composable
 fun SubmissionList(
     submissions: List<Submission>,
-    listState: LazyListState,
+    lazyListState: LazyListState,
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
     onListEnd: () -> Unit,
 ) {
-    if (listState.firstVisibleItemIndex >= submissions.size - 10) {
+    if (lazyListState.firstVisibleItemIndex >= submissions.size - 10) {
         onListEnd()
     }
     val displayWidthDp = AmbientContext.current.getDisplayWidthDp()
     val displayWidth = remember { displayWidthDp }
 
-    LazyColumnForIndexed(state = listState, items = submissions) { index, submission ->
+    LazyColumnForIndexed(state = lazyListState, items = submissions) { index, submission ->
         if (index == submissions.size - 1) {
             Column {
                 SubmissionPreview(
