@@ -76,6 +76,11 @@ private fun CommentContent(comment: Comment) {
                     Text(
                         text = comment.author,
                         style = MaterialTheme.typography.subtitle1,
+                        color = if (comment.isOP) {
+                            MaterialTheme.colors.primary
+                        } else {
+                            Color.Unspecified
+                        }
                     )
                     Text(
                         text = "↑ ${comment.votes}",
@@ -125,8 +130,8 @@ fun Marker() {
 private fun CommentContentPreview() {
     val comment = Comment(
         body = "This is the comment body text.",
-        author = "Author",
-        isOP = false,
+        author = "author",
+        isOP = true,
         votes = 123,
         depth = 1,
         isCollapsed = false,
