@@ -51,7 +51,7 @@ fun CommentData.toComment(): Comment {
         votes = score.toInt(),
         depth = depth.toInt(),
         isCollapsed = collapsed,
-        relativeTime = getRelativeTime(created.toInt()),
+        relativeTime = getRelativeTime(createdUTC.toLong()),
         replies = repliedComments
     )
 }

@@ -48,7 +48,7 @@ fun SubmissionListingResponse.toLoadResultData(): List<Submission> {
                 link = it.url,
                 comments = it.numComments.toInt(),
                 votes = getVotesFormat(it.score),
-                relativeTime = getRelativeTime(it.created.toInt()),
+                relativeTime = getRelativeTime(it.createdUTC.toLong()),
                 thumbnail = getThumbnail(it.thumbnail),
                 media = getSubmissionMedia(it),
             )

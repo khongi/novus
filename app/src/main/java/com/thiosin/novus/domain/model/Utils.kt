@@ -1,11 +1,18 @@
 package com.thiosin.novus.domain.model
 
 import android.text.format.DateUtils
+import java.time.Instant
+import java.time.ZoneOffset
 
-fun getRelativeTime(epochSec: Int): String {
+fun getRelativeTime(epochSecUTC: Long): String {
+    val now = Instant.now().toEpochMilli()
+    val time = Instant
+        .ofEpochSecond(epochSecUTC)
+        .atOffset(ZoneOffset.UTC)
+        .toEpochSecond() * 1_000L
     return DateUtils.getRelativeTimeSpanString(
-        System.currentTimeMillis(),
-        epochSec * 1_000L,
+        time,
+        now,
         DateUtils.SECOND_IN_MILLIS
     ).toString()
 }
