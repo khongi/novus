@@ -22,4 +22,6 @@ class LoginPresenter @Inject constructor(
     suspend fun getUserToken(url: String) = withIOContext {
         authInteractor.acquireUserToken(url)
     }
+
+    fun getRedirectUrl() = authInteractor.getRedirectUrl()
 }

@@ -73,7 +73,7 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     private suspend fun getUser(): User? {
-        return User("test")
+        return homePresenter.getUser()
     }
 
     private suspend fun getSubreddits(): List<Subreddit> {

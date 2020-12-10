@@ -92,7 +92,10 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     },
                     selected = viewState.getCurrentSubreddit(),
                     user = viewState.getUser(),
-                    onUserLoginLogout = {}
+                    onUserLoginLogout = {
+                        // TODO handle logout
+                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
+                    }
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,

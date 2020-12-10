@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_submissionFragment"
             app:destination="@id/submissionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/webFragment"
@@ -34,4 +37,8 @@
             android:id="@+id/action_submissionFragment_to_webFragment"
             app:destination="@id/webFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.thiosin.novus.screens.login.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>

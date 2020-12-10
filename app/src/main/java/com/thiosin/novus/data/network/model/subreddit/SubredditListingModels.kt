@@ -12,7 +12,7 @@ data class SubredditListingResponse(
 
 @JsonClass(generateAdapter = true)
 data class SubredditListingData(
-    val modhash: String,
+    val modhash: String? = null,
     val dist: Long,
     val children: List<SubredditListingChild>,
     val after: String,
