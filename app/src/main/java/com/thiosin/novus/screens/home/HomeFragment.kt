@@ -83,10 +83,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 )
             },
             drawerContent = {
-                HomeDrawer(
-                    viewState = viewState,
-                    scaffoldState = scaffoldState,
-                    onSwitchSubreddit = onSwitchSubreddit
+                NovusDrawer(
+                    subreddits = viewState.getSubreddits(),
+                    onClick = { subreddit ->
+                        onSwitchSubreddit(subreddit)
+                        scaffoldState.drawerState.close()
+                    },
+                    selected = viewState.getCurrentSubreddit()
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,
@@ -100,22 +103,6 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     onDetailsClick = onDetailsClick,
                 )
             }
-        )
-    }
-
-    @Composable
-    private fun HomeDrawer(
-        viewState: HomeViewState,
-        scaffoldState: ScaffoldState,
-        onSwitchSubreddit: (Subreddit) -> Unit,
-    ) {
-        NovusDrawer(
-            subreddits = viewState.getSubreddits(),
-            onClick = { subreddit ->
-                onSwitchSubreddit(subreddit)
-                scaffoldState.drawerState.close()
-            },
-            selected = viewState.getCurrentSubreddit()
         )
     }
 
