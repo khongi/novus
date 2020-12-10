@@ -9,7 +9,7 @@ object HomeInitial : HomeViewState()
 
 data class HomeReady(
     val submissions: List<Submission>,
-    val currentSubreddit: Subreddit,
+    val selectedSubreddit: Subreddit,
     val subreddits: List<Subreddit>,
     val loading: Boolean = false,
 ) : HomeViewState()

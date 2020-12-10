@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.annotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Subreddit
@@ -33,11 +34,10 @@ fun NovusDrawer(subreddits: List<Subreddit>, selected: Subreddit?, onClick: (Sub
         ) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
                 val title = annotatedString {
-                    pushStyle(SpanStyle(color = MaterialTheme.colors.onSurface))
                     append("Novus for ")
-                    pushStyle(SpanStyle(fontWeight = FontWeight.Bold, color = redditOrange))
-                    append("Reddit")
-                    pop()
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = redditOrange)) {
+                        append("Reddit")
+                    }
                 }
                 Text(
                     text = title,

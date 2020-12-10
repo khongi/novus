@@ -149,7 +149,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
 
     private fun HomeViewState?.getTitle(): String {
         return when (this) {
-            is HomeReady -> currentSubreddit.displayName
+            is HomeReady -> selectedSubreddit.displayName
             else -> "Loading..."
         }
     }
@@ -163,7 +163,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
 
     private fun HomeViewState?.getCurrentSubreddit(): Subreddit? {
         return when (this) {
-            is HomeReady -> currentSubreddit
+            is HomeReady -> selectedSubreddit
             else -> null
         }
     }

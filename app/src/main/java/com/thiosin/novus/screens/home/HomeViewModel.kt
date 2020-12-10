@@ -13,22 +13,17 @@ class HomeViewModel @ViewModelInject constructor(
     fun load(subreddit: Subreddit? = null) = execute {
         val readyState = viewState as? HomeReady
 
-        val (subreddits, currentSubreddit) = if (readyState == null) {
-            val subreddits: List<Subreddit> = getSubreddits()
-            val currentSubreddit = subreddit ?: subreddits[0]
-            Pair(subreddits, currentSubreddit)
-        } else {
-            Pair(readyState.subreddits, readyState.currentSubreddit)
-        }
+        val subreddits = readyState?.subreddits ?: getSubreddits()
+        val selectedSubreddit = readyState?.selectedSubreddit ?: (subreddit ?: subreddits[0])
 
         val submissions = homePresenter.getSubredditPage(
-            subreddit = currentSubreddit.name,
+            subreddit = selectedSubreddit.name,
             sort = SubmissionSort.Hot
         )
 
         viewState = HomeReady(
             submissions = submissions,
-            currentSubreddit = currentSubreddit,
+            selectedSubreddit = selectedSubreddit,
             subreddits = subreddits
         )
     }
@@ -37,7 +32,7 @@ class HomeViewModel @ViewModelInject constructor(
         val oldState = viewState as? HomeReady ?: return@execute
 
         val newSubmissions = homePresenter.getSubredditPage(
-            subreddit = oldState.currentSubreddit.name,
+            subreddit = oldState.selectedSubreddit.name,
             sort = SubmissionSort.Hot,
             count = oldState.submissions.size,
             after = oldState.submissions.last().fullname
@@ -58,7 +53,7 @@ class HomeViewModel @ViewModelInject constructor(
 
         viewState = HomeReady(
             submissions = listOf(),
-            currentSubreddit = subreddit,
+            selectedSubreddit = subreddit,
             subreddits = oldState.subreddits,
             loading = true,
         )
@@ -70,7 +65,7 @@ class HomeViewModel @ViewModelInject constructor(
 
         viewState = HomeReady(
             submissions = submissions,
-            currentSubreddit = subreddit,
+            selectedSubreddit = subreddit,
             subreddits = oldState.subreddits
         )
     }
