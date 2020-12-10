@@ -9,16 +9,19 @@ class SubmissionViewModel @ViewModelInject constructor(
 ) : RainbowCakeViewModel<SubmissionViewState>(SubmissionInitial) {
 
     fun load(submission: Submission, displayWidthDp: Float) = execute {
-        val state = SubmissionReadyState(
-            submission = submission,
-            comments = emptyList(),
-            displayWidthDp = displayWidthDp,
-            loading = true
-        )
-        viewState = state
+        val readyState = viewState as? SubmissionReadyState
+
+        val loadingWithContentState = readyState?.copy(loading = true)
+            ?: SubmissionReadyState(
+                submission = submission,
+                comments = emptyList(),
+                displayWidthDp = displayWidthDp,
+                loading = true
+            )
+        viewState = loadingWithContentState
 
         val comments = submissionPresenter.getComments(submission.id)
 
-        viewState = state.copy(comments = comments, loading = false)
+        viewState = loadingWithContentState.copy(comments = comments, loading = false)
     }
 }

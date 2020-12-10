@@ -45,20 +45,13 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                     val state = viewModel.state.observeAsState()
                     state.value?.let { viewState ->
                         when (viewState) {
-                            is SubmissionInitial -> {
-                                // TODO
-                            }
                             is SubmissionReadyState -> {
                                 SubmissionScreen(
                                     viewState = viewState,
-                                    onLinkClick = { url ->
-                                        findNavController().navigate(
-                                            SubmissionFragmentDirections
-                                                .actionSubmissionFragmentToWebFragment(url)
-                                        )
-                                    }
+                                    onLinkClick = { url -> showWebScreen(url) }
                                 )
                             }
+                            SubmissionInitial -> Unit
                         }
                     }
                 }
@@ -91,6 +84,12 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                     onLinkClick = onLinkClick
                 )
             }
+        )
+    }
+
+    private fun showWebScreen(url: String) {
+        findNavController().navigate(
+            SubmissionFragmentDirections.actionSubmissionFragmentToWebFragment(url)
         )
     }
 }
