@@ -1,12 +1,15 @@
 package com.thiosin.novus.ui.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,16 +56,22 @@ fun SubmissionDetails(
 }
 
 @Composable
-fun CommentItem(comment: Comment) {
+fun CommentItem(comment: Comment, collapse: Boolean = false) {
+    val isCollapsed = remember { mutableStateOf(collapse) }
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
+            .clickable(
+                onLongClick = { isCollapsed.value = isCollapsed.value.not() },
+                onClick = { isCollapsed.value = false }
+            ))
+        {
             Spacer(modifier = Modifier.width((comment.depth * 8).dp))
-            CommentContent(comment)
+            CommentContent(comment, isCollapsed.value)
         }
         if (comment.replies.isNotEmpty()) {
-            if (comment.isCollapsed.not()) {
+            if (isCollapsed.value.not()) {
                 comment.replies.forEach { child ->
-                    CommentItem(comment = child)
+                    CommentItem(comment = child, collapse = collapse)
                 }
             }
         }
@@ -70,14 +79,14 @@ fun CommentItem(comment: Comment) {
 }
 
 @Composable
-private fun CommentContent(comment: Comment) {
+private fun CommentContent(comment: Comment, collapse: Boolean) {
     val border = getMarkerBorder(comment.depth)
     Column(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier
             .fillMaxWidth()
             .border(start = border)
             .padding(start = 8.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
+            Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     val authorColor = getAuthorColor(comment)
@@ -93,17 +102,26 @@ private fun CommentContent(comment: Comment) {
                         ),
                         modifier = Modifier.padding(start = 12.dp),
                     )
+                    if (collapse) {
+                        Text(
+                            text = "+[${comment.replies.size}]",
+                            modifier = Modifier.padding(start = 8.dp),
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
                 }
                 Text(
                     text = comment.relativeTime,
                     style = MaterialTheme.typography.overline,
                 )
             }
-            Text(
-                text = comment.body,
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+            if (collapse.not()) {
+                Text(
+                    text = comment.body,
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
         }
         Divider(thickness = 0.25.dp)
     }
@@ -153,11 +171,10 @@ private fun CommentContentPreview() {
         isOP = true,
         votes = 123,
         depth = 1,
-        isCollapsed = false,
         relativeTime = "1h ago",
         authorType = AuthorType.MODERATOR,
         replies = emptyList()
     )
 
-    CommentContent(comment = comment)
+    CommentContent(comment = comment, collapse = false)
 }

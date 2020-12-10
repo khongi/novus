@@ -11,7 +11,6 @@ data class Comment(
     val isOP: Boolean,
     val votes: Int,
     val depth: Int,
-    val isCollapsed: Boolean,
     val relativeTime: String,
     val authorType: AuthorType,
     val replies: List<Comment>,
@@ -58,7 +57,6 @@ fun CommentData.toComment(): Comment {
         isOP = isSubmitter,
         votes = score.toInt(),
         depth = depth.toInt(),
-        isCollapsed = collapsed,
         relativeTime = getRelativeTime(createdUTC.toLong()),
         authorType = getDistinguished(distinguished),
         replies = repliedComments
