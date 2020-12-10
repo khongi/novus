@@ -16,6 +16,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.annotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -33,7 +37,10 @@ import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.SubmissionMedia
 import com.thiosin.novus.domain.model.SubmissionMediaType
+import com.thiosin.novus.ui.theme.redditDownVote
+import com.thiosin.novus.ui.theme.redditUpvote
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlin.math.absoluteValue
 
 
 @Composable
@@ -226,8 +233,27 @@ fun CommentsButton(
 }
 
 @Composable
-fun Votes(votes: String) {
-    Text(text = votes,
+fun Votes(votes: Int) {
+    Text(text = getVotesFormat(votes),
         style = MaterialTheme.typography.caption,
         modifier = Modifier.padding(4.dp))
+}
+
+fun getVotesFormat(votes: Int): AnnotatedString {
+    val abs = votes.absoluteValue
+    val formattedValue = if (abs < 1000) {
+        "$abs"
+    } else {
+        "%.${1}fk".format(abs / 1000.0)
+    }
+
+    return annotatedString {
+        withStyle(SpanStyle(color = if (votes > 0) {
+            redditUpvote
+        } else {
+            redditDownVote
+        })) {
+            append(formattedValue)
+        }
+    }
 }

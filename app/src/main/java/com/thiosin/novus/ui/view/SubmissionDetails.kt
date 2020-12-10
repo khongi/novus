@@ -13,10 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.thiosin.novus.domain.model.AuthorType
 import com.thiosin.novus.domain.model.Comment
 import com.thiosin.novus.domain.model.Submission
@@ -48,6 +46,7 @@ private fun SubmissionContent(
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
 ) {
+//    Surface(elevation = 8.dp) {
     Column(modifier = Modifier.padding(top = 4.dp)) {
         InfoRow(submission)
         TitleRow(submission)
@@ -65,6 +64,7 @@ private fun SubmissionContent(
             LinkButton(submission.link, onLinkClick)
         }
     }
+//    }
 }
 
 @Composable
@@ -128,10 +128,8 @@ private fun CommentHeader(
                 color = authorColor
             )
             Text(
-                text = "↑ ${comment.votes}",
-                style = MaterialTheme.typography.subtitle1.plus(
-                    TextStyle(fontSize = 12.sp)
-                ),
+                text = getVotesFormat(comment.votes),
+                style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 12.dp),
             )
             if (collapse) {
@@ -191,7 +189,7 @@ private fun CommentContentPreview() {
         body = "This is the comment body text.",
         author = "author",
         isOP = true,
-        votes = 123,
+        votes = 1342,
         depth = 1,
         relativeTime = "1h ago",
         authorType = AuthorType.MODERATOR,

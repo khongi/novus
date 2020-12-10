@@ -8,6 +8,8 @@ val purple700 = Color(0xFF3700B3)
 val teal200 = Color(0xFF03DAC5)
 
 val redditOrange = Color(0xFFFF5700)
+val redditUpvote = Color(0xFFFF8B60)
+val redditDownVote = Color(0xFF9494FF)
 
 val deepPurple500 = Color(0xFF673AB7)
 val indigo500 = Color(0xFF3F51B5)
