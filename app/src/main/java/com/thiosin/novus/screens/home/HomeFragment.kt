@@ -19,6 +19,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,11 +86,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             drawerContent = {
                 NovusDrawer(
                     subreddits = viewState.getSubreddits(),
-                    onClick = { subreddit ->
+                    onSubredditSelect = { subreddit ->
                         onSwitchSubreddit(subreddit)
                         scaffoldState.drawerState.close()
                     },
-                    selected = viewState.getCurrentSubreddit()
+                    selected = viewState.getCurrentSubreddit(),
+                    user = viewState.getUser(),
+                    onUserLoginLogout = {}
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,
@@ -164,6 +167,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     private fun HomeViewState?.getCurrentSubreddit(): Subreddit? {
         return when (this) {
             is HomeReady -> selectedSubreddit
+            else -> null
+        }
+    }
+
+    private fun HomeViewState?.getUser(): User? {
+        return when (this) {
+            is HomeReady -> user
             else -> null
         }
     }

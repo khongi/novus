@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.User
 import timber.log.Timber
 
 class HomeViewModel @ViewModelInject constructor(
@@ -13,6 +14,7 @@ class HomeViewModel @ViewModelInject constructor(
     fun load(subreddit: Subreddit? = null) = execute {
         val readyState = viewState as? HomeReady
 
+        val user: User? = getUser()
         val subreddits = readyState?.subreddits ?: getSubreddits()
         val selectedSubreddit = readyState?.selectedSubreddit ?: (subreddit ?: subreddits[0])
 
@@ -24,7 +26,8 @@ class HomeViewModel @ViewModelInject constructor(
         viewState = HomeReady(
             submissions = submissions,
             selectedSubreddit = selectedSubreddit,
-            subreddits = subreddits
+            subreddits = subreddits,
+            user = user,
         )
     }
 
@@ -51,10 +54,9 @@ class HomeViewModel @ViewModelInject constructor(
     fun switchSubreddit(subreddit: Subreddit) = execute {
         val oldState = viewState as? HomeReady ?: return@execute
 
-        viewState = HomeReady(
+        viewState = oldState.copy(
             submissions = listOf(),
             selectedSubreddit = subreddit,
-            subreddits = oldState.subreddits,
             loading = true,
         )
 
@@ -68,6 +70,10 @@ class HomeViewModel @ViewModelInject constructor(
             selectedSubreddit = subreddit,
             subreddits = oldState.subreddits
         )
+    }
+
+    private suspend fun getUser(): User? {
+        return User("test")
     }
 
     private suspend fun getSubreddits(): List<Subreddit> {
