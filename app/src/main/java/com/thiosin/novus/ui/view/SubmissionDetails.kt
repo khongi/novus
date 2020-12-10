@@ -51,6 +51,9 @@ private fun SubmissionContent(
     Column(modifier = Modifier.padding(top = 4.dp)) {
         InfoRow(submission)
         TitleRow(submission)
+        if (submission.selfText.isBlank().not()) {
+            SelfText(submission.selfText)
+        }
         submission.media?.let {
             MediaRow(it, displayWidthDp.dp)
         }
@@ -62,6 +65,13 @@ private fun SubmissionContent(
             LinkButton(submission.link, onLinkClick)
         }
     }
+}
+
+@Composable
+fun SelfText(text: String) {
+    Text(text = text,
+        style = MaterialTheme.typography.body2,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
 }
 
 @Composable

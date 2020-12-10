@@ -17,6 +17,7 @@ data class Submission(
     val link: String,
     val votes: String,
     val comments: Int,
+    val selfText: String,
     val thumbnail: String? = null,
     val media: SubmissionMedia? = null,
 ) : Parcelable
@@ -47,6 +48,7 @@ fun SubmissionListingResponse.toLoadResultData(): List<Submission> {
                 author = it.author,
                 link = it.url,
                 comments = it.numComments.toInt(),
+                selfText = it.selftext?.trim() ?: "",
                 votes = getVotesFormat(it.score),
                 relativeTime = getRelativeTime(it.createdUTC.toLong()),
                 thumbnail = getThumbnail(it.thumbnail),

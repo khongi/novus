@@ -18,7 +18,6 @@ class HomeViewModel @ViewModelInject constructor(
             val currentSubreddit = subreddit ?: subreddits[0]
             Pair(subreddits, currentSubreddit)
         } else {
-            Timber.d("Reusing previous state :)")
             Pair(readyState.subreddits, readyState.currentSubreddit)
         }
 
