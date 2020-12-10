@@ -33,24 +33,33 @@ fun SubmissionDetails(
 ) {
     LazyColumn {
         item {
-            Column(modifier = Modifier.padding(top = 4.dp)) {
-                InfoRow(submission)
-                TitleRow(submission)
-                submission.media?.let {
-                    MediaRow(it, displayWidthDp.dp)
-                }
-                Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Votes(submission.votes)
-
-                    LinkButton(submission.link, onLinkClick)
-                }
-            }
+            SubmissionContent(submission, displayWidthDp, onLinkClick)
         }
 
         items(comments) {
             CommentItem(comment = it)
+        }
+    }
+}
+
+@Composable
+private fun SubmissionContent(
+    submission: Submission,
+    displayWidthDp: Float,
+    onLinkClick: (String) -> Unit,
+) {
+    Column(modifier = Modifier.padding(top = 4.dp)) {
+        InfoRow(submission)
+        TitleRow(submission)
+        submission.media?.let {
+            MediaRow(it, displayWidthDp.dp)
+        }
+        Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            Votes(submission.votes)
+
+            LinkButton(submission.link, onLinkClick)
         }
     }
 }
@@ -68,11 +77,9 @@ fun CommentItem(comment: Comment, collapse: Boolean = false) {
             Spacer(modifier = Modifier.width((comment.depth * 8).dp))
             CommentContent(comment, isCollapsed.value)
         }
-        if (comment.replies.isNotEmpty()) {
-            if (isCollapsed.value.not()) {
-                comment.replies.forEach { child ->
-                    CommentItem(comment = child, collapse = collapse)
-                }
+        if (isCollapsed.value.not()) {
+            comment.replies.forEach { child ->
+                CommentItem(comment = child, collapse = collapse)
             }
         }
     }
@@ -82,39 +89,8 @@ fun CommentItem(comment: Comment, collapse: Boolean = false) {
 private fun CommentContent(comment: Comment, collapse: Boolean) {
     val border = getMarkerBorder(comment.depth)
     Column(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .border(start = border)
-            .padding(start = 8.dp)) {
-            Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    val authorColor = getAuthorColor(comment)
-                    Text(
-                        text = comment.author,
-                        style = MaterialTheme.typography.subtitle1,
-                        color = authorColor
-                    )
-                    Text(
-                        text = "↑ ${comment.votes}",
-                        style = MaterialTheme.typography.subtitle1.plus(
-                            TextStyle(fontSize = 12.sp)
-                        ),
-                        modifier = Modifier.padding(start = 12.dp),
-                    )
-                    if (collapse) {
-                        Text(
-                            text = "+[${comment.replies.size}]",
-                            modifier = Modifier.padding(start = 8.dp),
-                            style = MaterialTheme.typography.caption
-                        )
-                    }
-                }
-                Text(
-                    text = comment.relativeTime,
-                    style = MaterialTheme.typography.overline,
-                )
-            }
+        Column(modifier = Modifier.fillMaxWidth().border(start = border).padding(start = 8.dp)) {
+            CommentHeader(comment, collapse)
             if (collapse.not()) {
                 Text(
                     text = comment.body,
@@ -124,6 +100,51 @@ private fun CommentContent(comment: Comment, collapse: Boolean) {
             }
         }
         Divider(thickness = 0.25.dp)
+    }
+}
+
+@Composable
+private fun CommentHeader(
+    comment: Comment,
+    collapse: Boolean,
+) {
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val authorColor = getAuthorColor(comment)
+            Text(
+                text = comment.author,
+                style = MaterialTheme.typography.subtitle1,
+                color = authorColor
+            )
+            Text(
+                text = "↑ ${comment.votes}",
+                style = MaterialTheme.typography.subtitle1.plus(
+                    TextStyle(fontSize = 12.sp)
+                ),
+                modifier = Modifier.padding(start = 12.dp),
+            )
+            if (collapse) {
+                Text(
+                    text = "+[${comment.replies.size}]",
+                    modifier = Modifier.padding(start = 8.dp),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+        }
+        Text(
+            text = comment.relativeTime,
+            style = MaterialTheme.typography.overline,
+        )
+    }
+}
+
+@Composable
+fun Marker() {
+    Column(modifier = Modifier.fillMaxHeight().wrapContentSize(Alignment.Center)) {
+        Box(
+            modifier = Modifier.preferredWidth(4.dp).fillMaxHeight().background(Color.Red)
+        )
     }
 }
 
@@ -151,15 +172,6 @@ private fun getMarkerBorder(depth: Int): Border? {
         else -> lime500
     }
     return Border(strokeWidth = 2.dp, color = color)
-}
-
-@Composable
-fun Marker() {
-    Column(modifier = Modifier.fillMaxHeight().wrapContentSize(Alignment.Center)) {
-        Box(
-            modifier = Modifier.preferredWidth(4.dp).fillMaxHeight().background(Color.Red)
-        )
-    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
