@@ -3,7 +3,6 @@ package com.thiosin.novus.ui.view
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -64,7 +63,7 @@ fun CommentItem(comment: Comment) {
 
 @Composable
 private fun CommentContent(comment: Comment) {
-    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)) {
         Spacer(modifier = Modifier.width((comment.depth * 8).dp))
         val border = getMarkerBorder(comment.depth)
         Column(modifier = Modifier
@@ -96,7 +95,6 @@ private fun CommentContent(comment: Comment) {
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
-            Divider(modifier = Modifier.height(1.dp))
         }
     }
 }
@@ -130,7 +128,8 @@ private fun CommentContentPreview() {
         author = "Author",
         isOP = false,
         votes = 123,
-        depth = 0,
+        depth = 1,
+        isCollapsed = false,
         relativeTime = "1h ago",
         replies = emptyList()
     )
