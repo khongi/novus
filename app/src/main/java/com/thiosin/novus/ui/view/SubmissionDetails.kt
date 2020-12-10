@@ -177,7 +177,12 @@ private fun getMarkerBorder(depth: Int): Border? {
         2 -> blue500
         3 -> cyan500
         4 -> green500
-        else -> lime500
+        5 -> lime500
+        6 -> yellow500
+        7 -> lightGreen500
+        8 -> teal500
+        9 -> lightBlue500
+        else -> indigo500
     }
     return Border(strokeWidth = 2.dp, color = color)
 }
