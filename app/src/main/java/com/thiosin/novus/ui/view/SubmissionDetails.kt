@@ -3,6 +3,7 @@ package com.thiosin.novus.ui.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,8 +43,6 @@ fun SubmissionDetails(
 
                     LinkButton(submission.link, onLinkClick)
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
@@ -56,20 +55,24 @@ fun SubmissionDetails(
 @Composable
 fun CommentItem(comment: Comment) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        CommentContent(comment)
-        Spacer(modifier = Modifier.height(8.dp))
-        comment.replies.forEach { child ->
-            CommentItem(comment = child)
+        Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)) {
+            Spacer(modifier = Modifier.width((comment.depth * 8).dp))
+            CommentContent(comment)
+        }
+        if (comment.replies.isNotEmpty()) {
+            if (comment.isCollapsed.not()) {
+                comment.replies.forEach { child ->
+                    CommentItem(comment = child)
+                }
+            }
         }
     }
 }
 
 @Composable
 private fun CommentContent(comment: Comment) {
-    val authorColor = getAuthorColor(comment)
-    Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)) {
-        Spacer(modifier = Modifier.width((comment.depth * 8).dp))
-        val border = getMarkerBorder(comment.depth)
+    val border = getMarkerBorder(comment.depth)
+    Column(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier
             .fillMaxWidth()
             .border(start = border)
@@ -77,6 +80,7 @@ private fun CommentContent(comment: Comment) {
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    val authorColor = getAuthorColor(comment)
                     Text(
                         text = comment.author,
                         style = MaterialTheme.typography.subtitle1,
@@ -101,6 +105,7 @@ private fun CommentContent(comment: Comment) {
                 modifier = Modifier.padding(bottom = 4.dp)
             )
         }
+        Divider(thickness = 0.25.dp)
     }
 }
 
