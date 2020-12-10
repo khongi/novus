@@ -1,8 +1,8 @@
 package com.thiosin.novus.ui.view
 
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,25 +27,27 @@ fun SubmissionDetails(
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
 ) {
-    ScrollableColumn {
-        Column(modifier = Modifier.padding(top = 4.dp)) {
-            InfoRow(submission)
-            TitleRow(submission)
-            submission.media?.let {
-                MediaRow(it, displayWidthDp.dp)
-            }
-            Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically) {
-                Votes(submission.votes)
+    LazyColumn {
+        item {
+            Column(modifier = Modifier.padding(top = 4.dp)) {
+                InfoRow(submission)
+                TitleRow(submission)
+                submission.media?.let {
+                    MediaRow(it, displayWidthDp.dp)
+                }
+                Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Votes(submission.votes)
 
-                LinkButton(submission.link, onLinkClick)
+                    LinkButton(submission.link, onLinkClick)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        comments.forEach {
+        items(comments) {
             CommentItem(comment = it)
         }
     }
