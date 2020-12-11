@@ -26,7 +26,7 @@ import com.thiosin.novus.domain.model.SubmissionMedia
 
 
 @Composable
-fun InfoRow(submission: Submission) {
+fun SubmissionInfoRow(submission: Submission) {
     Row(modifier = Modifier.padding(horizontal = 8.dp)) {
         Text(
             text = submission.subreddit,
@@ -47,13 +47,20 @@ fun InfoRow(submission: Submission) {
 }
 
 @Composable
-fun TitleRow(submission: Submission) {
+fun SubmissionTitleRow(submission: Submission) {
     Row(modifier = Modifier.fillMaxWidth()) {
         if (submission.media == null && submission.thumbnail != null) {
             Thumbnail(submission.thumbnail)
         }
         SubmissionTitle(submission.title)
     }
+}
+
+@Composable
+fun SubmissionSelfText(text: String) {
+    Text(text = text,
+        style = MaterialTheme.typography.body2,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
 }
 
 @Composable
@@ -66,7 +73,7 @@ fun SubmissionTitle(title: String) {
 }
 
 @Composable
-fun MediaRow(media: SubmissionMedia, availableWidth: Dp) {
+fun SubmissionMediaRow(media: SubmissionMedia, availableWidth: Dp) {
     val ratio = availableWidth.div(media.width)
     val height = ratio.times(media.height)
     Box(modifier = Modifier.width(availableWidth).height(height)) {
@@ -78,8 +85,8 @@ fun MediaRow(media: SubmissionMedia, availableWidth: Dp) {
 fun SubmissionButtonRow(
     submission: Submission,
     onLinkClick: (String) -> Unit,
-    onCommentsClick: (Submission) -> Unit,
     onVoteClick: (Submission) -> Unit,
+    onCommentsClick: ((Submission) -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
@@ -90,7 +97,9 @@ fun SubmissionButtonRow(
         Votes(votes = submission.votes)
         UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
         DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
-        CommentsButton(submission = submission, onClick = onCommentsClick)
+        if (onCommentsClick != null) {
+            CommentsButton(submission = submission, onClick = onCommentsClick)
+        }
         LinkButton(url = submission.link, onClick = onLinkClick)
     }
 }
@@ -100,7 +109,7 @@ fun SubmissionIconButton(
     submission: Submission,
     iconId: Int,
     onClick: (Submission) -> Unit,
-    color: Color = Color.Unspecified
+    color: Color = Color.Unspecified,
 ) {
     IconButton(onClick = { onClick(submission) }) {
         Icon(imageVector = vectorResource(id = iconId), tint = color)
@@ -112,7 +121,7 @@ fun SubmissionIconButtonWithText(
     submission: Submission,
     text: AnnotatedString,
     iconId: Int,
-    onClick: (Submission) -> Unit
+    onClick: (Submission) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -137,7 +146,7 @@ fun SubmissionIconButtonWithText(
 fun UpVoteButton(
     submission: Submission,
     liked: MutableState<Boolean?>,
-    onClick: (Submission) -> Unit
+    onClick: (Submission) -> Unit,
 ) {
     val upVoted = liked.value == true
     val icon = if (upVoted) {
@@ -164,7 +173,7 @@ fun UpVoteButton(
 fun DownVoteButton(
     submission: Submission,
     liked: MutableState<Boolean?>,
-    onClick: (Submission) -> Unit
+    onClick: (Submission) -> Unit,
 ) {
     val downVoted = liked.value == false
     val icon = if (downVoted) {

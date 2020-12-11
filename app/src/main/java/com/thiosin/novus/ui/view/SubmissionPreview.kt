@@ -14,24 +14,33 @@ import com.thiosin.novus.domain.model.Submission
 @Composable
 fun SubmissionPreview(
     submission: Submission,
+    showSelfText: Boolean,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
-    onDetailsClick: (Submission) -> Unit,
-    onVote: (Submission) -> Unit,
+    onVoteClick: (Submission) -> Unit,
+    onCommentsClick: ((Submission) -> Unit)? = null,
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).fillMaxWidth(),
-        elevation = 16.dp
+        elevation = 8.dp
     ) {
         Column(modifier = Modifier.padding(top = 4.dp)) {
-            InfoRow(submission)
-            TitleRow(submission)
+            SubmissionInfoRow(submission)
+            SubmissionTitleRow(submission)
+            if (showSelfText && submission.selfText.isNotBlank()) {
+                SubmissionSelfText(submission.selfText)
+            }
             submission.media?.let {
                 // Screen width - Horizontal padding
-                MediaRow(it, displayWidthDp.dp - 16.dp)
+                SubmissionMediaRow(it, displayWidthDp.dp - 16.dp)
             }
-            SubmissionButtonRow(submission, onLinkClick, onDetailsClick, onVote)
+            SubmissionButtonRow(
+                submission = submission,
+                onLinkClick = onLinkClick,
+                onVoteClick = onVoteClick,
+                onCommentsClick = onCommentsClick
+            )
         }
     }
 }
@@ -54,10 +63,10 @@ fun DefaultPreview() {
     )
     SubmissionPreview(
         submission = submission,
+        showSelfText = true,
         displayWidthDp = 300F,
         onLinkClick = {},
-        onDetailsClick = {},
-        onVote = {}
+        onVoteClick = {},
     )
 }
 

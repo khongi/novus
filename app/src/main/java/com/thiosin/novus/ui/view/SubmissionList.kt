@@ -29,20 +29,22 @@ fun SubmissionList(
             Column {
                 SubmissionPreview(
                     submission = submission,
+                    showSelfText = false,
                     displayWidthDp = displayWidth,
                     onLinkClick = onLinkClick,
-                    onDetailsClick = onDetailsClick,
-                    onVote = onVote
+                    onCommentsClick = onDetailsClick,
+                    onVoteClick = onVote,
                 )
                 LoadingItem()
             }
         } else {
             SubmissionPreview(
                 submission = submission,
+                showSelfText = false,
                 displayWidthDp = displayWidth,
                 onLinkClick = onLinkClick,
-                onDetailsClick = onDetailsClick,
-                onVote = onVote
+                onCommentsClick = onDetailsClick,
+                onVoteClick = onVote,
             )
         }
     }
