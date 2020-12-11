@@ -69,7 +69,7 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
         authUrl: String,
         redirectUrl: String,
         onPageStart: (url: String) -> Unit,
-        onAbort: () -> Unit
+        onAbort: () -> Unit,
     ) {
         val context = AmbientContext.current
         val webViewClient = object : WebViewClient() {

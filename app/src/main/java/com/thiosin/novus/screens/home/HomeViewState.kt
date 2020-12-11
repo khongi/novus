@@ -6,7 +6,7 @@ import com.thiosin.novus.domain.model.User
 
 sealed class HomeViewState
 
-object HomeInitial : HomeViewState()
+object HomeEmptyLoading : HomeViewState()
 
 data class HomeReady(
     val submissions: List<Submission>,

@@ -10,6 +10,7 @@ import javax.inject.Inject
 class UserInteractor @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val userInfoProvider: UserInfoProvider,
+    private val authInteractor: AuthInteractor,
 ) {
 
     suspend fun saveUserInfo(): Boolean {
@@ -18,11 +19,14 @@ class UserInteractor @Inject constructor(
             Timber.e("Could not fetch user info")
             return false
         }
-        val user = userInfo.toUser()
-        userInfoProvider.user = user
+        userInfoProvider.user = userInfo.toUser()
         return true
-        // TODO save it to Krate
     }
 
     fun getUser(): User? = userInfoProvider.user
+
+    fun logout() {
+        userInfoProvider.user = null
+        authInteractor.logout()
+    }
 }

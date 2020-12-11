@@ -25,21 +25,25 @@ class SubredditInteractor @Inject constructor(
         val fetchedSubreddits = networkDataSource.getUserlessSubreddits()
             ?.toSubredditList()
             ?: listOf()
-        val defaultSubreddits = getDefaultSubreddits()
-        return defaultSubreddits + fetchedSubreddits
+        val builtInSubreddits = getBuiltInSubreddits()
+        return builtInSubreddits + fetchedSubreddits
     }
 
     suspend fun getUserSubreddits(): List<Subreddit> {
         val fetchedSubreddits = networkDataSource.getUserSubreddits()
             ?.toSubredditList()
             ?: listOf()
-        val defaultSubreddits = getDefaultSubreddits()
-        return defaultSubreddits + fetchedSubreddits
+        val builtInSubreddits = getBuiltInSubreddits()
+        return builtInSubreddits + fetchedSubreddits
     }
 
-    private fun getDefaultSubreddits(): List<Subreddit> {
+    fun getDefaultSubreddit(): Subreddit {
+        return Subreddit("", "Frontpage", "")
+    }
+
+    private fun getBuiltInSubreddits(): List<Subreddit> {
         return listOf(
-            Subreddit("", "Frontpage", ""),
+            getDefaultSubreddit(),
             Subreddit("all", "All", ""),
             Subreddit("popular", "Popular", ""),
         )

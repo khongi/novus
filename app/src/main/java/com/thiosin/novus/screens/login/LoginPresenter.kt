@@ -9,9 +9,6 @@ class LoginPresenter @Inject constructor(
     private val authInteractor: AuthInteractor,
     private val userInteractor: UserInteractor,
 ) {
-    suspend fun acquireUserlessToken() = withIOContext {
-        authInteractor.acquireUserlessToken()
-    }
 
     suspend fun getUserAuthUrl(): String = withIOContext {
         authInteractor.getUserAuthUrl()

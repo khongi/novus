@@ -55,7 +55,18 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                             onNextPage = { viewModel.loadNextPage() },
                             onSwitchSubreddit = { subreddit -> viewModel.switchSubreddit(subreddit) },
                             onLinkClick = { url -> navigateToWebFragment(url) },
-                            onDetailsClick = { submission -> navigateToDetails(submission) }
+                            onDetailsClick = { submission -> navigateToDetails(submission) },
+                            onLogin = {
+                                viewModel.startLoading()
+                                scaffoldState.drawerState.close()
+                                findNavController().navigate(
+                                    HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+                                )
+                            },
+                            onLogout = {
+                                scaffoldState.drawerState.close()
+                                viewModel.switchToUserlessMode()
+                            }
                         )
                     }
                 }
@@ -72,6 +83,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         onSwitchSubreddit: (Subreddit) -> Unit,
         onLinkClick: (String) -> Unit,
         onDetailsClick: (Submission) -> Unit,
+        onLogin: () -> Unit,
+        onLogout: () -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxWidth(),
@@ -92,10 +105,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     },
                     selected = viewState.getCurrentSubreddit(),
                     user = viewState.getUser(),
-                    onUserLoginLogout = {
-                        // TODO handle logout
-                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
-                    }
+                    onLogin = onLogin,
+                    onLogout = onLogout
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,

@@ -28,10 +28,11 @@ fun NovusDrawer(
     selected: Subreddit?,
     user: User?,
     onSubredditSelect: (Subreddit) -> Unit,
-    onUserLoginLogout: () -> Unit
+    onLogin: () -> Unit,
+    onLogout: () -> Unit,
 ) {
     Column {
-        HeaderSection(user, onUserLoginLogout)
+        HeaderSection(user, onLogin, onLogout)
         SubredditsSection(subreddits, selected, onSubredditSelect)
     }
 }
@@ -54,7 +55,7 @@ fun SubredditsSection(
 }
 
 @Composable
-fun HeaderSection(user: User?, onClick: () -> Unit) {
+fun HeaderSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         elevation = 8.dp
@@ -76,13 +77,13 @@ fun HeaderSection(user: User?, onClick: () -> Unit) {
                     modifier = Modifier.padding(8.dp)
                 )
             }
-            UserSection(user = user, onClick = onClick)
+            UserSection(user = user, onLogin = onLogin, onLogout = onLogout)
         }
     }
 }
 
 @Composable
-fun UserSection(user: User?, onClick: () -> Unit) {
+fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -98,7 +99,13 @@ fun UserSection(user: User?, onClick: () -> Unit) {
                 style = MaterialTheme.typography.subtitle1,
             )
         }
-        IconButton(onClick = onClick) {
+        IconButton(onClick = {
+            if (user == null) {
+                onLogin()
+            } else {
+                onLogout()
+            }
+        }) {
             val iconId = if (user == null) {
                 R.drawable.ic_baseline_login_24
             } else {

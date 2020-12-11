@@ -4,11 +4,11 @@ import android.content.Context
 import com.kirkbushman.araw.RedditClient
 import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
-import com.kirkbushman.auth.managers.SharedPrefsStorageManager
 import com.kirkbushman.auth.managers.StorageManager
 import com.squareup.moshi.Moshi
 import com.thiosin.novus.BuildConfig
 import com.thiosin.novus.data.network.json.CResponseDataChildListAdapter
+import com.thiosin.novus.data.prefs.AuthInfoProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +26,8 @@ import javax.inject.Qualifier
 class NetworkModule {
 
     @Provides
-    fun provideSharedPrefsStorageManager(@ApplicationContext context: Context): StorageManager {
-        return SharedPrefsStorageManager(context)
+    fun provideStorageManager(authInfoProvider: AuthInfoProvider): StorageManager {
+        return authInfoProvider
     }
 
     @Qualifier

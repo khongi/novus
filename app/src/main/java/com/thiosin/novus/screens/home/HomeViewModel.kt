@@ -9,18 +9,21 @@ import timber.log.Timber
 
 class HomeViewModel @ViewModelInject constructor(
     private val homePresenter: HomePresenter,
-) : RainbowCakeViewModel<HomeViewState>(HomeInitial) {
+) : RainbowCakeViewModel<HomeViewState>(HomeEmptyLoading) {
 
     fun load(subreddit: Subreddit? = null) = execute {
         val readyState = viewState as? HomeReady
 
         val user: User? = getUser()
+        if (user == null) {
+            homePresenter.acquireUserlessCredentials()
+        }
         val subreddits = readyState?.subreddits ?: getSubreddits()
-        val selectedSubreddit = readyState?.selectedSubreddit ?: (subreddit ?: subreddits[0])
+        val selectedSubreddit = readyState?.selectedSubreddit
+            ?: (subreddit ?: homePresenter.getDefaultSubreddit())
 
         val submissions = homePresenter.getSubredditPage(
-            subreddit = selectedSubreddit.name,
-            sort = SubmissionSort.Hot
+            subreddit = selectedSubreddit.name
         )
 
         viewState = HomeReady(
@@ -36,7 +39,6 @@ class HomeViewModel @ViewModelInject constructor(
 
         val newSubmissions = homePresenter.getSubredditPage(
             subreddit = oldState.selectedSubreddit.name,
-            sort = SubmissionSort.Hot,
             count = oldState.submissions.size,
             after = oldState.submissions.last().fullname
         )
@@ -69,6 +71,36 @@ class HomeViewModel @ViewModelInject constructor(
             submissions = submissions,
             selectedSubreddit = subreddit,
             loading = false
+        )
+    }
+
+    fun startLoading() = execute {
+        viewState = HomeEmptyLoading
+    }
+
+    fun switchToUserlessMode() = execute {
+        val oldState = viewState as? HomeReady
+
+        viewState = HomeReady(
+            submissions = oldState?.submissions ?: emptyList(),
+            selectedSubreddit = oldState?.selectedSubreddit ?: homePresenter.getDefaultSubreddit(),
+            subreddits = oldState?.subreddits ?: emptyList(),
+            loading = true
+        )
+
+        homePresenter.logout()
+        homePresenter.acquireUserlessCredentials()
+
+        val subreddits = getSubreddits()
+        val selectedSubreddit = subreddits[0]
+        val submissions = homePresenter.getSubredditPage(
+            subreddit = selectedSubreddit.name
+        )
+
+        viewState = HomeReady(
+            submissions = submissions,
+            selectedSubreddit = selectedSubreddit,
+            subreddits = subreddits,
         )
     }
 
