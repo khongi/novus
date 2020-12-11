@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.AmbientContext
 import com.thiosin.novus.domain.model.Submission
-import com.thiosin.novus.ui.utils.displayWidth
+import com.thiosin.novus.ui.utils.getDisplayWidth
 
 @Composable
 fun SubmissionList(
@@ -21,7 +21,7 @@ fun SubmissionList(
     if (lazyListState.firstVisibleItemIndex >= submissions.size - 10) {
         onListEnd()
     }
-    val displayWidthDp = AmbientContext.current.displayWidth
+    val displayWidthDp = getDisplayWidth(AmbientContext.current)
     val displayWidth = remember { displayWidthDp }
 
     LazyColumnForIndexed(state = lazyListState, items = submissions) { index, submission ->

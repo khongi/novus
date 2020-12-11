@@ -17,17 +17,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.annotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.SubmissionMedia
-
+import com.thiosin.novus.ui.theme.redditDownVote
+import com.thiosin.novus.ui.theme.redditUpvote
+import com.thiosin.novus.ui.utils.shortenToThousands
 
 @Composable
 fun SubmissionInfoRow(submission: Submission) {
-    Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+    Row(modifier = Modifier.padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = submission.subreddit,
             color = MaterialTheme.colors.secondary,
@@ -43,6 +48,43 @@ fun SubmissionInfoRow(submission: Submission) {
             modifier = Modifier.padding(start = 8.dp),
             style = MaterialTheme.typography.subtitle2,
         )
+    }
+}
+
+@Composable
+fun SubmissionStatRow(submission: Submission) {
+    Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
+        verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = getVotesFormat(submission.votes),
+            style = MaterialTheme.typography.subtitle1,
+        )
+        Text(
+            text = "${shortenToThousands(submission.comments)} comments",
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.caption,
+        )
+    }
+}
+
+fun getVotesFormat(votes: Int): AnnotatedString {
+    val formattedValue = shortenToThousands(votes)
+
+    return annotatedString {
+        withStyle(SpanStyle(color = getVotesColor(votes > 0))) {
+            append(formattedValue)
+        }
+    }
+}
+
+fun getVotesColor(liked: Boolean): Color {
+    return when (liked) {
+        true -> {
+            redditUpvote
+        }
+        false -> {
+            redditDownVote
+        }
     }
 }
 
@@ -90,18 +132,25 @@ fun SubmissionButtonRow(
 ) {
     Row(
         modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val liked = remember { mutableStateOf(submission.likes) }
-        Votes(votes = submission.votes)
-        UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
-        DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+        VoteButtons(submission, onVoteClick)
         if (onCommentsClick != null) {
             CommentsButton(submission = submission, onClick = onCommentsClick)
         }
-        LinkButton(url = submission.link, onClick = onLinkClick)
+        LinkButton(submission = submission, onClick = onLinkClick)
     }
+}
+
+@Composable
+private fun VoteButtons(
+    submission: Submission,
+    onVoteClick: (Submission) -> Unit,
+) {
+    val liked = remember { mutableStateOf(submission.likes) }
+    UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+    DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
 }
 
 @Composable
@@ -201,9 +250,8 @@ fun CommentsButton(
     submission: Submission,
     onClick: (Submission) -> Unit,
 ) {
-    SubmissionIconButtonWithText(
+    SubmissionIconButton(
         submission = submission,
-        text = annotatedString { append(submission.comments.toString()) },
         iconId = R.drawable.ic_outline_mode_comment_24,
         onClick = onClick
     )
@@ -211,10 +259,12 @@ fun CommentsButton(
 
 @Composable
 fun LinkButton(
-    url: String,
+    submission: Submission,
     onClick: (String) -> Unit,
 ) {
-    IconButton(onClick = { onClick(url) }) {
-        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
-    }
+    SubmissionIconButton(
+        submission = submission,
+        iconId = R.drawable.ic_outline_link_24,
+        onClick = { onClick(submission.link) }
+    )
 }

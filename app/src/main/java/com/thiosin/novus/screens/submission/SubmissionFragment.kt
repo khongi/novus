@@ -17,7 +17,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.ui.theme.NovusTheme
-import com.thiosin.novus.ui.utils.displayWidth
+import com.thiosin.novus.ui.utils.getDisplayWidth
 import com.thiosin.novus.ui.view.NavigationIcon
 import com.thiosin.novus.ui.view.NovusTopAppBar
 import com.thiosin.novus.ui.view.SubmissionDetails
@@ -30,7 +30,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
 
     override fun onStart() {
         super.onStart()
-        val displayWidthDp = requireContext().displayWidth
+        val displayWidthDp = getDisplayWidth(requireContext())
         val submission = SubmissionFragmentArgs.fromBundle(requireArguments()).submission
         viewModel.load(submission, displayWidthDp)
     }
