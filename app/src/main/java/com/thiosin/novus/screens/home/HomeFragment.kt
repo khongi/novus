@@ -66,7 +66,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                             onLogout = {
                                 scaffoldState.drawerState.close()
                                 viewModel.switchToUserlessMode()
-                            }
+                            },
+                            onVote = { submission -> viewModel.vote(submission) }
                         )
                     }
                 }
@@ -85,6 +86,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         onDetailsClick: (Submission) -> Unit,
         onLogin: () -> Unit,
         onLogout: () -> Unit,
+        onVote: (Submission) -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxWidth(),
@@ -118,6 +120,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     onNextPage = onNextPage,
                     onLinkClick = onLinkClick,
                     onDetailsClick = onDetailsClick,
+                    onVote = onVote,
                 )
             }
         )
@@ -130,6 +133,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         onNextPage: () -> Unit,
         onLinkClick: (String) -> Unit,
         onDetailsClick: (Submission) -> Unit,
+        onVote: (Submission) -> Unit,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             when (viewState) {
@@ -142,7 +146,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                         lazyListState = lazyListState,
                         onLinkClick = onLinkClick,
                         onDetailsClick = onDetailsClick,
-                        onListEnd = onNextPage
+                        onListEnd = onNextPage,
+                        onVote = onVote,
                     )
                 }
                 else -> {

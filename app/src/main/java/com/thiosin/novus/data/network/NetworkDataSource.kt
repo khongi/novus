@@ -3,7 +3,8 @@ package com.thiosin.novus.data.network
 import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
-import com.thiosin.novus.data.network.model.user.UserInfo
+import com.thiosin.novus.data.network.model.user.MeResponse
+import com.thiosin.novus.data.prefs.AuthInfoProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -11,6 +12,7 @@ class NetworkDataSource @Inject constructor(
     // TODO check if the same token is returned with userless RedditAuth
     @NetworkModule.UserlessAuth private val redditAPI: RedditAPI,
     @NetworkModule.PageSize private val pageSize: Int,
+    private val authInfoProvider: AuthInfoProvider,
 ) {
 
     suspend fun getListing(
@@ -69,12 +71,20 @@ class NetworkDataSource @Inject constructor(
         }
     }
 
-    suspend fun getUserInfo(): UserInfo? {
+    suspend fun getUserInfo(): MeResponse? {
         return try {
-            redditAPI.getUserInfo()
+            redditAPI.getMe()
         } catch (t: Throwable) {
             Timber.e(t)
             null
+        }
+    }
+
+    suspend fun vote(id: String, direction: Int) {
+        try {
+            redditAPI.vote(dir = direction, id = id)
+        } catch (t: Throwable) {
+            Timber.e(t)
         }
     }
 }

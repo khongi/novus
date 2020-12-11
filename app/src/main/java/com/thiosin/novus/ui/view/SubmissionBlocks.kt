@@ -6,13 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onCommit
-import androidx.compose.runtime.onDispose
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.vectorResource
@@ -76,9 +74,11 @@ fun TitleRow(submission: Submission) {
 
 @Composable
 private fun Title(title: String) {
-    Text(text = title,
+    Text(
+        text = title,
         style = MaterialTheme.typography.h6,
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    )
 }
 
 @Composable
@@ -123,8 +123,10 @@ fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
         fadeIn = true,
         contentScale = contentScale,
         loading = {
-            Box(modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator(Modifier.size(48.dp))
             }
         },
@@ -189,16 +191,125 @@ fun PreviewButtonRow(
     submission: Submission,
     onLinkClick: (String) -> Unit,
     onCommentsClick: (Submission) -> Unit,
+    onVoteClick: (Submission) -> Unit,
 ) {
-    Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
+    Row(
+        modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically) {
-        Votes(submission.votes)
-
-        CommentsButton(submission, onCommentsClick)
-
-        LinkButton(submission.link, onLinkClick)
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val liked = remember { mutableStateOf(submission.likes) }
+        Votes(votes = submission.votes)
+        UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+        DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+        CommentsButton(submission = submission, onClick = onCommentsClick)
+        LinkButton(url = submission.link, onClick = onLinkClick)
     }
+}
+
+@Composable
+fun SubmissionIconButton(
+    submission: Submission,
+    iconId: Int,
+    onClick: (Submission) -> Unit,
+    color: Color = Color.Unspecified
+) {
+    IconButton(onClick = { onClick(submission) }) {
+        Icon(imageVector = vectorResource(id = iconId), tint = color)
+    }
+}
+
+@Composable
+fun SubmissionIconButtonWithText(
+    submission: Submission,
+    text: AnnotatedString,
+    iconId: Int,
+    onClick: (Submission) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .height(48.dp)
+            .padding(horizontal = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = { onClick(submission) })
+    ) {
+        Spacer(Modifier.size(8.dp))
+        Icon(imageVector = vectorResource(id = iconId))
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 4.dp),
+            style = MaterialTheme.typography.caption
+        )
+        Spacer(Modifier.size(8.dp))
+    }
+}
+
+@Composable
+fun UpVoteButton(
+    submission: Submission,
+    liked: MutableState<Boolean?>,
+    onClick: (Submission) -> Unit
+) {
+    val upVoted = liked.value == true
+    val icon = if (upVoted) {
+        R.drawable.ic_baseline_thumb_up_24
+    } else {
+        R.drawable.ic_outline_thumb_up_24
+    }
+    SubmissionIconButton(
+        submission = submission,
+        iconId = icon,
+        onClick = {
+            liked.value = if (liked.value != true) {
+                true
+            } else {
+                null
+            }
+            onClick(submission.copy(likes = liked.value))
+        },
+        color = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
+    )
+}
+
+@Composable
+fun DownVoteButton(
+    submission: Submission,
+    liked: MutableState<Boolean?>,
+    onClick: (Submission) -> Unit
+) {
+    val downVoted = liked.value == false
+    val icon = if (downVoted) {
+        R.drawable.ic_baseline_thumb_down_24
+    } else {
+        R.drawable.ic_outline_thumb_down_24
+    }
+    SubmissionIconButton(
+        submission = submission,
+        iconId = icon,
+        onClick = {
+            liked.value = if (liked.value != false) {
+                false
+            } else {
+                null
+            }
+            onClick(submission.copy(likes = liked.value))
+        },
+        color = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
+    )
+}
+
+@Composable
+fun CommentsButton(
+    submission: Submission,
+    onClick: (Submission) -> Unit,
+) {
+    SubmissionIconButtonWithText(
+        submission = submission,
+        text = annotatedString { append(submission.comments.toString()) },
+        iconId = R.drawable.ic_outline_mode_comment_24,
+        onClick = onClick
+    )
 }
 
 @Composable
@@ -212,31 +323,12 @@ fun LinkButton(
 }
 
 @Composable
-fun CommentsButton(
-    submission: Submission,
-    onClick: (Submission) -> Unit,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .height(48.dp)
-            .padding(horizontal = 8.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = { onClick(submission) })
-    ) {
-        Spacer(Modifier.size(8.dp))
-        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
-        Text(text = "${submission.comments}",
-            modifier = Modifier.padding(start = 4.dp),
-            style = MaterialTheme.typography.caption)
-        Spacer(Modifier.size(8.dp))
-    }
-}
-
-@Composable
 fun Votes(votes: Int) {
-    Text(text = getVotesFormat(votes),
+    Text(
+        text = getVotesFormat(votes),
         style = MaterialTheme.typography.caption,
-        modifier = Modifier.padding(4.dp))
+        modifier = Modifier.padding(4.dp)
+    )
 }
 
 fun getVotesFormat(votes: Int): AnnotatedString {
@@ -248,12 +340,23 @@ fun getVotesFormat(votes: Int): AnnotatedString {
     }
 
     return annotatedString {
-        withStyle(SpanStyle(color = if (votes > 0) {
-            redditUpvote
-        } else {
-            redditDownVote
-        })) {
+        withStyle(
+            SpanStyle(
+                color = getVotesColor(votes > 0)
+            )
+        ) {
             append(formattedValue)
+        }
+    }
+}
+
+fun getVotesColor(liked: Boolean): Color {
+    return when (liked) {
+        true -> {
+            redditUpvote
+        }
+        false -> {
+            redditDownVote
         }
     }
 }

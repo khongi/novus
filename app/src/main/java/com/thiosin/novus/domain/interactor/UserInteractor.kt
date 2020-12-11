@@ -29,4 +29,13 @@ class UserInteractor @Inject constructor(
         userInfoProvider.user = null
         authInteractor.logout()
     }
+
+    suspend fun vote(id: String, likes: Boolean?) {
+        val direction = when (likes) {
+            false -> -1
+            null -> 0
+            true -> 1
+        }
+        networkDataSource.vote(id, direction)
+    }
 }

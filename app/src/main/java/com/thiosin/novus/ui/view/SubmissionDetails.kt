@@ -1,12 +1,12 @@
 package com.thiosin.novus.ui.view
 
+import android.view.Surface
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,10 +28,11 @@ fun SubmissionDetails(
     comments: List<Comment>,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
+    onVoteClick: (Submission) -> Unit,
 ) {
     LazyColumn {
         item {
-            SubmissionContent(submission, displayWidthDp, onLinkClick)
+            SubmissionContent(submission, displayWidthDp, onLinkClick, onVoteClick)
         }
 
         items(comments) {
@@ -45,22 +46,31 @@ private fun SubmissionContent(
     submission: Submission,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
+    onVoteClick: (Submission) -> Unit,
 ) {
-    Column(modifier = Modifier.padding(top = 4.dp)) {
-        InfoRow(submission)
-        TitleRow(submission)
-        if (submission.selfText.isBlank().not()) {
-            SelfText(submission.selfText)
-        }
-        submission.media?.let {
-            MediaRow(it, displayWidthDp.dp)
-        }
-        Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Votes(submission.votes)
-
-            LinkButton(submission.link, onLinkClick)
+    val liked = remember { mutableStateOf(submission.likes) }
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).fillMaxWidth(),
+        elevation = 8.dp
+    ) {
+        Column(modifier = Modifier.padding(top = 4.dp)) {
+            InfoRow(submission)
+            TitleRow(submission)
+            if (submission.selfText.isBlank().not()) {
+                SelfText(submission.selfText)
+            }
+            submission.media?.let {
+                MediaRow(it, displayWidthDp.dp)
+            }
+            Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                Votes(submission.votes)
+                UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+                DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+                LinkButton(submission.link, onLinkClick)
+            }
         }
     }
 }
