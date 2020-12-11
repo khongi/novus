@@ -2,7 +2,6 @@ package com.thiosin.novus.screens.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
-import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.domain.model.User
@@ -105,8 +104,8 @@ class HomeViewModel @ViewModelInject constructor(
         )
     }
 
-    fun vote(submission: Submission) = execute {
-        homePresenter.vote(submission.fullname, submission.likes)
+    fun vote(fullname: String, liked: Boolean?) = execute {
+        homePresenter.vote(fullname, liked)
     }
 
     private suspend fun getUser(): User? {

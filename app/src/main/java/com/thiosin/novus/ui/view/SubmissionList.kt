@@ -16,7 +16,7 @@ fun SubmissionList(
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
     onListEnd: () -> Unit,
-    onVote: (Submission) -> Unit,
+    onVote: (String, Boolean?) -> Unit,
 ) {
     if (lazyListState.firstVisibleItemIndex >= submissions.size - 10) {
         onListEnd()

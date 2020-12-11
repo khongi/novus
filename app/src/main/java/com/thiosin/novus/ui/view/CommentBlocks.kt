@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,18 +19,18 @@ import com.thiosin.novus.ui.utils.border
 
 @Composable
 fun CommentItem(comment: Comment, collapse: Boolean = false) {
-    val isCollapsed = remember { mutableStateOf(collapse) }
+    var isCollapsed by remember { mutableStateOf(collapse) }
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
             .clickable(
-                onLongClick = { isCollapsed.value = isCollapsed.value.not() },
-                onClick = { isCollapsed.value = false }
+                onLongClick = { isCollapsed = isCollapsed.not() },
+                onClick = { isCollapsed = false }
             ))
         {
             Spacer(modifier = Modifier.width((comment.depth * 8).dp))
-            CommentContent(comment, isCollapsed.value)
+            CommentContent(comment, isCollapsed)
         }
-        if (isCollapsed.value.not()) {
+        if (isCollapsed.not()) {
             comment.replies.forEach { child ->
                 CommentItem(comment = child, collapse = collapse)
             }
@@ -41,8 +39,13 @@ fun CommentItem(comment: Comment, collapse: Boolean = false) {
 }
 
 @Composable
-private fun CommentContent(comment: Comment, collapse: Boolean) {
+private fun CommentContent(
+    comment: Comment,
+    collapse: Boolean,
+//    onVoteClick: (String, Boolean?) -> Unit,
+) {
     val border = getMarkerBorder(comment.depth)
+//    var showControls by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.fillMaxWidth().border(start = border).padding(start = 8.dp)) {
             CommentHeader(comment, collapse)
@@ -53,6 +56,11 @@ private fun CommentContent(comment: Comment, collapse: Boolean) {
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
+//            if (showControls) {
+//                Row {
+//                    VoteButtons(comment.fullname)
+//                }
+//            }
         }
         Divider(thickness = 0.25.dp)
     }

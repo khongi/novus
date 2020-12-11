@@ -11,7 +11,7 @@ fun SubmissionDetails(
     comments: List<Comment>,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
-    onVoteClick: (Submission) -> Unit,
+    onVoteClick: (String, Boolean?) -> Unit,
 ) {
     LazyColumn {
         item {

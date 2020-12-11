@@ -1,8 +1,6 @@
 package com.thiosin.novus.ui.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -13,7 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
@@ -127,7 +124,7 @@ fun SubmissionMediaRow(media: SubmissionMedia, availableWidth: Dp) {
 fun SubmissionButtonRow(
     submission: Submission,
     onLinkClick: (String) -> Unit,
-    onVoteClick: (Submission) -> Unit,
+    onVoteClick: (String, Boolean?) -> Unit,
     onCommentsClick: ((Submission) -> Unit)? = null,
 ) {
     Row(
@@ -135,67 +132,30 @@ fun SubmissionButtonRow(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        VoteButtons(submission, onVoteClick)
+        VoteButtons(submission.fullname, submission.likes, onVoteClick)
         if (onCommentsClick != null) {
             CommentsButton(submission = submission, onClick = onCommentsClick)
         }
-        LinkButton(submission = submission, onClick = onLinkClick)
+        LinkButton(url = submission.link, onClick = onLinkClick)
     }
 }
 
 @Composable
-private fun VoteButtons(
-    submission: Submission,
-    onVoteClick: (Submission) -> Unit,
+fun VoteButtons(
+    fullname: String,
+    liked: Boolean?,
+    onVoteClick: (String, Boolean?) -> Unit,
 ) {
-    val liked = remember { mutableStateOf(submission.likes) }
-    UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
-    DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
-}
-
-@Composable
-fun SubmissionIconButton(
-    submission: Submission,
-    iconId: Int,
-    onClick: (Submission) -> Unit,
-    color: Color = Color.Unspecified,
-) {
-    IconButton(onClick = { onClick(submission) }) {
-        Icon(imageVector = vectorResource(id = iconId), tint = color)
-    }
-}
-
-@Composable
-fun SubmissionIconButtonWithText(
-    submission: Submission,
-    text: AnnotatedString,
-    iconId: Int,
-    onClick: (Submission) -> Unit,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .height(48.dp)
-            .padding(horizontal = 8.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = { onClick(submission) })
-    ) {
-        Spacer(Modifier.size(8.dp))
-        Icon(imageVector = vectorResource(id = iconId))
-        Text(
-            text = text,
-            modifier = Modifier.padding(start = 4.dp),
-            style = MaterialTheme.typography.caption
-        )
-        Spacer(Modifier.size(8.dp))
-    }
+    val mutableLiked = remember { mutableStateOf(liked) }
+    UpVoteButton(fullname = fullname, liked = mutableLiked, onClick = onVoteClick)
+    DownVoteButton(fullname = fullname, liked = mutableLiked, onClick = onVoteClick)
 }
 
 @Composable
 fun UpVoteButton(
-    submission: Submission,
+    fullname: String,
     liked: MutableState<Boolean?>,
-    onClick: (Submission) -> Unit,
+    onClick: (String, Boolean?) -> Unit,
 ) {
     val upVoted = liked.value == true
     val icon = if (upVoted) {
@@ -203,26 +163,24 @@ fun UpVoteButton(
     } else {
         R.drawable.ic_outline_thumb_up_24
     }
-    SubmissionIconButton(
-        submission = submission,
-        iconId = icon,
-        onClick = {
-            liked.value = if (liked.value != true) {
-                true
-            } else {
-                null
-            }
-            onClick(submission.copy(likes = liked.value))
-        },
-        color = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
-    )
+    val tint = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
+    IconButton(onClick = {
+        liked.value = if (liked.value != true) {
+            true
+        } else {
+            null
+        }
+        onClick(fullname, liked.value)
+    }) {
+        Icon(imageVector = vectorResource(id = icon), tint = tint)
+    }
 }
 
 @Composable
 fun DownVoteButton(
-    submission: Submission,
+    fullname: String,
     liked: MutableState<Boolean?>,
-    onClick: (Submission) -> Unit,
+    onClick: (String, Boolean?) -> Unit,
 ) {
     val downVoted = liked.value == false
     val icon = if (downVoted) {
@@ -230,19 +188,17 @@ fun DownVoteButton(
     } else {
         R.drawable.ic_outline_thumb_down_24
     }
-    SubmissionIconButton(
-        submission = submission,
-        iconId = icon,
-        onClick = {
-            liked.value = if (liked.value != false) {
-                false
-            } else {
-                null
-            }
-            onClick(submission.copy(likes = liked.value))
-        },
-        color = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
-    )
+    val tint = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
+    IconButton(onClick = {
+        liked.value = if (liked.value != false) {
+            false
+        } else {
+            null
+        }
+        onClick(fullname, liked.value)
+    }) {
+        Icon(imageVector = vectorResource(id = icon), tint = tint)
+    }
 }
 
 @Composable
@@ -250,21 +206,17 @@ fun CommentsButton(
     submission: Submission,
     onClick: (Submission) -> Unit,
 ) {
-    SubmissionIconButton(
-        submission = submission,
-        iconId = R.drawable.ic_outline_mode_comment_24,
-        onClick = onClick
-    )
+    IconButton(onClick = { onClick(submission) }) {
+        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
+    }
 }
 
 @Composable
 fun LinkButton(
-    submission: Submission,
+    url: String,
     onClick: (String) -> Unit,
 ) {
-    SubmissionIconButton(
-        submission = submission,
-        iconId = R.drawable.ic_outline_link_24,
-        onClick = { onClick(submission.link) }
-    )
+    IconButton(onClick = { onClick(url) }) {
+        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
+    }
 }

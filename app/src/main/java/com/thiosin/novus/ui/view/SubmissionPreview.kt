@@ -16,7 +16,7 @@ fun SubmissionPreview(
     showSelfText: Boolean,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
-    onVoteClick: (Submission) -> Unit,
+    onVoteClick: (String, Boolean?) -> Unit,
     onCommentsClick: ((Submission) -> Unit)? = null,
 ) {
     Card(
@@ -69,7 +69,7 @@ fun DefaultPreview() {
         showSelfText = true,
         displayWidthDp = 300F,
         onLinkClick = {},
-        onVoteClick = {},
+        onVoteClick = { _: String, _: Boolean? -> },
     )
 }
 

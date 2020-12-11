@@ -56,18 +56,20 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                             onSwitchSubreddit = { subreddit -> viewModel.switchSubreddit(subreddit) },
                             onLinkClick = { url -> navigateToWebFragment(url) },
                             onDetailsClick = { submission -> navigateToDetails(submission) },
-                            onLogin = {
+                            onLoginClick = {
                                 viewModel.startLoading()
                                 scaffoldState.drawerState.close()
                                 findNavController().navigate(
                                     HomeFragmentDirections.actionHomeFragmentToLoginFragment()
                                 )
                             },
-                            onLogout = {
+                            onLogoutClick = {
                                 scaffoldState.drawerState.close()
                                 viewModel.switchToUserlessMode()
                             },
-                            onVote = { submission -> viewModel.vote(submission) }
+                            onVoteClick = { fullname, liked ->
+                                viewModel.vote(fullname, liked)
+                            }
                         )
                     }
                 }
@@ -84,9 +86,9 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         onSwitchSubreddit: (Subreddit) -> Unit,
         onLinkClick: (String) -> Unit,
         onDetailsClick: (Submission) -> Unit,
-        onLogin: () -> Unit,
-        onLogout: () -> Unit,
-        onVote: (Submission) -> Unit,
+        onLoginClick: () -> Unit,
+        onLogoutClick: () -> Unit,
+        onVoteClick: (String, Boolean?) -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxWidth(),
@@ -107,8 +109,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     },
                     selected = viewState.getCurrentSubreddit(),
                     user = viewState.getUser(),
-                    onLogin = onLogin,
-                    onLogout = onLogout
+                    onLogin = onLoginClick,
+                    onLogout = onLogoutClick
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,
@@ -120,7 +122,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     onNextPage = onNextPage,
                     onLinkClick = onLinkClick,
                     onDetailsClick = onDetailsClick,
-                    onVote = onVote,
+                    onVote = onVoteClick,
                 )
             }
         )
@@ -133,7 +135,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         onNextPage: () -> Unit,
         onLinkClick: (String) -> Unit,
         onDetailsClick: (Submission) -> Unit,
-        onVote: (Submission) -> Unit,
+        onVote: (String, Boolean?) -> Unit,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             when (viewState) {
