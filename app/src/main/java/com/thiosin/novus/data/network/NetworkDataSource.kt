@@ -82,12 +82,7 @@ class NetworkDataSource @Inject constructor(
 
     suspend fun vote(id: String) {
         try {
-            val modhash = authInfoProvider.modhash ?: ""
-            redditAPI.vote(
-                dir = 1,
-                id = id,
-                header = mapOf("X-Modhash" to modhash)
-            )
+            redditAPI.vote(dir = 1, id = id)
         } catch (t: Throwable) {
             Timber.e(t)
         }

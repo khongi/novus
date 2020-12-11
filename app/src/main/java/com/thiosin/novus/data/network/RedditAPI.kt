@@ -59,6 +59,5 @@ interface RedditAPI {
     suspend fun vote(
         @Field("dir") dir: Int,
         @Field("id") id: String,
-        @HeaderMap header: Map<String, String>,
     )
 }

@@ -120,7 +120,7 @@ data class UserData(
     val iconImg: String,
 
     @Json(name = "has_mod_mail")
-    val hasModMail: Boolean,
+    val hasModMail: Boolean? = null,
 
     @Json(name = "pref_nightmode")
     val prefNightmode: Boolean,
@@ -134,7 +134,7 @@ data class UserData(
     @Json(name = "password_set")
     val passwordSet: Boolean,
 
-    val modhash: String,
+    val modhash: String? = null,
 
     @Json(name = "link_karma")
     val linkKarma: Long,
@@ -152,7 +152,7 @@ data class UserData(
     val prefTopKarmaSubreddits: Boolean,
 
     @Json(name = "has_mail")
-    val hasMail: Boolean,
+    val hasMail: Boolean? = null,
 
     @Json(name = "pref_show_snoovatar")
     val prefShowSnoovatar: Boolean,

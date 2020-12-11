@@ -31,10 +31,6 @@ class AuthInteractor @Inject constructor(
 
     fun getRedirectUrl() = BuildConfig.REDIRECT_URL
 
-    fun saveModhash(modhash: String) {
-        authInfoProvider.modhash = modhash
-    }
-
     fun logout() {
         authInfoProvider.clearAll()
     }

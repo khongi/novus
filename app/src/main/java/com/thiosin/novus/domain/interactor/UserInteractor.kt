@@ -20,7 +20,6 @@ class UserInteractor @Inject constructor(
             return false
         }
         userInfoProvider.user = userInfo.toUser()
-        authInteractor.saveModhash(userInfo.data.modhash)
         return true
     }
 

@@ -177,7 +177,7 @@ data class SubmissionListingChildData(
     @Json(name = "selftext_html")
     val selftextHTML: String? = null,
 
-    val likes: Any? = null,
+    val likes: Boolean? = null,
 
     @Json(name = "suggested_sort")
     val suggestedSort: String? = null,
