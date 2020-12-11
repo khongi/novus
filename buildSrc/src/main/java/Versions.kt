@@ -34,6 +34,8 @@ object Versions {
 
     const val nav = "2.3.2"
 
+    const val krate = "1.0.0"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"

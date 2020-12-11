@@ -46,7 +46,6 @@ private fun SubmissionContent(
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
 ) {
-//    Surface(elevation = 8.dp) {
     Column(modifier = Modifier.padding(top = 4.dp)) {
         InfoRow(submission)
         TitleRow(submission)
@@ -64,7 +63,6 @@ private fun SubmissionContent(
             LinkButton(submission.link, onLinkClick)
         }
     }
-//    }
 }
 
 @Composable

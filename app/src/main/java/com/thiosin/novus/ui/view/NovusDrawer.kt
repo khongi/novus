@@ -4,40 +4,72 @@ import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.annotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.ui.theme.redditOrange
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun NovusDrawer(subreddits: List<Subreddit>, selected: Subreddit?, onClick: (Subreddit) -> Unit) {
+fun NovusDrawer(
+    subreddits: List<Subreddit>,
+    selected: Subreddit?,
+    user: User?,
+    onSubredditSelect: (Subreddit) -> Unit,
+    onLogin: () -> Unit,
+    onLogout: () -> Unit,
+) {
     Column {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .preferredHeight(56.dp),
-            elevation = 8.dp
-        ) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterStart) {
+        HeaderSection(user, onLogin, onLogout)
+        SubredditsSection(subreddits, selected, onSubredditSelect)
+    }
+}
+
+@Composable
+fun SubredditsSection(
+    subreddits: List<Subreddit>,
+    selected: Subreddit?,
+    onClick: (Subreddit) -> Unit
+) {
+    ScrollableColumn() {
+        subreddits.forEach {
+            DrawerItem(
+                subreddit = it,
+                isSelected = it.name == selected?.name,
+                onClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
+fun HeaderSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = 8.dp
+    ) {
+        Column {
+            Box(
+                modifier = Modifier.preferredHeight(56.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
                 val title = annotatedString {
-                    pushStyle(SpanStyle(color = MaterialTheme.colors.onSurface))
                     append("Novus for ")
-                    pushStyle(SpanStyle(fontWeight = FontWeight.Bold, color = redditOrange))
-                    append("Reddit")
-                    pop()
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = redditOrange)) {
+                        append("Reddit")
+                    }
                 }
                 Text(
                     text = title,
@@ -45,15 +77,41 @@ fun NovusDrawer(subreddits: List<Subreddit>, selected: Subreddit?, onClick: (Sub
                     modifier = Modifier.padding(8.dp)
                 )
             }
+            UserSection(user = user, onLogin = onLogin, onLogout = onLogout)
         }
-        ScrollableColumn() {
-            subreddits.forEach {
-                DrawerItem(
-                    subreddit = it,
-                    isSelected = it.name == selected?.name,
-                    onClick = onClick
-                )
+    }
+}
+
+@Composable
+fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = vectorResource(id = R.drawable.ic_baseline_account_circle_24),
+                modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = user?.name ?: "Anonymous",
+                style = MaterialTheme.typography.subtitle1,
+            )
+        }
+        IconButton(onClick = {
+            if (user == null) {
+                onLogin()
+            } else {
+                onLogout()
             }
+        }) {
+            val iconId = if (user == null) {
+                R.drawable.ic_baseline_login_24
+            } else {
+                R.drawable.ic_baseline_exit_to_app_24
+            }
+            Icon(imageVector = vectorResource(id = iconId))
         }
     }
 }

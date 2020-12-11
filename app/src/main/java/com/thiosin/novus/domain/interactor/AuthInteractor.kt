@@ -1,12 +1,16 @@
 package com.thiosin.novus.domain.interactor
 
 import com.kirkbushman.auth.RedditAuth
+import com.kirkbushman.auth.models.TokenBearer
+import com.thiosin.novus.BuildConfig
 import com.thiosin.novus.data.network.NetworkModule
+import com.thiosin.novus.data.prefs.AuthInfoProvider
 import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(
     @NetworkModule.UserlessAuth private val userlessRedditAuth: RedditAuth,
     @NetworkModule.UserAuth private val userRedditAuth: RedditAuth,
+    private val authInfoProvider: AuthInfoProvider,
 ) {
 
     fun acquireUserlessToken() {
@@ -21,7 +25,13 @@ class AuthInteractor @Inject constructor(
         return userRedditAuth.isRedirectedUrl(url)
     }
 
-    fun acquireUserToken(url: String) {
-        userRedditAuth.getTokenBearer(url)
+    fun acquireUserToken(url: String): TokenBearer? {
+        return userRedditAuth.getTokenBearer(url)
+    }
+
+    fun getRedirectUrl() = BuildConfig.REDIRECT_URL
+
+    fun logout() {
+        authInfoProvider.clearAll()
     }
 }

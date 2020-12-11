@@ -12,10 +12,10 @@ data class SubredditListingResponse(
 
 @JsonClass(generateAdapter = true)
 data class SubredditListingData(
-    val modhash: String,
+    val modhash: String? = null,
     val dist: Long,
     val children: List<SubredditListingChild>,
-    val after: String,
+    val after: String? = null,
     val before: Any? = null,
 )
 
@@ -67,10 +67,10 @@ data class SubredditListingChildData(
 
     val over18: Boolean,
 
-    val description: String,
+    val description: String? = null,
 
     @Json(name = "description_html")
-    val descriptionHtml: String,
+    val descriptionHtml: String? = null,
 
     val url: String,
 )

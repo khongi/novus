@@ -3,6 +3,7 @@ package com.thiosin.novus.data.network
 import com.kirkbushman.auth.RedditAuth
 import okhttp3.Interceptor
 import okhttp3.Response
+import timber.log.Timber
 
 class AuthInterceptor(private val redditAuth: RedditAuth) : Interceptor {
 
@@ -14,6 +15,8 @@ class AuthInterceptor(private val redditAuth: RedditAuth) : Interceptor {
         } else {
             redditAuth.getTokenBearer() ?: throw IllegalStateException("Token unavailable")
         }
+
+        Timber.v("Sending request: ${request.url}")
 
         val newRequest = request.newBuilder()
             .url(request.url)

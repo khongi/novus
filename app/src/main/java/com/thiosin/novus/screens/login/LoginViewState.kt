@@ -4,6 +4,9 @@ sealed class LoginViewState
 
 object LoginInitial : LoginViewState()
 
-data class LoginStart(val authUrl: String) : LoginViewState()
+data class LoginStart(
+    val authUrl: String,
+    val redirectUrl: String
+) : LoginViewState()
 
 object LoginComplete : LoginViewState()

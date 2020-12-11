@@ -4,11 +4,11 @@ import android.content.Context
 import com.kirkbushman.araw.RedditClient
 import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
-import com.kirkbushman.auth.managers.SharedPrefsStorageManager
 import com.kirkbushman.auth.managers.StorageManager
 import com.squareup.moshi.Moshi
 import com.thiosin.novus.BuildConfig
 import com.thiosin.novus.data.network.json.CResponseDataChildListAdapter
+import com.thiosin.novus.data.prefs.AuthInfoProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +26,8 @@ import javax.inject.Qualifier
 class NetworkModule {
 
     @Provides
-    fun provideSharedPrefsStorageManager(@ApplicationContext context: Context): StorageManager {
-        return SharedPrefsStorageManager(context)
+    fun provideStorageManager(authInfoProvider: AuthInfoProvider): StorageManager {
+        return authInfoProvider
     }
 
     @Qualifier
@@ -52,7 +52,7 @@ class NetworkModule {
             .setUserlessCredentials(BuildConfig.CLIENT_ID)
             .setScopes("*")
             .setStorageManager(storageManager)
-            .setLogging(false)
+            .setLogging(true)
             .build()
     }
 
@@ -67,10 +67,9 @@ class NetworkModule {
     fun provideUserRedditAuth(storageManager: StorageManager): RedditAuth {
         return RedditAuth.Builder()
             .setApplicationCredentials(BuildConfig.CLIENT_ID, BuildConfig.REDIRECT_URL)
-            // TODO define scopes
-            .setScopes(arrayOf("read"))
+            .setScopes(arrayOf("read", "identity", "mysubreddits", "vote"))
             .setStorageManager(storageManager)
-            .setLogging(false)
+            .setLogging(true)
             .build()
     }
 
@@ -93,7 +92,7 @@ class NetworkModule {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(
                 HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BASIC
+                    level = HttpLoggingInterceptor.Level.BODY
                 }
             )
             .addInterceptor(AuthInterceptor(redditAuth))

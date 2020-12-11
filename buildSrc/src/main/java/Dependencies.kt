@@ -56,6 +56,11 @@ object Dependencies {
         const val gif = "io.coil-kt:coil-gif:${Versions.coil}"
     }
 
+    object Storage {
+        const val krate = "hu.autsoft:krate:${Versions.krate}"
+        const val krateMoshiCodegen = "hu.autsoft:krate-moshi-codegen:${Versions.krate}"
+    }
+
     object Network {
         const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp}"
         const val okHttpLoggingInterceptor =

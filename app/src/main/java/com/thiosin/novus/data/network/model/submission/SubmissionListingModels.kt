@@ -12,7 +12,7 @@ data class SubmissionListingResponse(
 
 @JsonClass(generateAdapter = true)
 data class SubmissionListingData(
-    val modhash: String,
+    val modhash: String? = null,
     val dist: Long,
     val children: List<SubmissionListingChild>,
     val after: String,

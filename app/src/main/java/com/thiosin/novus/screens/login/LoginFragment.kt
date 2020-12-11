@@ -7,13 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.theme.NovusTheme
+import com.thiosin.novus.ui.view.NavigationIcon
+import com.thiosin.novus.ui.view.NovusTopAppBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,12 +49,15 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
                 when (viewState) {
                     is LoginInitial -> Unit
                     is LoginStart -> {
-                        LoginScreen(authUrl = viewState.authUrl) { url ->
-                            viewModel.onAuthPageStart(url)
-                        }
+                        LoginScreen(
+                            authUrl = viewState.authUrl,
+                            redirectUrl = viewState.redirectUrl,
+                            onPageStart = { url -> viewModel.onPageStart(url) },
+                            onAbort = { findNavController().popBackStack() }
+                        )
                     }
                     is LoginComplete -> {
-//                        navigator?.replace(HomeFragment())
+                        findNavController().popBackStack()
                     }
                 }
             }
@@ -57,19 +65,40 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
     }
 
     @Composable
-    private fun LoginScreen(authUrl: String, onPageStart: (url: String) -> Unit) {
-        val browser = remember {
-            WebView(requireContext()).apply {
-                webViewClient = object : WebViewClient() {
-                    override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-                        onPageStart(url)
-                    }
+    private fun LoginScreen(
+        authUrl: String,
+        redirectUrl: String,
+        onPageStart: (url: String) -> Unit,
+        onAbort: () -> Unit,
+    ) {
+        val context = AmbientContext.current
+        val webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
+                if (url.startsWith(redirectUrl)) {
+                    view.stopLoading()
                 }
+                onPageStart(url)
+            }
+        }
+        val browser = remember {
+            WebView(context).apply {
+                setWebViewClient(webViewClient)
             }
         }
 
         browser.loadUrl(authUrl)
 
-        AndroidView({ browser })
+        Scaffold(
+            topBar = {
+                NovusTopAppBar(
+                    title = "Login",
+                    navIcon = NavigationIcon.Close,
+                    onNavigationIconClick = onAbort
+                )
+            },
+            bodyContent = {
+                AndroidView({ browser })
+            }
+        )
     }
 }

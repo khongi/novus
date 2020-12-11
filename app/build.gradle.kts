@@ -81,7 +81,6 @@ kapt {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Dependencies.Kotlin.stdLib)
-//    implementation("org.jetbrains.kotlin:kotlin-android-extensions:${Versions.kotlin}")
 
     implementation(Dependencies.RainbowCake.core)
     implementation(Dependencies.RainbowCake.timber)
@@ -120,6 +119,9 @@ dependencies {
     implementation(Dependencies.Network.retrofitMoshiConverter)
     implementation(Dependencies.Network.moshi)
     kapt(Dependencies.Network.moshiCodegen)
+
+    implementation(Dependencies.Storage.krate)
+    implementation(Dependencies.Storage.krateMoshiCodegen)
 
     testImplementation(Dependencies.Tests.Framework.kotest)
     testImplementation(Dependencies.Tests.Assertion.kotest)

@@ -19,6 +19,7 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +55,18 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                             onNextPage = { viewModel.loadNextPage() },
                             onSwitchSubreddit = { subreddit -> viewModel.switchSubreddit(subreddit) },
                             onLinkClick = { url -> navigateToWebFragment(url) },
-                            onDetailsClick = { submission -> navigateToDetails(submission) }
+                            onDetailsClick = { submission -> navigateToDetails(submission) },
+                            onLogin = {
+                                viewModel.startLoading()
+                                scaffoldState.drawerState.close()
+                                findNavController().navigate(
+                                    HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+                                )
+                            },
+                            onLogout = {
+                                scaffoldState.drawerState.close()
+                                viewModel.switchToUserlessMode()
+                            }
                         )
                     }
                 }
@@ -71,6 +83,8 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         onSwitchSubreddit: (Subreddit) -> Unit,
         onLinkClick: (String) -> Unit,
         onDetailsClick: (Submission) -> Unit,
+        onLogin: () -> Unit,
+        onLogout: () -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxWidth(),
@@ -83,10 +97,16 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                 )
             },
             drawerContent = {
-                HomeDrawer(
-                    viewState = viewState,
-                    scaffoldState = scaffoldState,
-                    onSwitchSubreddit = onSwitchSubreddit
+                NovusDrawer(
+                    subreddits = viewState.getSubreddits(),
+                    onSubredditSelect = { subreddit ->
+                        onSwitchSubreddit(subreddit)
+                        scaffoldState.drawerState.close()
+                    },
+                    selected = viewState.getCurrentSubreddit(),
+                    user = viewState.getUser(),
+                    onLogin = onLogin,
+                    onLogout = onLogout
                 )
             },
             drawerBackgroundColor = MaterialTheme.colors.background,
@@ -100,22 +120,6 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     onDetailsClick = onDetailsClick,
                 )
             }
-        )
-    }
-
-    @Composable
-    private fun HomeDrawer(
-        viewState: HomeViewState,
-        scaffoldState: ScaffoldState,
-        onSwitchSubreddit: (Subreddit) -> Unit,
-    ) {
-        NovusDrawer(
-            subreddits = viewState.getSubreddits(),
-            onClick = { subreddit ->
-                onSwitchSubreddit(subreddit)
-                scaffoldState.drawerState.close()
-            },
-            selected = viewState.getCurrentSubreddit()
         )
     }
 
@@ -162,7 +166,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
 
     private fun HomeViewState?.getTitle(): String {
         return when (this) {
-            is HomeReady -> currentSubreddit.displayName
+            is HomeReady -> selectedSubreddit.displayName
             else -> "Loading..."
         }
     }
@@ -176,7 +180,14 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
 
     private fun HomeViewState?.getCurrentSubreddit(): Subreddit? {
         return when (this) {
-            is HomeReady -> currentSubreddit
+            is HomeReady -> selectedSubreddit
+            else -> null
+        }
+    }
+
+    private fun HomeViewState?.getUser(): User? {
+        return when (this) {
+            is HomeReady -> user
             else -> null
         }
     }
