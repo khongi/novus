@@ -4,15 +4,26 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class UserInfo(
+data class MeResponse(
+    val loid: String,
+
+    @Json(name = "loid_created")
+    val loidCreated: Long,
+
+    val kind: String,
+    val data: UserData,
+)
+
+@JsonClass(generateAdapter = true)
+data class UserData(
     @Json(name = "is_employee")
     val isEmployee: Boolean,
 
-    @Json(name = "seen_layout_switch")
-    val seenLayoutSwitch: Boolean,
-
     @Json(name = "has_visited_new_profile")
     val hasVisitedNewProfile: Boolean,
+
+    @Json(name = "is_friend")
+    val isFriend: Boolean,
 
     @Json(name = "pref_no_profanity")
     val prefNoProfanity: Boolean,
@@ -23,17 +34,13 @@ data class UserInfo(
     @Json(name = "pref_geopopular")
     val prefGeopopular: String,
 
-    @Json(name = "seen_redesign_modal")
-    val seenRedesignModal: Boolean,
-
     @Json(name = "pref_show_trending")
     val prefShowTrending: Boolean,
 
-    @Json(name = "subreddit")
-    val userSubredditInfo: UserSubredditInfo,
+    val subreddit: UserSubreddit,
 
-    @Json(name = "snoovatar_img")
-    val snoovatarImg: String,
+    @Json(name = "has_ios_subscription")
+    val hasIosSubscription: Boolean,
 
     @Json(name = "snoovatar_size")
     val snoovatarSize: Any? = null,
@@ -52,10 +59,13 @@ data class UserInfo(
 
     val features: Features,
 
-    @Json(name = "has_android_subscription")
-    val hasAndroidSubscription: Boolean,
+    @Json(name = "can_edit_name")
+    val canEditName: Boolean,
 
     val verified: Boolean,
+
+    @Json(name = "new_modmail_exists")
+    val newModmailExists: Any? = null,
 
     @Json(name = "pref_autoplay")
     val prefAutoplay: Boolean,
@@ -70,11 +80,8 @@ data class UserInfo(
 
     val id: String,
 
-    @Json(name = "has_stripe_subscription")
-    val hasStripeSubscription: Boolean,
-
-    @Json(name = "oauth_client_id")
-    val oauthClientID: String,
+    @Json(name = "force_password_reset")
+    val forcePasswordReset: Boolean,
 
     @Json(name = "can_create_subreddit")
     val canCreateSubreddit: Boolean,
@@ -103,14 +110,17 @@ data class UserInfo(
     @Json(name = "pref_video_autoplay")
     val prefVideoAutoplay: Boolean,
 
-    @Json(name = "can_edit_name")
-    val canEditName: Boolean,
+    @Json(name = "has_android_subscription")
+    val hasAndroidSubscription: Boolean,
 
     @Json(name = "in_redesign_beta")
     val inRedesignBeta: Boolean,
 
     @Json(name = "icon_img")
     val iconImg: String,
+
+    @Json(name = "has_mod_mail")
+    val hasModMail: Boolean,
 
     @Json(name = "pref_nightmode")
     val prefNightmode: Boolean,
@@ -124,26 +134,25 @@ data class UserInfo(
     @Json(name = "password_set")
     val passwordSet: Boolean,
 
+    val modhash: String,
+
     @Json(name = "link_karma")
     val linkKarma: Long,
 
-    @Json(name = "force_password_reset")
-    val forcePasswordReset: Boolean,
+    @Json(name = "has_stripe_subscription")
+    val hasStripeSubscription: Boolean,
 
     @Json(name = "total_karma")
     val totalKarma: Long,
 
-    @Json(name = "seen_give_award_tooltip")
-    val seenGiveAwardTooltip: Boolean,
-
     @Json(name = "inbox_count")
     val inboxCount: Long,
 
-    @Json(name = "seen_premium_adblock_modal")
-    val seenPremiumAdblockModal: Boolean,
-
     @Json(name = "pref_top_karma_subreddits")
     val prefTopKarmaSubreddits: Boolean,
+
+    @Json(name = "has_mail")
+    val hasMail: Boolean,
 
     @Json(name = "pref_show_snoovatar")
     val prefShowSnoovatar: Boolean,
@@ -161,8 +170,8 @@ data class UserInfo(
     @Json(name = "created_utc")
     val createdUTC: Double,
 
-    @Json(name = "has_ios_subscription")
-    val hasIosSubscription: Boolean,
+    @Json(name = "snoovatar_img")
+    val snoovatarImg: String,
 
     @Json(name = "pref_show_twitter")
     val prefShowTwitter: Boolean,
@@ -175,12 +184,6 @@ data class UserInfo(
 
     @Json(name = "has_subscribed")
     val hasSubscribed: Boolean,
-
-    @Json(name = "linked_identities")
-    val linkedIdentities: List<Any?>,
-
-    @Json(name = "seen_subreddit_chat_ftux")
-    val seenSubredditChatFtux: Boolean,
 )
 
 @JsonClass(generateAdapter = true)
@@ -322,12 +325,9 @@ data class MwebXpromoRevampV(
 )
 
 @JsonClass(generateAdapter = true)
-data class UserSubredditInfo(
+data class UserSubreddit(
     @Json(name = "default_set")
     val defaultSet: Boolean,
-
-    @Json(name = "user_is_contributor")
-    val userIsContributor: Boolean,
 
     @Json(name = "banner_img")
     val bannerImg: String,
@@ -347,8 +347,7 @@ data class UserSubredditInfo(
     @Json(name = "show_media")
     val showMedia: Boolean,
 
-    @Json(name = "icon_color")
-    val iconColor: String,
+    val description: String,
 
     @Json(name = "user_is_muted")
     val userIsMuted: Boolean,
@@ -365,6 +364,9 @@ data class UserSubredditInfo(
     @Json(name = "previous_names")
     val previousNames: List<Any?>,
 
+    @Json(name = "user_is_moderator")
+    val userIsModerator: Boolean,
+
     @Json(name = "over_18")
     val over18: Boolean,
 
@@ -377,7 +379,8 @@ data class UserSubredditInfo(
     @Json(name = "icon_img")
     val iconImg: String,
 
-    val description: String,
+    @Json(name = "icon_color")
+    val iconColor: String,
 
     @Json(name = "submit_link_label")
     val submitLinkLabel: String,
@@ -416,8 +419,8 @@ data class UserSubredditInfo(
     @Json(name = "banner_size")
     val bannerSize: Any? = null,
 
-    @Json(name = "user_is_moderator")
-    val userIsModerator: Boolean,
+    @Json(name = "user_is_contributor")
+    val userIsContributor: Boolean,
 
     @Json(name = "public_description")
     val publicDescription: String,
@@ -434,3 +437,4 @@ data class UserSubredditInfo(
     @Json(name = "user_is_subscriber")
     val userIsSubscriber: Boolean,
 )
+

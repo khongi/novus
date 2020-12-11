@@ -26,6 +26,8 @@ class AuthInfoProvider @Inject constructor(
     private var scopes by stringPref("SCOPES", "")
     private var authType by moshiPref("AUTH_TYPE", AuthType.NONE)
 
+    var modhash by stringPref("MODHASH")
+
     override fun authType(): AuthType = authType
 
     override fun clearAll() {
@@ -36,6 +38,7 @@ class AuthInfoProvider @Inject constructor(
         tokenType = ""
         scopes = ""
         authType = AuthType.NONE
+        modhash = null
     }
 
     override fun getToken(): Token {
