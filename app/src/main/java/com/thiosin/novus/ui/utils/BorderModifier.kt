@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.modifiers
+package com.thiosin.novus.ui.utils
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier

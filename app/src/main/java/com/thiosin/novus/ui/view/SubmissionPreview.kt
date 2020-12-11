@@ -1,6 +1,5 @@
 package com.thiosin.novus.ui.view
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,14 +13,12 @@ import com.thiosin.novus.domain.model.Submission
 
 @Composable
 fun SubmissionPreview(
-    submission: Submission?,
+    submission: Submission,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
     onVote: (Submission) -> Unit,
 ) {
-    requireNotNull(submission)
-
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).fillMaxWidth(),
@@ -34,11 +31,10 @@ fun SubmissionPreview(
                 // Screen width - Horizontal padding
                 MediaRow(it, displayWidthDp.dp - 16.dp)
             }
-            PreviewButtonRow(submission, onLinkClick, onDetailsClick, onVote)
+            SubmissionButtonRow(submission, onLinkClick, onDetailsClick, onVote)
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -65,7 +61,3 @@ fun DefaultPreview() {
     )
 }
 
-fun Context.getDisplayWidthDp(): Float {
-    val displayMetrics = resources.displayMetrics
-    return displayMetrics.widthPixels / displayMetrics.density
-}
