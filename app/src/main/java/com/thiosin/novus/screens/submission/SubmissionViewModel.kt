@@ -24,4 +24,8 @@ class SubmissionViewModel @ViewModelInject constructor(
 
         viewState = loadingWithContentState.copy(comments = comments, loading = false)
     }
+
+    fun vote(submission: Submission) = execute {
+        submissionPresenter.vote(submission.fullname, submission.likes)
+    }
 }

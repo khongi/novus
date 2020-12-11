@@ -28,10 +28,11 @@ fun SubmissionDetails(
     comments: List<Comment>,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
+    onVoteClick: (Submission) -> Unit,
 ) {
     LazyColumn {
         item {
-            SubmissionContent(submission, displayWidthDp, onLinkClick)
+            SubmissionContent(submission, displayWidthDp, onLinkClick, onVoteClick)
         }
 
         items(comments) {
@@ -45,7 +46,9 @@ private fun SubmissionContent(
     submission: Submission,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
+    onVoteClick: (Submission) -> Unit,
 ) {
+    val liked = remember { mutableStateOf(submission.likes) }
     Column(modifier = Modifier.padding(top = 4.dp)) {
         InfoRow(submission)
         TitleRow(submission)
@@ -59,7 +62,8 @@ private fun SubmissionContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
             Votes(submission.votes)
-
+            UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
+            DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
             LinkButton(submission.link, onLinkClick)
         }
     }

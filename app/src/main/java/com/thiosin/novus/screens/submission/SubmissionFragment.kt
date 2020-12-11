@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.NavigationIcon
 import com.thiosin.novus.ui.view.NovusTopAppBar
@@ -48,7 +49,8 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                             is SubmissionReadyState -> {
                                 SubmissionScreen(
                                     viewState = viewState,
-                                    onLinkClick = { url -> showWebScreen(url) }
+                                    onLinkClick = { url -> showWebScreen(url) },
+                                    onVoteClick = { submission -> viewModel.vote(submission) }
                                 )
                             }
                             SubmissionInitial -> Unit
@@ -63,6 +65,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
     private fun SubmissionScreen(
         viewState: SubmissionReadyState,
         onLinkClick: (String) -> Unit,
+        onVoteClick: (Submission) -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -81,7 +84,8 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                     submission = viewState.submission,
                     comments = viewState.comments,
                     displayWidthDp = viewState.displayWidthDp,
-                    onLinkClick = onLinkClick
+                    onLinkClick = onLinkClick,
+                    onVoteClick = onVoteClick
                 )
             }
         )
