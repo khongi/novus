@@ -106,7 +106,7 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     fun vote(submission: Submission) = execute {
-        homePresenter.vote(submission.fullname)
+        homePresenter.vote(submission.fullname, submission.likes)
     }
 
     private suspend fun getUser(): User? {

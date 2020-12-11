@@ -54,7 +54,7 @@ class HomePresenter @Inject constructor(
         userInteractor.logout()
     }
 
-    suspend fun vote(fullname: String) = withIOContext {
-        userInteractor.vote(fullname)
+    suspend fun vote(fullname: String, likes: Boolean?) = withIOContext {
+        userInteractor.vote(fullname, likes)
     }
 }
