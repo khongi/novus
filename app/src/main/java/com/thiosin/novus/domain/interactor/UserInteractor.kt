@@ -30,4 +30,8 @@ class UserInteractor @Inject constructor(
         userInfoProvider.user = null
         authInteractor.logout()
     }
+
+    suspend fun vote(id: String) {
+        networkDataSource.vote(id)
+    }
 }

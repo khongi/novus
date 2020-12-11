@@ -18,6 +18,7 @@ fun SubmissionPreview(
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
+    onVote: (Submission) -> Unit,
 ) {
     requireNotNull(submission)
 
@@ -33,7 +34,7 @@ fun SubmissionPreview(
                 // Screen width - Horizontal padding
                 MediaRow(it, displayWidthDp.dp - 16.dp)
             }
-            PreviewButtonRow(submission, onLinkClick, onDetailsClick)
+            PreviewButtonRow(submission, onLinkClick, onDetailsClick, onVote)
         }
     }
 }
@@ -59,7 +60,8 @@ fun DefaultPreview() {
         submission = submission,
         displayWidthDp = 300F,
         onLinkClick = {},
-        onDetailsClick = {}
+        onDetailsClick = {},
+        onVote = {}
     )
 }
 

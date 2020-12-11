@@ -189,11 +189,15 @@ fun PreviewButtonRow(
     submission: Submission,
     onLinkClick: (String) -> Unit,
     onCommentsClick: (Submission) -> Unit,
+    onVoteClick: (Submission) -> Unit,
 ) {
     Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically) {
-        Votes(submission.votes)
+        Votes(
+            votes = submission.votes,
+            onVoteClick = { onVoteClick(submission) }
+        )
 
         CommentsButton(submission, onCommentsClick)
 
@@ -233,10 +237,10 @@ fun CommentsButton(
 }
 
 @Composable
-fun Votes(votes: Int) {
+fun Votes(votes: Int, onVoteClick: () -> Unit) {
     Text(text = getVotesFormat(votes),
         style = MaterialTheme.typography.caption,
-        modifier = Modifier.padding(4.dp))
+        modifier = Modifier.padding(4.dp).clickable(onClick = onVoteClick))
 }
 
 fun getVotesFormat(votes: Int): AnnotatedString {

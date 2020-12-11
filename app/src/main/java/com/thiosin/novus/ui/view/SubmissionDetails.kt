@@ -58,7 +58,7 @@ private fun SubmissionContent(
         Row(modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
-            Votes(submission.votes)
+            Votes(submission.votes, { /* TODO */ })
 
             LinkButton(submission.link, onLinkClick)
         }

@@ -15,6 +15,7 @@ fun SubmissionList(
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
     onListEnd: () -> Unit,
+    onVote: (Submission) -> Unit,
 ) {
     if (lazyListState.firstVisibleItemIndex >= submissions.size - 10) {
         onListEnd()
@@ -29,7 +30,8 @@ fun SubmissionList(
                     submission = submission,
                     displayWidthDp = displayWidth,
                     onLinkClick = onLinkClick,
-                    onDetailsClick = onDetailsClick
+                    onDetailsClick = onDetailsClick,
+                    onVote = onVote
                 )
                 LoadingItem()
             }
@@ -38,7 +40,8 @@ fun SubmissionList(
                 submission = submission,
                 displayWidthDp = displayWidth,
                 onLinkClick = onLinkClick,
-                onDetailsClick = onDetailsClick
+                onDetailsClick = onDetailsClick,
+                onVote = onVote
             )
         }
     }

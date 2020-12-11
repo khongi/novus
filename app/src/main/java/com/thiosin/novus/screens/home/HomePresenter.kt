@@ -53,4 +53,8 @@ class HomePresenter @Inject constructor(
     suspend fun logout() = withIOContext {
         userInteractor.logout()
     }
+
+    suspend fun vote(fullname: String) = withIOContext {
+        userInteractor.vote(fullname)
+    }
 }

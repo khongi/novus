@@ -4,9 +4,7 @@ import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
 import com.thiosin.novus.data.network.model.user.MeResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface RedditAPI {
 
@@ -55,4 +53,12 @@ interface RedditAPI {
 
     @GET("/api/me.json")
     suspend fun getMe(): MeResponse
+
+    @FormUrlEncoded
+    @POST("/api/vote")
+    suspend fun vote(
+        @Field("dir") dir: Int,
+        @Field("id") id: String,
+        @HeaderMap header: Map<String, String>,
+    )
 }
