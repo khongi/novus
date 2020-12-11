@@ -67,10 +67,10 @@ data class SubredditListingChildData(
 
     val over18: Boolean,
 
-    val description: String,
+    val description: String? = null,
 
     @Json(name = "description_html")
-    val descriptionHtml: String,
+    val descriptionHtml: String? = null,
 
     val url: String,
 )

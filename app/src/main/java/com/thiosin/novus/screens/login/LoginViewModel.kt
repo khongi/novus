@@ -19,8 +19,10 @@ class LoginViewModel @ViewModelInject constructor(
          val userToken = loginPresenter.getUserToken(url)
 
          if (userToken != null) {
-            loginPresenter.saveUserInfo()
-            viewState = LoginComplete
+            val userIsSaved = loginPresenter.saveUserInfo()
+            if (userIsSaved) {
+               viewState = LoginComplete
+            }
          }
       }
    }

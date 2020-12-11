@@ -1,6 +1,7 @@
 package com.thiosin.novus.domain.interactor
 
 import com.thiosin.novus.data.network.NetworkDataSource
+import com.thiosin.novus.data.prefs.UserInfoProvider
 import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.domain.model.toUser
 import timber.log.Timber
@@ -8,6 +9,7 @@ import javax.inject.Inject
 
 class UserInteractor @Inject constructor(
     private val networkDataSource: NetworkDataSource,
+    private val userInfoProvider: UserInfoProvider,
 ) {
 
     suspend fun saveUserInfo(): Boolean {
@@ -17,12 +19,10 @@ class UserInteractor @Inject constructor(
             return false
         }
         val user = userInfo.toUser()
-        return false
+        userInfoProvider.user = user
+        return true
         // TODO save it to Krate
     }
 
-    fun getUser(): User? {
-        // TODO fetch user from Krate
-        return null
-    }
+    fun getUser(): User? = userInfoProvider.user
 }
