@@ -65,10 +65,10 @@ class HomeViewModel @ViewModelInject constructor(
             sort = SubmissionSort.Hot
         )
 
-        viewState = HomeReady(
+        viewState = oldState.copy(
             submissions = submissions,
             selectedSubreddit = subreddit,
-            subreddits = oldState.subreddits
+            loading = false
         )
     }
 

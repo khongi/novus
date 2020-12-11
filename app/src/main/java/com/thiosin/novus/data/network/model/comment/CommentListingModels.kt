@@ -12,7 +12,7 @@ data class CResponse(
 
 @JsonClass(generateAdapter = true)
 data class CResponseData(
-    val modhash: String,
+    val modhash: String? = null,
     val dist: Any? = null,
     val children: List<CResponseDataChild>,
     val after: Any? = null,
@@ -238,22 +238,28 @@ data class Gildings(
 )
 
 enum class AwardSubType {
-    @Json(name = "GLOBAL")
     GLOBAL,
-
-    @Json(name = "GROUP")
     GROUP,
-
-    @Json(name = "APPRECIATION")
     APPRECIATION,
-
-    @Json(name = "PREMIUM")
-    PREMIUM
+    PREMIUM,
+    COMMUNITY,
 }
 
 enum class AwardType {
     @Json(name = "global")
-    GLOBAL
+    GLOBAL,
+
+    @Json(name = "group")
+    GROUP,
+
+    @Json(name = "appreciation")
+    APPRECIATION,
+
+    @Json(name = "premium")
+    PREMIUM,
+
+    @Json(name = "community")
+    COMMUNITY,
 }
 
 enum class AuthorFlairType {
