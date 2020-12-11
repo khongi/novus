@@ -29,8 +29,16 @@ interface RedditAPI {
     @GET("/subreddits/{where}.json")
     suspend fun getSubreddits(
         @Path("where") where: String = "default",
-        @Query("limit") limit: Int,
-        @Query("count") count: Int,
+        @Query("limit") limit: Int = 100,
+        @Query("count") count: Int = 0,
+        @Query("after") after: String? = "",
+    ): SubredditListingResponse
+
+    @GET("/subreddits/mine/{where}.json")
+    suspend fun getMySubreddits(
+        @Path("where") where: String = "subscriber",
+        @Query("limit") limit: Int = 100,
+        @Query("count") count: Int = 0,
         @Query("after") after: String? = "",
     ): SubredditListingResponse
 

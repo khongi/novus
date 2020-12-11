@@ -52,7 +52,7 @@ class NetworkModule {
             .setUserlessCredentials(BuildConfig.CLIENT_ID)
             .setScopes("*")
             .setStorageManager(storageManager)
-            .setLogging(false)
+            .setLogging(true)
             .build()
     }
 
@@ -67,10 +67,9 @@ class NetworkModule {
     fun provideUserRedditAuth(storageManager: StorageManager): RedditAuth {
         return RedditAuth.Builder()
             .setApplicationCredentials(BuildConfig.CLIENT_ID, BuildConfig.REDIRECT_URL)
-            // TODO define scopes
-            .setScopes(arrayOf("read"))
+            .setScopes(arrayOf("read", "identity", "mysubreddits", "vote"))
             .setStorageManager(storageManager)
-            .setLogging(false)
+            .setLogging(true)
             .build()
     }
 

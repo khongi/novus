@@ -15,7 +15,7 @@ data class SubredditListingData(
     val modhash: String? = null,
     val dist: Long,
     val children: List<SubredditListingChild>,
-    val after: String,
+    val after: String? = null,
     val before: Any? = null,
 )
 

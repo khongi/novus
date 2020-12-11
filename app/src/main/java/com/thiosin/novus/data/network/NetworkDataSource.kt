@@ -7,6 +7,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class NetworkDataSource @Inject constructor(
+    // TODO check if the same token is returned with userless RedditAuth
     @NetworkModule.UserlessAuth private val redditAPI: RedditAPI,
     @NetworkModule.PageSize private val pageSize: Int,
 ) {
@@ -42,11 +43,16 @@ class NetworkDataSource @Inject constructor(
 
     suspend fun getUserlessSubreddits(): SubredditListingResponse? {
         return try {
-            redditAPI.getSubreddits(
-                count = 0,
-                limit = pageSize,
-                after = ""
-            )
+            redditAPI.getSubreddits()
+        } catch (t: Throwable) {
+            Timber.e(t)
+            null
+        }
+    }
+
+    suspend fun getUserSubreddits(): SubredditListingResponse? {
+        return try {
+            redditAPI.getMySubreddits()
         } catch (t: Throwable) {
             Timber.e(t)
             null
@@ -60,5 +66,9 @@ class NetworkDataSource @Inject constructor(
             Timber.e(t)
             emptyList()
         }
+    }
+
+    suspend fun getUserInfo() {
+        // TODO get user from API
     }
 }

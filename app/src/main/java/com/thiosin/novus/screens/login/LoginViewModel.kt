@@ -8,8 +8,6 @@ class LoginViewModel @ViewModelInject constructor(
 ): RainbowCakeViewModel<LoginViewState>(LoginInitial) {
 
    fun startLogin() = execute {
-//      loginPresenter.acquireUserlessToken()
-
       viewState = LoginStart(
          authUrl = loginPresenter.getUserAuthUrl(),
          redirectUrl = loginPresenter.getRedirectUrl()
@@ -18,9 +16,12 @@ class LoginViewModel @ViewModelInject constructor(
 
    fun onPageStart(url: String) = executeNonBlocking {
       if (loginPresenter.isRedirectUrl(url)) {
-         loginPresenter.getUserToken(url)
-         // Get user info?
-         viewState = LoginComplete
+         val userToken = loginPresenter.getUserToken(url)
+
+         if (userToken != null) {
+            loginPresenter.saveUserInfo()
+            viewState = LoginComplete
+         }
       }
    }
 }

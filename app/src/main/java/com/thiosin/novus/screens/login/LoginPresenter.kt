@@ -2,10 +2,12 @@ package com.thiosin.novus.screens.login
 
 import co.zsmb.rainbowcake.withIOContext
 import com.thiosin.novus.domain.interactor.AuthInteractor
+import com.thiosin.novus.domain.interactor.UserInteractor
 import javax.inject.Inject
 
 class LoginPresenter @Inject constructor(
-    private val authInteractor: AuthInteractor
+    private val authInteractor: AuthInteractor,
+    private val userInteractor: UserInteractor,
 ) {
     suspend fun acquireUserlessToken() = withIOContext {
         authInteractor.acquireUserlessToken()
@@ -24,4 +26,8 @@ class LoginPresenter @Inject constructor(
     }
 
     fun getRedirectUrl() = authInteractor.getRedirectUrl()
+
+    suspend fun saveUserInfo() = withIOContext {
+        userInteractor.saveUserInfo()
+    }
 }
