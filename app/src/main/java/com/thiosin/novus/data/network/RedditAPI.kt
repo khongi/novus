@@ -3,6 +3,7 @@ package com.thiosin.novus.data.network
 import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
+import com.thiosin.novus.data.network.model.user.UserInfo
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -51,4 +52,7 @@ interface RedditAPI {
         @Query("showmore") showMore: Boolean = false,
         @Query("depth") depth: Int = 10,
     ): List<CResponse>
+
+    @GET("/api/v1/me.json")
+    suspend fun getUserInfo(): UserInfo
 }

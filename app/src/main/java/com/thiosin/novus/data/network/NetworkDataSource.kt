@@ -3,6 +3,7 @@ package com.thiosin.novus.data.network
 import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
+import com.thiosin.novus.data.network.model.user.UserInfo
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -68,7 +69,12 @@ class NetworkDataSource @Inject constructor(
         }
     }
 
-    suspend fun getUserInfo() {
-        // TODO get user from API
+    suspend fun getUserInfo(): UserInfo? {
+        return try {
+            redditAPI.getUserInfo()
+        } catch (t: Throwable) {
+            Timber.e(t)
+            null
+        }
     }
 }
