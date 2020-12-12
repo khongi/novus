@@ -51,8 +51,6 @@ object Versions {
 }
 
 object Dependencies {
-    const val kotlin = "1.4.20"
-    const val compose = "1.0.0-alpha08"
 
     object Kotlin {
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
@@ -118,11 +116,9 @@ object Dependencies {
 
     object Network {
         const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okHttp}"
-        const val okHttpLoggingInterceptor =
-            "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
+        const val okHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
         const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
-        const val retrofitMoshiConverter =
-            "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
+        const val retrofitMoshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
         const val moshi = "com.squareup.moshi:moshi:${Versions.moshi}"
         const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
     }
