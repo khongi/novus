@@ -18,12 +18,12 @@ class AuthInterceptor(
 
         val accessToken = when (authInfoProvider.loggedIn) {
             true -> {
-                Timber.d("Installed App mode")
+                Timber.v("Installed App mode")
                 val bearer = installedAppAuth.getSavedBearer()
                 bearer.getAccessToken()
             }
             false -> {
-                Timber.d("Userless mode")
+                Timber.v("Userless mode")
                 val bearer = if (userlessAuth.hasSavedBearer()) {
                     userlessAuth.getSavedBearer()
                 } else {

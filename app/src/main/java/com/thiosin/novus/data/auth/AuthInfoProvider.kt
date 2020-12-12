@@ -59,11 +59,7 @@ class AuthInfoProvider @Inject constructor(
             true
         }
 
-        return accessToken.isNotBlank()
-                && refreshTokenStatus
-                && expiresInSec != 0
-                && createdTime != 0L
-                && scopes.isNotBlank()
+        return accessToken.isNotBlank() && refreshTokenStatus
     }
 
     override fun isAuthed(): Boolean {

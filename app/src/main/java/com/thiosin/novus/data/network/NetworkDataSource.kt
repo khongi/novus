@@ -1,6 +1,5 @@
 package com.thiosin.novus.data.network
 
-import com.thiosin.novus.data.auth.AuthInfoProvider
 import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
@@ -11,7 +10,6 @@ import javax.inject.Inject
 class NetworkDataSource @Inject constructor(
     private val redditAPI: RedditAPI,
     @NetworkModule.PageSize private val pageSize: Int,
-    private val authInfoProvider: AuthInfoProvider,
 ) {
 
     suspend fun getListing(
