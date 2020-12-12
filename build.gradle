@@ -1,0 +1,40 @@
+import com.thiosin.novus.buildsrc.Plugins
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath Plugins.androidGradle
+        classpath Plugins.kotlinGradle
+        classpath Plugins.hiltGradle
+        classpath Plugins.safeArgsGradle
+    }
+}
+
+subprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+
+            freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi'
+            freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.FlowPreview'
+            freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
+            freeCompilerArgs += '-Xallow-jvm-ir-dependencies'
+
+            jvmTarget = "1.8"
+        }
+    }
+}
+
+tasks.create("clean", Delete.class) {
+    delete(rootProject.buildDir)
+}

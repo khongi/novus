@@ -1,3 +1,5 @@
+package com.thiosin.novus.buildsrc
+
 object Dependencies {
     object Kotlin {
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"

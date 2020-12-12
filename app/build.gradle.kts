@@ -1,27 +1,27 @@
 plugins {
-    id(Plugins.androidApplication)
-    id(Plugins.hilt)
-    kotlin(Plugins.Kotlin.android)
-    kotlin(Plugins.Kotlin.kapt)
-    id(Plugins.kotlinAndroidExtensions)
-    id(Plugins.safeArgs)
+    id(com.thiosin.novus.buildsrc.Plugins.androidApplication)
+    id(com.thiosin.novus.buildsrc.Plugins.hilt)
+    kotlin(com.thiosin.novus.buildsrc.Plugins.Kotlin.android)
+    kotlin(com.thiosin.novus.buildsrc.Plugins.Kotlin.kapt)
+    id(com.thiosin.novus.buildsrc.Plugins.kotlinAndroidExtensions)
+    id(com.thiosin.novus.buildsrc.Plugins.safeArgs)
 }
 
 android {
-    compileSdkVersion(Versions.compileSdk)
+    compileSdkVersion(com.thiosin.novus.buildsrc.Versions.compileSdk)
 
     defaultConfig {
         applicationId = "com.thiosin.novus"
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
-        versionCode = Versions.versionCode
-        versionName = Versions.versionName
+        minSdkVersion(com.thiosin.novus.buildsrc.Versions.minSdk)
+        targetSdkVersion(com.thiosin.novus.buildsrc.Versions.targetSdk)
+        versionCode = com.thiosin.novus.buildsrc.Versions.versionCode
+        versionName = com.thiosin.novus.buildsrc.Versions.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String","CLIENT_ID","\"04WMjFYDMJFljQ\"")
-        buildConfigField("String","REDIRECT_URL","\"novus-app://auth/reddit-redirect\"")
-        buildConfigField("String","BASE_URL","\"https://oauth.reddit.com\"")
+        buildConfigField("String", "CLIENT_ID", "\"04WMjFYDMJFljQ\"")
+        buildConfigField("String", "REDIRECT_URL", "\"novus-app://auth/reddit-redirect\"")
+        buildConfigField("String", "BASE_URL", "\"https://oauth.reddit.com\"")
     }
 
     buildTypes {
@@ -53,8 +53,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
-        kotlinCompilerVersion = Versions.kotlin
+        kotlinCompilerExtensionVersion = com.thiosin.novus.buildsrc.Versions.compose
+        kotlinCompilerVersion = com.thiosin.novus.buildsrc.Versions.kotlin
     }
 
     lintOptions {
@@ -69,8 +69,6 @@ tasks.withType<Test> {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs + "-progressive"
-        freeCompilerArgs = freeCompilerArgs + "-Xuse-experimental=kotlin.Experimental"
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 }
 
@@ -80,59 +78,59 @@ kapt {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(Dependencies.Kotlin.stdLib)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Kotlin.stdLib)
 
-    implementation(Dependencies.RainbowCake.core)
-    implementation(Dependencies.RainbowCake.timber)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.RainbowCake.core)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.RainbowCake.timber)
 
-    implementation(Dependencies.Hilt.android)
-    kapt(Dependencies.Hilt.compiler)
-    implementation(Dependencies.AndroidX.Hilt.viewModel)
-    kapt(Dependencies.AndroidX.Hilt.compiler)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Hilt.android)
+    kapt(com.thiosin.novus.buildsrc.Dependencies.Hilt.compiler)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Hilt.viewModel)
+    kapt(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Hilt.compiler)
 
-    implementation(Dependencies.Android.material)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Android.material)
 
-    implementation(Dependencies.AndroidX.Compose.ui)
-    implementation(Dependencies.AndroidX.Compose.material)
-    implementation(Dependencies.AndroidX.Compose.uiTooling)
-    implementation(Dependencies.AndroidX.Compose.livedata)
-    implementation(Dependencies.AndroidX.Compose.viewBinding)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Compose.ui)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Compose.material)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Compose.uiTooling)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Compose.livedata)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Compose.viewBinding)
 
-    implementation(Dependencies.AndroidX.Navigation.ktxFragment)
-    implementation(Dependencies.AndroidX.Navigation.ktxUi)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Navigation.ktxFragment)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.Navigation.ktxUi)
 
-    implementation(Dependencies.AndroidX.ktxCore)
-    implementation(Dependencies.AndroidX.ktxLifecycle)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.ktxCore)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.ktxLifecycle)
 
-    implementation(Dependencies.AndroidX.appCompat)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.AndroidX.appCompat)
 
-    implementation(Dependencies.Reddit.auth)
-    implementation(Dependencies.Reddit.api)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Reddit.auth)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Reddit.api)
 
-    implementation(Dependencies.Accompanist.coil)
-    implementation(Dependencies.Coil.gif)
-    implementation(Dependencies.Android.exoplayer)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Accompanist.coil)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Coil.gif)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Android.exoplayer)
 
-    implementation(Dependencies.Network.okHttp)
-    implementation(Dependencies.Network.okHttpLoggingInterceptor)
-    implementation(Dependencies.Network.retrofit)
-    implementation(Dependencies.Network.retrofitMoshiConverter)
-    implementation(Dependencies.Network.moshi)
-    kapt(Dependencies.Network.moshiCodegen)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Network.okHttp)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Network.okHttpLoggingInterceptor)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Network.retrofit)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Network.retrofitMoshiConverter)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Network.moshi)
+    kapt(com.thiosin.novus.buildsrc.Dependencies.Network.moshiCodegen)
 
-    implementation(Dependencies.Storage.krate)
-    implementation(Dependencies.Storage.krateMoshiCodegen)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Storage.krate)
+    implementation(com.thiosin.novus.buildsrc.Dependencies.Storage.krateMoshiCodegen)
 
-    testImplementation(Dependencies.Tests.Framework.kotest)
-    testImplementation(Dependencies.Tests.Assertion.kotest)
-    testImplementation(Dependencies.Tests.Framework.rainbowcake)
-    testImplementation(Dependencies.Tests.Mock.mockk)
-    testImplementation(Dependencies.Tests.Hilt.android)
-    kaptTest(Dependencies.Hilt.compiler)
+    testImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Framework.kotest)
+    testImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Assertion.kotest)
+    testImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Framework.rainbowcake)
+    testImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Mock.mockk)
+    testImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Hilt.android)
+    kaptTest(com.thiosin.novus.buildsrc.Dependencies.Hilt.compiler)
 
-    androidTestImplementation(Dependencies.Tests.Framework.junit)
-    androidTestImplementation(Dependencies.Tests.UI.androidx_junit)
-    androidTestImplementation(Dependencies.Tests.UI.espresso)
-    androidTestImplementation(Dependencies.Tests.Hilt.android)
-    kaptAndroidTest(Dependencies.Hilt.compiler)
+    androidTestImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Framework.junit)
+    androidTestImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.UI.androidx_junit)
+    androidTestImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.UI.espresso)
+    androidTestImplementation(com.thiosin.novus.buildsrc.Dependencies.Tests.Hilt.android)
+    kaptAndroidTest(com.thiosin.novus.buildsrc.Dependencies.Hilt.compiler)
 }
