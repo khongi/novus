@@ -1,5 +1,6 @@
 package com.thiosin.novus.ui.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -89,14 +90,18 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = vectorResource(id = R.drawable.ic_baseline_account_circle_24),
-                modifier = Modifier.size(48.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            Image(
+                imageVector = vectorResource(id = R.drawable.ic_user),
+                modifier = Modifier.size(36.dp)
             )
             Text(
                 text = user?.name ?: "Anonymous",
                 style = MaterialTheme.typography.subtitle1,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
         IconButton(onClick = {
@@ -107,11 +112,15 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
             }
         }) {
             val iconId = if (user == null) {
-                R.drawable.ic_baseline_login_24
+                R.drawable.ic_login
             } else {
-                R.drawable.ic_baseline_exit_to_app_24
+                R.drawable.ic_logout
             }
-            Icon(imageVector = vectorResource(id = iconId))
+            CoilImage(
+                data = iconId,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(28.dp)
+            )
         }
     }
 }
@@ -138,7 +147,7 @@ fun DrawerItem(subreddit: Subreddit, isSelected: Boolean, onClick: (Subreddit) -
                 data = if (subreddit.icon.isBlank().not()) {
                     subreddit.icon
                 } else {
-                    R.drawable.ic_reddit_orange
+                    R.drawable.ic_reddit
                 },
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(28.dp).clip(CircleShape)

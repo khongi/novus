@@ -1,5 +1,6 @@
 package com.thiosin.novus.ui.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -9,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -22,6 +25,7 @@ import com.thiosin.novus.domain.model.SubmissionMedia
 import com.thiosin.novus.ui.theme.redditDownVote
 import com.thiosin.novus.ui.theme.redditUpvote
 import com.thiosin.novus.ui.utils.shortenToThousands
+import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun SubmissionInfoRow(submission: Submission) {
@@ -157,12 +161,8 @@ fun UpVoteButton(
     onClick: (String, Boolean?) -> Unit,
 ) {
     val upVoted = liked == true
-    val icon = if (upVoted) {
-        R.drawable.ic_baseline_thumb_up_24
-    } else {
-        R.drawable.ic_outline_thumb_up_24
-    }
-    val tint = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
+    val tint = if (upVoted) getVotesColor(true) else null
+    val colorFilter = tint?.let { ColorFilter.tint(tint) }
     IconButton(onClick = {
         val newLikedValue = if (liked != true) {
             true
@@ -171,7 +171,11 @@ fun UpVoteButton(
         }
         onClick(fullname, newLikedValue)
     }) {
-        Icon(imageVector = vectorResource(id = icon), tint = tint)
+        Image(
+            imageVector = vectorResource(id = R.drawable.ic_like),
+            modifier = Modifier.size(24.dp),
+            colorFilter = colorFilter
+        )
     }
 }
 
@@ -182,12 +186,8 @@ fun DownVoteButton(
     onClick: (String, Boolean?) -> Unit,
 ) {
     val downVoted = liked == false
-    val icon = if (downVoted) {
-        R.drawable.ic_baseline_thumb_down_24
-    } else {
-        R.drawable.ic_outline_thumb_down_24
-    }
-    val tint = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
+    val tint = if (downVoted) getVotesColor(false) else null
+    val colorFilter = tint?.let { ColorFilter.tint(tint) }
     IconButton(onClick = {
         val newLikedValue = if (liked != false) {
             false
@@ -196,7 +196,11 @@ fun DownVoteButton(
         }
         onClick(fullname, newLikedValue)
     }) {
-        Icon(imageVector = vectorResource(id = icon), tint = tint)
+        Image(
+            imageVector = vectorResource(id = R.drawable.ic_dislike),
+            modifier = Modifier.size(24.dp),
+            colorFilter = colorFilter
+        )
     }
 }
 
@@ -206,7 +210,10 @@ fun CommentsButton(
     onClick: (Submission) -> Unit,
 ) {
     IconButton(onClick = { onClick(submission) }) {
-        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
+        Image(
+            imageVector = vectorResource(id = R.drawable.ic_comment),
+            modifier = Modifier.size(24.dp)
+        )
     }
 }
 
@@ -216,6 +223,9 @@ fun LinkButton(
     onClick: (String) -> Unit,
 ) {
     IconButton(onClick = { onClick(url) }) {
-        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
+        Image(
+            imageVector = vectorResource(id = R.drawable.ic_link),
+            modifier = Modifier.size(24.dp),
+        )
     }
 }
