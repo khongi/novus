@@ -48,7 +48,7 @@ fun SubredditsSection(
         subreddits.forEach {
             DrawerItem(
                 subreddit = it,
-                isSelected = it.name == selected?.name,
+                isSelected = it.queryName == selected?.queryName,
                 onClick = onClick
             )
         }
@@ -143,15 +143,22 @@ fun DrawerItem(subreddit: Subreddit, isSelected: Boolean, onClick: (Subreddit) -
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CoilImage(
-                data = if (subreddit.icon.isBlank().not()) {
-                    subreddit.icon
-                } else {
-                    R.drawable.ic_reddit
-                },
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(28.dp).clip(CircleShape)
-            )
+            if (subreddit.iconResource != null) {
+                Image(
+                    imageVector = vectorResource(id = subreddit.iconResource),
+                    modifier = Modifier.size(28.dp)
+                )
+            } else {
+                CoilImage(
+                    data = if (subreddit.iconUrl.isNullOrBlank()) {
+                        R.drawable.ic_reddit
+                    } else {
+                        subreddit.iconUrl
+                    },
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(28.dp).clip(CircleShape)
+                )
+            }
             Text(
                 text = subreddit.displayName,
                 style = MaterialTheme.typography.button,

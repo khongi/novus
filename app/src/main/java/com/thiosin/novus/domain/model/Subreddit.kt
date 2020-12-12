@@ -4,10 +4,19 @@ import com.thiosin.novus.data.network.model.subreddit.SubredditListingChildData
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
 
 data class Subreddit(
-    val name: String,
+    val queryName: String,
     val displayName: String,
-    val icon: String,
+    val type: SubredditType = SubredditType.Community,
+    val iconUrl: String? = null,
+    val iconResource: Int? = null
 )
+
+enum class SubredditType {
+    Frontpage,
+    All,
+    Popular,
+    Community
+}
 
 fun SubredditListingResponse.toSubredditList(): List<Subreddit> {
     return data.children.map { it.data.toSubreddit() }
@@ -15,8 +24,8 @@ fun SubredditListingResponse.toSubredditList(): List<Subreddit> {
 
 fun SubredditListingChildData.toSubreddit(): Subreddit {
     return Subreddit(
-        name = displayName,
+        queryName = displayName,
         displayName = "/$displayNamePrefixed",
-        icon = iconImg
+        iconUrl = iconImg
     )
 }

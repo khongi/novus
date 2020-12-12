@@ -23,7 +23,7 @@ class HomeViewModel @ViewModelInject constructor(
             ?: (subreddit ?: homePresenter.getDefaultSubreddit())
 
         val submissions = homePresenter.getSubredditPage(
-            subreddit = selectedSubreddit.name
+            subreddit = selectedSubreddit.queryName
         )
 
         viewState = HomeReady(
@@ -38,7 +38,7 @@ class HomeViewModel @ViewModelInject constructor(
         val oldState = viewState as? HomeReady ?: return@execute
 
         val newSubmissions = homePresenter.getSubredditPage(
-            subreddit = oldState.selectedSubreddit.name,
+            subreddit = oldState.selectedSubreddit.queryName,
             count = oldState.submissions.size,
             after = oldState.submissions.last().fullname
         )
@@ -63,7 +63,7 @@ class HomeViewModel @ViewModelInject constructor(
         )
 
         val submissions = homePresenter.getSubredditPage(
-            subreddit = subreddit.name,
+            subreddit = subreddit.queryName,
             sort = SubmissionSort.Hot
         )
 
@@ -94,7 +94,7 @@ class HomeViewModel @ViewModelInject constructor(
         val subreddits = getSubreddits()
         val selectedSubreddit = subreddits[0]
         val submissions = homePresenter.getSubredditPage(
-            subreddit = selectedSubreddit.name
+            subreddit = selectedSubreddit.queryName
         )
 
         viewState = HomeReady(
