@@ -25,13 +25,15 @@ class SubmissionViewModel @ViewModelInject constructor(
         viewState = loadingWithContentState.copy(comments = comments, loading = false)
     }
 
-    fun vote(fullname: String, liked: Boolean?) = execute {
+    fun vote(fullname: String, liked: Boolean?, isComment: Boolean = false) = execute {
         val oldState = viewState as? SubmissionReadyState ?: return@execute
 
         viewState = oldState.copy(voting = true)
 
         if (submissionPresenter.vote(fullname, liked)) {
-            oldState.submission.likes = liked
+            if (isComment.not()) {
+                oldState.submission.liked = liked
+            }
         }
 
         viewState = oldState.copy(voting = false)

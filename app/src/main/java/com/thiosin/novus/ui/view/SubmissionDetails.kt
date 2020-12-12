@@ -12,6 +12,7 @@ fun SubmissionDetails(
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
     onVoteClick: (String, Boolean?) -> Unit,
+    onCommentVoteClick: (String, Boolean?) -> Unit,
 ) {
     LazyColumn {
         item {
@@ -25,7 +26,7 @@ fun SubmissionDetails(
         }
 
         items(comments) {
-            CommentItem(comment = it)
+            CommentItem(comment = it, onVoteClick = onCommentVoteClick)
         }
     }
 }

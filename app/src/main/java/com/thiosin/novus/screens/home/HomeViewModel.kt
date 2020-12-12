@@ -109,7 +109,7 @@ class HomeViewModel @ViewModelInject constructor(
         viewState = oldState.copy(voting = true)
 
         if (homePresenter.vote(fullname, liked)) {
-            oldState.submissions.first { it.fullname == fullname }.likes = liked
+            oldState.submissions.first { it.fullname == fullname }.liked = liked
         }
 
         viewState = oldState.copy(voting = false)

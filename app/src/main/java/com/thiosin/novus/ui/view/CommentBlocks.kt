@@ -18,21 +18,36 @@ import com.thiosin.novus.ui.utils.Border
 import com.thiosin.novus.ui.utils.border
 
 @Composable
-fun CommentItem(comment: Comment, collapse: Boolean = false) {
+fun CommentItem(
+    comment: Comment,
+    collapse: Boolean = false,
+    onVoteClick: (String, Boolean?) -> Unit,
+) {
     var isCollapsed by remember { mutableStateOf(collapse) }
+    var showControls by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
             .clickable(
                 onLongClick = { isCollapsed = isCollapsed.not() },
-                onClick = { isCollapsed = false }
+                onClick = { showControls = showControls.not() }
             ))
         {
             Spacer(modifier = Modifier.width((comment.depth * 8).dp))
-            CommentContent(comment, isCollapsed)
+            CommentContent(comment = comment, collapse = isCollapsed)
+        }
+        if (showControls) {
+            Row(horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()) {
+                var liked: Boolean? by remember { mutableStateOf(comment.liked) }
+                VoteButtons(comment.fullname, liked) { fullname, newLikedValue ->
+                    liked = newLikedValue
+                    onVoteClick(fullname, newLikedValue)
+                }
+            }
         }
         if (isCollapsed.not()) {
             comment.replies.forEach { child ->
-                CommentItem(comment = child, collapse = collapse)
+                CommentItem(comment = child, collapse = collapse, onVoteClick = onVoteClick)
             }
         }
     }
@@ -42,10 +57,8 @@ fun CommentItem(comment: Comment, collapse: Boolean = false) {
 private fun CommentContent(
     comment: Comment,
     collapse: Boolean,
-//    onVoteClick: (String, Boolean?) -> Unit,
 ) {
     val border = getMarkerBorder(comment.depth)
-//    var showControls by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.fillMaxWidth().border(start = border).padding(start = 8.dp)) {
             CommentHeader(comment, collapse)
@@ -56,11 +69,6 @@ private fun CommentContent(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
-//            if (showControls) {
-//                Row {
-//                    VoteButtons(comment.fullname)
-//                }
-//            }
         }
         Divider(thickness = 0.25.dp)
     }
@@ -142,6 +150,7 @@ private fun getCommentDepthColor(depth: Int): Color? {
 @Composable
 private fun CommentContentPreview() {
     val comment = Comment(
+        fullname = "t1_asdasd",
         body = "This is the comment body text.",
         author = "author",
         isOP = true,
@@ -149,7 +158,8 @@ private fun CommentContentPreview() {
         depth = 1,
         relativeTime = "1h ago",
         authorType = AuthorType.MODERATOR,
-        replies = emptyList()
+        replies = emptyList(),
+        liked = true
     )
 
     CommentContent(comment = comment, collapse = false)

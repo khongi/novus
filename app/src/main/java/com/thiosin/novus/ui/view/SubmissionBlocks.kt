@@ -129,7 +129,7 @@ fun SubmissionButtonRow(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        VoteButtons(submission.fullname, submission.likes, onVoteClick)
+        VoteButtons(submission.fullname, submission.liked, onVoteClick)
         if (onCommentsClick != null) {
             CommentsButton(submission = submission, onClick = onCommentsClick)
         }
@@ -143,7 +143,6 @@ fun VoteButtons(
     liked: Boolean?,
     onVoteClick: (String, Boolean?) -> Unit,
 ) {
-//    val mutableLiked = remember { mutableStateOf(liked) }
     UpVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
     DownVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
 }

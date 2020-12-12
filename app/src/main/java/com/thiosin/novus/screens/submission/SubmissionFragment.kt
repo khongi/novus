@@ -51,6 +51,9 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                                     onLinkClick = { url -> showWebScreen(url) },
                                     onVoteClick = { fullname, liked ->
                                         viewModel.vote(fullname, liked)
+                                    },
+                                    onCommentVoteClick = { fullname, liked ->
+                                        viewModel.vote(fullname, liked, isComment = true)
                                     }
                                 )
                             }
@@ -67,6 +70,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
         viewState: SubmissionReadyState,
         onLinkClick: (String) -> Unit,
         onVoteClick: (String, Boolean?) -> Unit,
+        onCommentVoteClick: (String, Boolean?) -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -86,7 +90,8 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                     comments = viewState.comments,
                     displayWidthDp = viewState.displayWidthDp,
                     onLinkClick = onLinkClick,
-                    onVoteClick = onVoteClick
+                    onVoteClick = onVoteClick,
+                    onCommentVoteClick = onCommentVoteClick
                 )
             }
         )

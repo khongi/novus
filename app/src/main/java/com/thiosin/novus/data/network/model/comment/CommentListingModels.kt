@@ -112,6 +112,8 @@ data class CommentData(
     val authorCakeday: Boolean? = null,
 
     val distinguished: Distinguished? = null,
+
+    val likes: Boolean? = null,
 )
 
 @JsonClass(generateAdapter = true)

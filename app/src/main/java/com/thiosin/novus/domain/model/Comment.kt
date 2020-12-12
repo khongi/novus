@@ -6,6 +6,7 @@ import com.thiosin.novus.data.network.model.comment.Distinguished
 import timber.log.Timber
 
 data class Comment(
+    val fullname: String,
     val body: String,
     val author: String,
     val isOP: Boolean,
@@ -14,6 +15,7 @@ data class Comment(
     val relativeTime: String,
     val authorType: AuthorType,
     val replies: List<Comment>,
+    val liked: Boolean?,
 )
 
 enum class AuthorType {
@@ -52,6 +54,7 @@ fun CommentData.toComment(): Comment {
     }
 
     return Comment(
+        fullname = name,
         body = body.trim(),
         author = author,
         isOP = isSubmitter,
@@ -59,7 +62,8 @@ fun CommentData.toComment(): Comment {
         depth = depth.toInt(),
         relativeTime = getRelativeTime(createdUTC.toLong()),
         authorType = getDistinguished(distinguished),
-        replies = repliedComments
+        replies = repliedComments,
+        liked = likes
     )
 }
 

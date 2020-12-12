@@ -20,7 +20,7 @@ data class Submission(
     val selfText: String,
     val thumbnail: String? = null,
     val media: SubmissionMedia? = null,
-    var likes: Boolean? = null,
+    var liked: Boolean? = null,
 ) : Parcelable
 
 @Parcelize
@@ -54,7 +54,7 @@ fun SubmissionListingResponse.toLoadResultData(): List<Submission> {
                 relativeTime = getRelativeTime(it.createdUTC.toLong()),
                 thumbnail = getThumbnail(it.thumbnail),
                 media = getSubmissionMedia(it),
-                likes = it.likes,
+                liked = it.likes,
             )
         }
     }
