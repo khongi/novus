@@ -1,8 +1,8 @@
 plugins {
     id(com.thiosin.novus.buildsrc.Plugins.androidApplication)
     id(com.thiosin.novus.buildsrc.Plugins.hilt)
-    kotlin(com.thiosin.novus.buildsrc.Plugins.Kotlin.android)
-    kotlin(com.thiosin.novus.buildsrc.Plugins.Kotlin.kapt)
+    id(com.thiosin.novus.buildsrc.Plugins.kotlinAndroid)
+    id(com.thiosin.novus.buildsrc.Plugins.kotlinKapt)
     id(com.thiosin.novus.buildsrc.Plugins.kotlinAndroidExtensions)
     id(com.thiosin.novus.buildsrc.Plugins.safeArgs)
 }

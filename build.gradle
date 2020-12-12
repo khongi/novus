@@ -14,7 +14,7 @@ buildscript {
     }
 }
 
-subprojects {
+allprojects {
     repositories {
         google()
         jcenter()
@@ -29,12 +29,13 @@ subprojects {
             freeCompilerArgs += '-Xopt-in=kotlinx.coroutines.FlowPreview'
             freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
             freeCompilerArgs += '-Xallow-jvm-ir-dependencies'
+            freeCompilerArgs += '-progressive'
 
             jvmTarget = "1.8"
         }
     }
 }
 
-tasks.create("clean", Delete.class) {
-    delete(rootProject.buildDir)
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
