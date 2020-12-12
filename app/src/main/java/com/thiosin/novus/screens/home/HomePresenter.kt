@@ -47,7 +47,7 @@ class HomePresenter @Inject constructor(
     }
 
     suspend fun getUser() = withIOContext {
-        return@withIOContext userInteractor.getUser()
+        userInteractor.getUser()
     }
 
     suspend fun logout() = withIOContext {

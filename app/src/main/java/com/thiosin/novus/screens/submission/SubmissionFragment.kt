@@ -15,12 +15,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
-import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.ui.theme.NovusTheme
+import com.thiosin.novus.ui.utils.getDisplayWidth
 import com.thiosin.novus.ui.view.NavigationIcon
 import com.thiosin.novus.ui.view.NovusTopAppBar
 import com.thiosin.novus.ui.view.SubmissionDetails
-import com.thiosin.novus.ui.view.getDisplayWidthDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +29,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
 
     override fun onStart() {
         super.onStart()
-        val displayWidthDp = requireContext().getDisplayWidthDp()
+        val displayWidthDp = getDisplayWidth(requireContext())
         val submission = SubmissionFragmentArgs.fromBundle(requireArguments()).submission
         viewModel.load(submission, displayWidthDp)
     }
@@ -50,7 +49,12 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                                 SubmissionScreen(
                                     viewState = viewState,
                                     onLinkClick = { url -> showWebScreen(url) },
-                                    onVoteClick = { submission -> viewModel.vote(submission) }
+                                    onVoteClick = { fullname, liked ->
+                                        viewModel.vote(fullname, liked)
+                                    },
+                                    onCommentVoteClick = { fullname, liked ->
+                                        viewModel.vote(fullname, liked, isComment = true)
+                                    }
                                 )
                             }
                             SubmissionInitial -> Unit
@@ -65,7 +69,8 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
     private fun SubmissionScreen(
         viewState: SubmissionReadyState,
         onLinkClick: (String) -> Unit,
-        onVoteClick: (Submission) -> Unit,
+        onVoteClick: (String, Boolean?) -> Unit,
+        onCommentVoteClick: (String, Boolean?) -> Unit,
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -85,7 +90,8 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                     comments = viewState.comments,
                     displayWidthDp = viewState.displayWidthDp,
                     onLinkClick = onLinkClick,
-                    onVoteClick = onVoteClick
+                    onVoteClick = onVoteClick,
+                    onCommentVoteClick = onCommentVoteClick
                 )
             }
         )

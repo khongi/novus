@@ -12,4 +12,5 @@ data class SubmissionReadyState(
     val comments: List<Comment>,
     val displayWidthDp: Float,
     val loading: Boolean = false,
+    val voting: Boolean = false,
 ) : SubmissionViewState()

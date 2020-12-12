@@ -20,7 +20,7 @@ val typography = Typography(
     ),
     subtitle2 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         letterSpacing = 0.1.sp,
     ),

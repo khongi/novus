@@ -1,12 +1,10 @@
 package com.thiosin.novus.ui.view
 
-import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -14,31 +12,41 @@ import com.thiosin.novus.domain.model.Submission
 
 @Composable
 fun SubmissionPreview(
-    submission: Submission?,
+    submission: Submission,
+    showSelfText: Boolean,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
-    onDetailsClick: (Submission) -> Unit,
-    onVote: (Submission) -> Unit,
+    onVoteClick: (String, Boolean?) -> Unit,
+    onCommentsClick: ((Submission) -> Unit)? = null,
 ) {
-    requireNotNull(submission)
-
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).fillMaxWidth(),
-        elevation = 16.dp
+        elevation = 8.dp
     ) {
         Column(modifier = Modifier.padding(top = 4.dp)) {
-            InfoRow(submission)
-            TitleRow(submission)
+            SubmissionInfoRow(submission)
+            SubmissionTitleRow(submission)
+            if (showSelfText && submission.selfText.isNotBlank()) {
+                SubmissionSelfText(submission.selfText)
+            }
             submission.media?.let {
                 // Screen width - Horizontal padding
-                MediaRow(it, displayWidthDp.dp - 16.dp)
+                SubmissionMediaRow(it, displayWidthDp.dp - 16.dp)
             }
-            PreviewButtonRow(submission, onLinkClick, onDetailsClick, onVote)
+            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                SubmissionStatRow(submission)
+                SubmissionButtonRow(
+                    submission = submission,
+                    onLinkClick = onLinkClick,
+                    onVoteClick = onVoteClick,
+                    onCommentsClick = onCommentsClick
+                )
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -58,14 +66,10 @@ fun DefaultPreview() {
     )
     SubmissionPreview(
         submission = submission,
+        showSelfText = true,
         displayWidthDp = 300F,
         onLinkClick = {},
-        onDetailsClick = {},
-        onVote = {}
+        onVoteClick = { _: String, _: Boolean? -> },
     )
 }
 
-fun Context.getDisplayWidthDp(): Float {
-    val displayMetrics = resources.displayMetrics
-    return displayMetrics.widthPixels / displayMetrics.density
-}

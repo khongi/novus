@@ -30,12 +30,12 @@ class UserInteractor @Inject constructor(
         authInteractor.logout()
     }
 
-    suspend fun vote(id: String, likes: Boolean?) {
+    suspend fun vote(id: String, likes: Boolean?): Boolean {
         val direction = when (likes) {
             false -> -1
             null -> 0
             true -> 1
         }
-        networkDataSource.vote(id, direction)
+        return networkDataSource.vote(id, direction)
     }
 }

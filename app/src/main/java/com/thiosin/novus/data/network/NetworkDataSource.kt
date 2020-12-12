@@ -80,11 +80,13 @@ class NetworkDataSource @Inject constructor(
         }
     }
 
-    suspend fun vote(id: String, direction: Int) {
-        try {
+    suspend fun vote(id: String, direction: Int): Boolean {
+        return try {
             redditAPI.vote(dir = direction, id = id)
+            true
         } catch (t: Throwable) {
             Timber.e(t)
+            false
         }
     }
 }

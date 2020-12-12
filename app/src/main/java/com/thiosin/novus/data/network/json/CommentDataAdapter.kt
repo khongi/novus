@@ -49,7 +49,9 @@ class CommentDataAdapter(
         "controversiality",
         "depth",
         "author_cakeday",
-        "distinguished")
+        "distinguished",
+        "likes"
+    )
 
     private val longAdapter: JsonAdapter<Long> = moshi.adapter(Long::class.java, emptySet(),
         "totalAwardsReceived")
@@ -122,6 +124,7 @@ class CommentDataAdapter(
         var depth: Long? = null
         var authorCakeday: Boolean? = null
         var distinguished: Distinguished? = null
+        var likes: Boolean? = null
         var mask0 = -1
         var mask1 = -1
         reader.beginObject()
@@ -237,6 +240,11 @@ class CommentDataAdapter(
                     // $mask = $mask and (1 shl 1).inv()
                     mask1 = mask1 and 0xfffffffd.toInt()
                 }
+                34 -> {
+                    likes = nullableBooleanAdapter.fromJson(reader)
+                    // $mask = $mask and (1 shl 2).inv()
+                    mask1 = mask1 and 0xfffffffb.toInt()
+                }
                 -1 -> {
                     // Unknown name, skip it.
                     reader.skipName()
@@ -281,6 +289,7 @@ class CommentDataAdapter(
                 Long::class.javaPrimitiveType,
                 Boolean::class.javaObjectType,
                 Distinguished::class.java,
+                Boolean::class.javaObjectType,
                 Int::class.javaPrimitiveType,
                 Int::class.javaPrimitiveType,
                 Util.DEFAULT_CONSTRUCTOR_MARKER).also {
@@ -324,6 +333,7 @@ class CommentDataAdapter(
             depth ?: throw Util.missingProperty("depth", "depth", reader),
             authorCakeday,
             distinguished,
+            likes,
             mask0, mask1,
             null
         )
@@ -402,6 +412,8 @@ class CommentDataAdapter(
         nullableBooleanAdapter.toJson(writer, value.authorCakeday)
         writer.name("distinguished")
         nullableDistinguishedAdapter.toJson(writer, value.distinguished)
+        writer.name("likes")
+        nullableBooleanAdapter.toJson(writer, value.likes)
         writer.endObject()
     }
 }

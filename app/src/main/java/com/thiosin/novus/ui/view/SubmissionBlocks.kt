@@ -1,18 +1,14 @@
 package com.thiosin.novus.ui.view
 
-import android.net.Uri
-import android.view.ViewGroup
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -20,30 +16,17 @@ import androidx.compose.ui.text.annotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import coil.ImageLoader
-import coil.decode.ImageDecoderDecoder
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.SubmissionMedia
-import com.thiosin.novus.domain.model.SubmissionMediaType
 import com.thiosin.novus.ui.theme.redditDownVote
 import com.thiosin.novus.ui.theme.redditUpvote
-import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlin.math.absoluteValue
-
+import com.thiosin.novus.ui.utils.shortenToThousands
 
 @Composable
-fun InfoRow(submission: Submission) {
-    Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+fun SubmissionInfoRow(submission: Submission) {
+    Row(modifier = Modifier.padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = submission.subreddit,
             color = MaterialTheme.colors.secondary,
@@ -63,288 +46,26 @@ fun InfoRow(submission: Submission) {
 }
 
 @Composable
-fun TitleRow(submission: Submission) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        if (submission.media == null && submission.thumbnail != null) {
-            Thumbnail(submission.thumbnail)
-        }
-        Title(submission.title)
-    }
-}
-
-@Composable
-private fun Title(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.h6,
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-    )
-}
-
-@Composable
-fun Thumbnail(url: String) {
-    RemoteImage(
-        url = url,
-        modifier = Modifier.size(100.dp).padding(8.dp)
-            .clip(MaterialTheme.shapes.medium),
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
-fun MediaRow(media: SubmissionMedia, availableWidth: Dp) {
-    val ratio = availableWidth.div(media.width)
-    val height = ratio.times(media.height)
-    Box(modifier = Modifier.width(availableWidth).height(height)) {
-        Media(media = media)
-    }
-}
-
-@Composable
-fun Media(media: SubmissionMedia) {
-    when (media.type) {
-        SubmissionMediaType.Image -> {
-            RemoteImage(
-                url = media.url,
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
-            )
-        }
-        SubmissionMediaType.Video -> {
-            RemoteVideo(url = media.url)
-        }
-    }
-}
-
-@Composable
-fun RemoteImage(url: String, modifier: Modifier, contentScale: ContentScale) {
-    CoilImage(
-        data = url,
-        fadeIn = true,
-        contentScale = contentScale,
-        loading = {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(Modifier.size(48.dp))
-            }
-        },
-        modifier = modifier,
-        imageLoader = ImageLoader.Builder(AmbientContext.current)
-            .componentRegistry {
-                add(ImageDecoderDecoder())
-            }
-            .build()
-    )
-}
-
-@Composable
-fun RemoteVideo(url: String) {
-    // This is the official way to access current context from Composable functions
-    val context = AmbientContext.current
-
-    // Do not recreate the player everytime this Composable commits
-    val exoPlayer = remember {
-        SimpleExoPlayer.Builder(context).build()
-    }
-
-    // We only want to react to changes in sourceUrl.
-    // This callback will be execute at each commit phase if
-    // [sourceUrl] has changed.
-    onCommit(url) {
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
-            context,
-            Util.getUserAgent(context, context.packageName)
-        )
-
-        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(
-                Uri.parse(url)
-            )
-
-        exoPlayer.prepare(source)
-    }
-
-    onDispose(callback = {
-        exoPlayer.release()
-    })
-
-    AndroidView(viewBlock = {
-        PlayerView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-            useController = true
-            controllerAutoShow = true
-            player = exoPlayer
-            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
-            exoPlayer.playWhenReady = false
-        }
-    })
-}
-
-@Composable
-fun PreviewButtonRow(
-    submission: Submission,
-    onLinkClick: (String) -> Unit,
-    onCommentsClick: (Submission) -> Unit,
-    onVoteClick: (Submission) -> Unit,
-) {
-    Row(
-        modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val liked = remember { mutableStateOf(submission.likes) }
-        Votes(votes = submission.votes)
-        UpVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
-        DownVoteButton(submission = submission, liked = liked, onClick = onVoteClick)
-        CommentsButton(submission = submission, onClick = onCommentsClick)
-        LinkButton(url = submission.link, onClick = onLinkClick)
-    }
-}
-
-@Composable
-fun SubmissionIconButton(
-    submission: Submission,
-    iconId: Int,
-    onClick: (Submission) -> Unit,
-    color: Color = Color.Unspecified
-) {
-    IconButton(onClick = { onClick(submission) }) {
-        Icon(imageVector = vectorResource(id = iconId), tint = color)
-    }
-}
-
-@Composable
-fun SubmissionIconButtonWithText(
-    submission: Submission,
-    text: AnnotatedString,
-    iconId: Int,
-    onClick: (Submission) -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .height(48.dp)
-            .padding(horizontal = 8.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = { onClick(submission) })
-    ) {
-        Spacer(Modifier.size(8.dp))
-        Icon(imageVector = vectorResource(id = iconId))
+fun SubmissionStatRow(submission: Submission) {
+    Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
+        verticalAlignment = Alignment.CenterVertically) {
         Text(
-            text = text,
-            modifier = Modifier.padding(start = 4.dp),
-            style = MaterialTheme.typography.caption
+            text = getVotesFormat(submission.votes),
+            style = MaterialTheme.typography.subtitle1,
         )
-        Spacer(Modifier.size(8.dp))
+        Text(
+            text = "${shortenToThousands(submission.comments)} comments",
+            modifier = Modifier.padding(start = 8.dp),
+            style = MaterialTheme.typography.caption,
+        )
     }
-}
-
-@Composable
-fun UpVoteButton(
-    submission: Submission,
-    liked: MutableState<Boolean?>,
-    onClick: (Submission) -> Unit
-) {
-    val upVoted = liked.value == true
-    val icon = if (upVoted) {
-        R.drawable.ic_baseline_thumb_up_24
-    } else {
-        R.drawable.ic_outline_thumb_up_24
-    }
-    SubmissionIconButton(
-        submission = submission,
-        iconId = icon,
-        onClick = {
-            liked.value = if (liked.value != true) {
-                true
-            } else {
-                null
-            }
-            onClick(submission.copy(likes = liked.value))
-        },
-        color = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
-    )
-}
-
-@Composable
-fun DownVoteButton(
-    submission: Submission,
-    liked: MutableState<Boolean?>,
-    onClick: (Submission) -> Unit
-) {
-    val downVoted = liked.value == false
-    val icon = if (downVoted) {
-        R.drawable.ic_baseline_thumb_down_24
-    } else {
-        R.drawable.ic_outline_thumb_down_24
-    }
-    SubmissionIconButton(
-        submission = submission,
-        iconId = icon,
-        onClick = {
-            liked.value = if (liked.value != false) {
-                false
-            } else {
-                null
-            }
-            onClick(submission.copy(likes = liked.value))
-        },
-        color = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
-    )
-}
-
-@Composable
-fun CommentsButton(
-    submission: Submission,
-    onClick: (Submission) -> Unit,
-) {
-    SubmissionIconButtonWithText(
-        submission = submission,
-        text = annotatedString { append(submission.comments.toString()) },
-        iconId = R.drawable.ic_outline_mode_comment_24,
-        onClick = onClick
-    )
-}
-
-@Composable
-fun LinkButton(
-    url: String,
-    onClick: (String) -> Unit,
-) {
-    IconButton(onClick = { onClick(url) }) {
-        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
-    }
-}
-
-@Composable
-fun Votes(votes: Int) {
-    Text(
-        text = getVotesFormat(votes),
-        style = MaterialTheme.typography.caption,
-        modifier = Modifier.padding(4.dp)
-    )
 }
 
 fun getVotesFormat(votes: Int): AnnotatedString {
-    val abs = votes.absoluteValue
-    val formattedValue = if (abs < 1000) {
-        "$abs"
-    } else {
-        "%.${1}fk".format(abs / 1000.0)
-    }
+    val formattedValue = shortenToThousands(votes)
 
     return annotatedString {
-        withStyle(
-            SpanStyle(
-                color = getVotesColor(votes > 0)
-            )
-        ) {
+        withStyle(SpanStyle(color = getVotesColor(votes > 0))) {
             append(formattedValue)
         }
     }
@@ -358,5 +79,140 @@ fun getVotesColor(liked: Boolean): Color {
         false -> {
             redditDownVote
         }
+    }
+}
+
+@Composable
+fun SubmissionTitleRow(submission: Submission) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        if (submission.media == null && submission.thumbnail != null) {
+            Thumbnail(submission.thumbnail)
+        }
+        SubmissionTitle(submission.title)
+    }
+}
+
+@Composable
+fun SubmissionSelfText(text: String) {
+    Text(text = text,
+        style = MaterialTheme.typography.body2,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+}
+
+@Composable
+fun SubmissionTitle(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.h6,
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    )
+}
+
+@Composable
+fun SubmissionMediaRow(media: SubmissionMedia, availableWidth: Dp) {
+    val ratio = availableWidth.div(media.width)
+    val height = ratio.times(media.height)
+    Box(modifier = Modifier.width(availableWidth).height(height)) {
+        Media(media = media)
+    }
+}
+
+@Composable
+fun SubmissionButtonRow(
+    submission: Submission,
+    onLinkClick: (String) -> Unit,
+    onVoteClick: (String, Boolean?) -> Unit,
+    onCommentsClick: ((Submission) -> Unit)? = null,
+) {
+    Row(
+        modifier = Modifier.padding(horizontal = 4.dp).fillMaxWidth().height(48.dp),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        VoteButtons(submission.fullname, submission.liked, onVoteClick)
+        if (onCommentsClick != null) {
+            CommentsButton(submission = submission, onClick = onCommentsClick)
+        }
+        LinkButton(url = submission.link, onClick = onLinkClick)
+    }
+}
+
+@Composable
+fun VoteButtons(
+    fullname: String,
+    liked: Boolean?,
+    onVoteClick: (String, Boolean?) -> Unit,
+) {
+    UpVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
+    DownVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
+}
+
+@Composable
+fun UpVoteButton(
+    fullname: String,
+    liked: Boolean?,
+    onClick: (String, Boolean?) -> Unit,
+) {
+    val upVoted = liked == true
+    val icon = if (upVoted) {
+        R.drawable.ic_baseline_thumb_up_24
+    } else {
+        R.drawable.ic_outline_thumb_up_24
+    }
+    val tint = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
+    IconButton(onClick = {
+        val newLikedValue = if (liked != true) {
+            true
+        } else {
+            null
+        }
+        onClick(fullname, newLikedValue)
+    }) {
+        Icon(imageVector = vectorResource(id = icon), tint = tint)
+    }
+}
+
+@Composable
+fun DownVoteButton(
+    fullname: String,
+    liked: Boolean?,
+    onClick: (String, Boolean?) -> Unit,
+) {
+    val downVoted = liked == false
+    val icon = if (downVoted) {
+        R.drawable.ic_baseline_thumb_down_24
+    } else {
+        R.drawable.ic_outline_thumb_down_24
+    }
+    val tint = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
+    IconButton(onClick = {
+        val newLikedValue = if (liked != false) {
+            false
+        } else {
+            null
+        }
+        onClick(fullname, newLikedValue)
+    }) {
+        Icon(imageVector = vectorResource(id = icon), tint = tint)
+    }
+}
+
+@Composable
+fun CommentsButton(
+    submission: Submission,
+    onClick: (Submission) -> Unit,
+) {
+    IconButton(onClick = { onClick(submission) }) {
+        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_mode_comment_24))
+    }
+}
+
+@Composable
+fun LinkButton(
+    url: String,
+    onClick: (String) -> Unit,
+) {
+    IconButton(onClick = { onClick(url) }) {
+        Icon(imageVector = vectorResource(id = R.drawable.ic_outline_link_24))
     }
 }
