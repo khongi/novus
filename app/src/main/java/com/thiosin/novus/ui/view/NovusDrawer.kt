@@ -1,5 +1,7 @@
 package com.thiosin.novus.ui.view
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -47,7 +49,7 @@ fun SubredditsSection(
         subreddits.forEach {
             DrawerItem(
                 subreddit = it,
-                isSelected = it.name == selected?.name,
+                isSelected = it.queryName == selected?.queryName,
                 onClick = onClick
             )
         }
@@ -89,14 +91,18 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = vectorResource(id = R.drawable.ic_baseline_account_circle_24),
-                modifier = Modifier.size(48.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            Image(
+                imageVector = vectorResource(id = R.drawable.ic_user),
+                modifier = Modifier.size(24.dp)
             )
             Text(
                 text = user?.name ?: "Anonymous",
                 style = MaterialTheme.typography.subtitle1,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
         IconButton(onClick = {
@@ -107,42 +113,50 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
             }
         }) {
             val iconId = if (user == null) {
-                R.drawable.ic_baseline_login_24
+                R.drawable.ic_login
             } else {
-                R.drawable.ic_baseline_exit_to_app_24
+                R.drawable.ic_logout
             }
-            Icon(imageVector = vectorResource(id = iconId))
+            CoilImage(
+                data = iconId,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(28.dp)
+            )
         }
     }
 }
 
 @Composable
 fun DrawerItem(subreddit: Subreddit, isSelected: Boolean, onClick: (Subreddit) -> Unit) {
+    val border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colors.secondary) else null
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .clickable(onClick = { onClick(subreddit) }),
-        backgroundColor = if (isSelected) {
-            MaterialTheme.colors.secondary
-        } else {
-            MaterialTheme.colors.background
-        },
-        elevation = 8.dp
+        elevation = 8.dp,
+        border = border
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CoilImage(
-                data = if (subreddit.icon.isBlank().not()) {
-                    subreddit.icon
-                } else {
-                    R.drawable.ic_reddit_orange
-                },
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(28.dp).clip(CircleShape)
-            )
+            if (subreddit.iconResource != null) {
+                Image(
+                    imageVector = vectorResource(id = subreddit.iconResource),
+                    modifier = Modifier.size(28.dp)
+                )
+            } else {
+                CoilImage(
+                    data = if (subreddit.iconUrl.isNullOrBlank()) {
+                        R.drawable.ic_reddit
+                    } else {
+                        subreddit.iconUrl
+                    },
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.size(28.dp).clip(CircleShape)
+                )
+            }
             Text(
                 text = subreddit.displayName,
                 style = MaterialTheme.typography.button,

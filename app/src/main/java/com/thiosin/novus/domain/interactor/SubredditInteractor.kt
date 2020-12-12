@@ -3,6 +3,7 @@ package com.thiosin.novus.domain.interactor
 import com.thiosin.novus.data.network.NetworkDataSource
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.SubredditType
 import com.thiosin.novus.domain.model.toSubredditList
 import javax.inject.Inject
 
@@ -22,30 +23,22 @@ class SubredditInteractor @Inject constructor(
     }
 
     suspend fun getUserlessSubreddits(): List<Subreddit> {
-        val fetchedSubreddits = networkDataSource.getUserlessSubreddits()
-            ?.toSubredditList()
-            ?: listOf()
-        val builtInSubreddits = getBuiltInSubreddits()
-        return builtInSubreddits + fetchedSubreddits
+        return networkDataSource.getUserlessSubreddits()?.toSubredditList() ?: listOf()
     }
 
     suspend fun getUserSubreddits(): List<Subreddit> {
-        val fetchedSubreddits = networkDataSource.getUserSubreddits()
-            ?.toSubredditList()
-            ?: listOf()
-        val builtInSubreddits = getBuiltInSubreddits()
-        return builtInSubreddits + fetchedSubreddits
+        return networkDataSource.getUserSubreddits()?.toSubredditList() ?: listOf()
     }
 
     fun getDefaultSubreddit(): Subreddit {
-        return Subreddit("", "Frontpage", "")
+        return Subreddit("", "Frontpage", SubredditType.Frontpage)
     }
 
-    private fun getBuiltInSubreddits(): List<Subreddit> {
+    fun getBuiltInSubreddits(): List<Subreddit> {
         return listOf(
             getDefaultSubreddit(),
-            Subreddit("all", "All", ""),
-            Subreddit("popular", "Popular", ""),
+            Subreddit("all", "All", SubredditType.All),
+            Subreddit("popular", "Popular", SubredditType.Popular),
         )
     }
 }

@@ -21,6 +21,7 @@ import com.thiosin.novus.ui.utils.border
 fun CommentItem(
     comment: Comment,
     collapse: Boolean = false,
+    canVote: Boolean = false,
     onVoteClick: (String, Boolean?) -> Unit,
 ) {
     var isCollapsed by remember { mutableStateOf(collapse) }
@@ -35,7 +36,7 @@ fun CommentItem(
             Spacer(modifier = Modifier.width((comment.depth * 8).dp))
             CommentContent(comment = comment, collapse = isCollapsed)
         }
-        if (showControls) {
+        if (canVote && showControls) {
             Row(horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()) {
                 var liked: Boolean? by remember { mutableStateOf(comment.liked) }
@@ -47,7 +48,12 @@ fun CommentItem(
         }
         if (isCollapsed.not()) {
             comment.replies.forEach { child ->
-                CommentItem(comment = child, collapse = collapse, onVoteClick = onVoteClick)
+                CommentItem(
+                    comment = child,
+                    collapse = collapse,
+                    canVote = canVote,
+                    onVoteClick = onVoteClick
+                )
             }
         }
     }

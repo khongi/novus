@@ -1,11 +1,13 @@
 package com.thiosin.novus.screens.home
 
 import co.zsmb.rainbowcake.withIOContext
+import com.thiosin.novus.R
 import com.thiosin.novus.domain.interactor.AuthInteractor
 import com.thiosin.novus.domain.interactor.SubredditInteractor
 import com.thiosin.novus.domain.interactor.UserInteractor
 import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
+import com.thiosin.novus.domain.model.SubredditType
 import com.thiosin.novus.domain.model.toLoadResultData
 import javax.inject.Inject
 
@@ -35,11 +37,20 @@ class HomePresenter @Inject constructor(
 
     suspend fun getSubreddits(): List<Subreddit> = withIOContext {
         val user = userInteractor.getUser()
-        if (user == null) {
+        val communitySubreddits = if (user == null) {
             subredditInteractor.getUserlessSubreddits()
         } else {
             subredditInteractor.getUserSubreddits()
         }
+        val buildInSubreddits = subredditInteractor.getBuiltInSubreddits().map {
+            when (it.type) {
+                SubredditType.Frontpage -> it.copy(iconResource = R.drawable.ic_home)
+                SubredditType.All -> it.copy(iconResource = R.drawable.ic_group)
+                SubredditType.Popular -> it.copy(iconResource = R.drawable.ic_popular)
+                else -> it
+            }
+        }
+        buildInSubreddits + communitySubreddits
     }
 
     suspend fun getDefaultSubreddit(): Subreddit = withIOContext {

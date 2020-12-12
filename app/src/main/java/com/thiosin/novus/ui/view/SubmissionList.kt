@@ -13,6 +13,7 @@ import com.thiosin.novus.ui.utils.getDisplayWidth
 fun SubmissionList(
     submissions: List<Submission>,
     lazyListState: LazyListState,
+    canVote: Boolean,
     onLinkClick: (String) -> Unit,
     onDetailsClick: (Submission) -> Unit,
     onListEnd: () -> Unit,
@@ -30,6 +31,7 @@ fun SubmissionList(
                 SubmissionPreview(
                     submission = submission,
                     showSelfText = false,
+                    canVote = canVote,
                     displayWidthDp = displayWidth,
                     onLinkClick = onLinkClick,
                     onCommentsClick = onDetailsClick,
@@ -41,10 +43,11 @@ fun SubmissionList(
             SubmissionPreview(
                 submission = submission,
                 showSelfText = false,
+                canVote = canVote,
                 displayWidthDp = displayWidth,
                 onLinkClick = onLinkClick,
-                onCommentsClick = onDetailsClick,
                 onVoteClick = onVote,
+                onCommentsClick = onDetailsClick,
             )
         }
     }

@@ -1,11 +1,10 @@
 package com.thiosin.novus.ui.view
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.Image
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import com.thiosin.novus.R
 
 @Composable
@@ -15,17 +14,21 @@ fun NovusTopAppBar(
     onNavigationIconClick: () -> Unit = {},
 ) {
     TopAppBar(
-        title = { Text(title) },
+        title = { Text(text = title, color = MaterialTheme.colors.primary) },
+        backgroundColor = MaterialTheme.colors.surface,
         navigationIcon = {
             if (navIcon != NavigationIcon.NoIcon) {
                 IconButton(
                     onClick = onNavigationIconClick
                 ) {
-                    when (navIcon) {
-                        NavigationIcon.Back -> Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_arrow_back_24))
-                        NavigationIcon.Menu -> Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_menu_24))
-                        NavigationIcon.Close -> Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_close_24))
-                        NavigationIcon.NoIcon -> Unit
+                    val iconId = when (navIcon) {
+                        NavigationIcon.Back -> R.drawable.ic_left_arrow
+                        NavigationIcon.Menu -> R.drawable.ic_menu
+                        NavigationIcon.Close -> R.drawable.ic_close
+                        NavigationIcon.NoIcon -> null
+                    }
+                    iconId?.let {
+                        Image(imageVector = vectorResource(id = iconId))
                     }
                 }
             }
