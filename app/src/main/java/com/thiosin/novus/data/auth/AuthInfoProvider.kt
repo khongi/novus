@@ -1,4 +1,4 @@
-package com.thiosin.novus.data.prefs
+package com.thiosin.novus.data.auth
 
 import android.content.Context
 import com.kirkbushman.auth.managers.StorageManager
@@ -6,11 +6,8 @@ import com.kirkbushman.auth.models.AuthType
 import com.kirkbushman.auth.models.Token
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
-import hu.autsoft.krate.SimpleKrate
-import hu.autsoft.krate.intPref
-import hu.autsoft.krate.longPref
+import hu.autsoft.krate.*
 import hu.autsoft.krate.moshi.moshiPref
-import hu.autsoft.krate.stringPref
 import javax.inject.Inject
 
 @ActivityScoped
@@ -26,6 +23,8 @@ class AuthInfoProvider @Inject constructor(
     private var scopes by stringPref("SCOPES", "")
     private var authType by moshiPref("AUTH_TYPE", AuthType.NONE)
 
+    var loggedIn: Boolean by booleanPref("LOGGED_IN", false)
+
     override fun authType(): AuthType = authType
 
     override fun clearAll() {
@@ -36,6 +35,7 @@ class AuthInfoProvider @Inject constructor(
         tokenType = ""
         scopes = ""
         authType = AuthType.NONE
+        loggedIn = false
     }
 
     override fun getToken(): Token {

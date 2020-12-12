@@ -18,6 +18,8 @@ class LoginViewModel @ViewModelInject constructor(
       if (loginPresenter.isRedirectUrl(url)) {
          val userToken = loginPresenter.getUserToken(url)
 
+         loginPresenter.setLoggedInStatus(userToken != null)
+
          if (userToken != null) {
             val userIsSaved = loginPresenter.saveUserInfo()
             if (userIsSaved) {

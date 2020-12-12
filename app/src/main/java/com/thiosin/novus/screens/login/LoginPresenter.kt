@@ -19,12 +19,16 @@ class LoginPresenter @Inject constructor(
     }
 
     suspend fun getUserToken(url: String) = withIOContext {
-        authInteractor.acquireUserToken(url)
+        authInteractor.acquireUserToken(url)?.getToken()
     }
 
     fun getRedirectUrl() = authInteractor.getRedirectUrl()
 
     suspend fun saveUserInfo() = withIOContext {
         userInteractor.saveUserInfo()
+    }
+
+    suspend fun setLoggedInStatus(status: Boolean) = withIOContext {
+        authInteractor.setLoggedInStatus(status)
     }
 }

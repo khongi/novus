@@ -11,5 +11,5 @@ class UserInfoProvider @Inject constructor(
     @ApplicationContext context: Context,
 ) : SimpleKrate(context) {
 
-    var user: User? by moshiPref("user")
+    var user: User? by moshiPref("USER")
 }
