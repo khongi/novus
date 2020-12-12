@@ -1,1 +1,1 @@
-[![Build Status](https://travis-ci.com/khongi/novus.svg?branch=develop)](https://travis-ci.com/khongi/novus)
+[![Build Status](https://app.bitrise.io/app/9d2e22db4b2f8198/status.svg?token=QTrzEHNZUX0OD_oXQcmGgA&branch=develop)](https://app.bitrise.io/app/9d2e22db4b2f8198)
