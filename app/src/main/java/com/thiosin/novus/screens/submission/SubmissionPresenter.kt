@@ -17,4 +17,8 @@ class SubmissionPresenter @Inject constructor(
     suspend fun vote(fullname: String, likes: Boolean?) = withIOContext {
         userInteractor.vote(fullname, likes)
     }
+
+    suspend fun isLoggedIn(): Boolean = withIOContext {
+        userInteractor.getUser() != null
+    }
 }

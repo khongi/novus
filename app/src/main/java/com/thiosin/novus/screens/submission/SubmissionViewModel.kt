@@ -11,11 +11,14 @@ class SubmissionViewModel @ViewModelInject constructor(
     fun load(submission: Submission, displayWidthDp: Float) = execute {
         val readyState = viewState as? SubmissionReadyState
 
+        val loggedIn = submissionPresenter.isLoggedIn()
+
         val loadingWithContentState = readyState?.copy(loading = true)
             ?: SubmissionReadyState(
                 submission = submission,
                 comments = emptyList(),
                 displayWidthDp = displayWidthDp,
+                canVote = loggedIn,
                 loading = true
             )
         viewState = loadingWithContentState

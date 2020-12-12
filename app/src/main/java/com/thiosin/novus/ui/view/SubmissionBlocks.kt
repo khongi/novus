@@ -120,6 +120,7 @@ fun SubmissionMediaRow(media: SubmissionMedia, availableWidth: Dp) {
 @Composable
 fun SubmissionButtonRow(
     submission: Submission,
+    canVote: Boolean,
     onLinkClick: (String) -> Unit,
     onVoteClick: (String, Boolean?) -> Unit,
     onCommentsClick: ((Submission) -> Unit)? = null,
@@ -129,7 +130,9 @@ fun SubmissionButtonRow(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        VoteButtons(submission.fullname, submission.liked, onVoteClick)
+        if (canVote) {
+            VoteButtons(submission.fullname, submission.liked, onVoteClick)
+        }
         if (onCommentsClick != null) {
             CommentsButton(submission = submission, onClick = onCommentsClick)
         }

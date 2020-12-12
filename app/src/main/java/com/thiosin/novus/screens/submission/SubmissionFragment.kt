@@ -88,6 +88,7 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
                 SubmissionDetails(
                     submission = viewState.submission,
                     comments = viewState.comments,
+                    canVote = viewState.canVote,
                     displayWidthDp = viewState.displayWidthDp,
                     onLinkClick = onLinkClick,
                     onVoteClick = onVoteClick,

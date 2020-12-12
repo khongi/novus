@@ -14,6 +14,7 @@ import com.thiosin.novus.domain.model.Submission
 fun SubmissionPreview(
     submission: Submission,
     showSelfText: Boolean,
+    canVote: Boolean,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
     onVoteClick: (String, Boolean?) -> Unit,
@@ -39,6 +40,7 @@ fun SubmissionPreview(
                 SubmissionStatRow(submission)
                 SubmissionButtonRow(
                     submission = submission,
+                    canVote = canVote,
                     onLinkClick = onLinkClick,
                     onVoteClick = onVoteClick,
                     onCommentsClick = onCommentsClick
@@ -67,6 +69,7 @@ fun DefaultPreview() {
     SubmissionPreview(
         submission = submission,
         showSelfText = true,
+        canVote = true,
         displayWidthDp = 300F,
         onLinkClick = {},
         onVoteClick = { _: String, _: Boolean? -> },

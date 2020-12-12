@@ -9,6 +9,7 @@ import com.thiosin.novus.domain.model.Submission
 fun SubmissionDetails(
     submission: Submission,
     comments: List<Comment>,
+    canVote: Boolean,
     displayWidthDp: Float,
     onLinkClick: (String) -> Unit,
     onVoteClick: (String, Boolean?) -> Unit,
@@ -19,6 +20,7 @@ fun SubmissionDetails(
             SubmissionPreview(
                 submission = submission,
                 showSelfText = true,
+                canVote = canVote,
                 displayWidthDp = displayWidthDp,
                 onLinkClick = onLinkClick,
                 onVoteClick = onVoteClick
@@ -26,7 +28,11 @@ fun SubmissionDetails(
         }
 
         items(comments) {
-            CommentItem(comment = it, onVoteClick = onCommentVoteClick)
+            CommentItem(
+                comment = it,
+                canVote = canVote,
+                onVoteClick = onCommentVoteClick
+            )
         }
     }
 }

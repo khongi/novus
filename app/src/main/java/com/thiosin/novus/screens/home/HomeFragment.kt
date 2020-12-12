@@ -146,6 +146,7 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
                     SubmissionList(
                         submissions = viewState.submissions,
                         lazyListState = lazyListState,
+                        canVote = viewState.canVote(),
                         onLinkClick = onLinkClick,
                         onDetailsClick = onDetailsClick,
                         onListEnd = onNextPage,
@@ -196,6 +197,13 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
         return when (this) {
             is HomeReady -> user
             else -> null
+        }
+    }
+
+    private fun HomeViewState?.canVote(): Boolean {
+        return when (this) {
+            is HomeReady -> user != null
+            else -> false
         }
     }
 }
