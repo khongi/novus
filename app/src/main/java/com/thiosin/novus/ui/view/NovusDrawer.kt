@@ -1,5 +1,6 @@
 package com.thiosin.novus.ui.view
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.clickable
@@ -96,7 +97,7 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
         ) {
             Image(
                 imageVector = vectorResource(id = R.drawable.ic_user),
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(24.dp)
             )
             Text(
                 text = user?.name ?: "Anonymous",
@@ -127,17 +128,14 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
 
 @Composable
 fun DrawerItem(subreddit: Subreddit, isSelected: Boolean, onClick: (Subreddit) -> Unit) {
+    val border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colors.secondary) else null
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .clickable(onClick = { onClick(subreddit) }),
-        backgroundColor = if (isSelected) {
-            MaterialTheme.colors.secondary
-        } else {
-            MaterialTheme.colors.background
-        },
-        elevation = 8.dp
+        elevation = 8.dp,
+        border = border
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
