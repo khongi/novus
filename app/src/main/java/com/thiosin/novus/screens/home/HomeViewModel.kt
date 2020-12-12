@@ -105,7 +105,14 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     fun vote(fullname: String, liked: Boolean?) = execute {
-        homePresenter.vote(fullname, liked)
+        val oldState = viewState as? HomeReady ?: return@execute
+        viewState = oldState.copy(voting = true)
+
+        if (homePresenter.vote(fullname, liked)) {
+            oldState.submissions.first { it.fullname == fullname }.likes = liked
+        }
+
+        viewState = oldState.copy(voting = false)
     }
 
     private suspend fun getUser(): User? {

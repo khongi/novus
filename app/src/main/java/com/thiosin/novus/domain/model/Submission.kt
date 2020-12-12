@@ -20,7 +20,7 @@ data class Submission(
     val selfText: String,
     val thumbnail: String? = null,
     val media: SubmissionMedia? = null,
-    val likes: Boolean? = null,
+    var likes: Boolean? = null,
 ) : Parcelable
 
 @Parcelize

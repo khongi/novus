@@ -6,9 +6,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -146,18 +143,18 @@ fun VoteButtons(
     liked: Boolean?,
     onVoteClick: (String, Boolean?) -> Unit,
 ) {
-    val mutableLiked = remember { mutableStateOf(liked) }
-    UpVoteButton(fullname = fullname, liked = mutableLiked, onClick = onVoteClick)
-    DownVoteButton(fullname = fullname, liked = mutableLiked, onClick = onVoteClick)
+//    val mutableLiked = remember { mutableStateOf(liked) }
+    UpVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
+    DownVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
 }
 
 @Composable
 fun UpVoteButton(
     fullname: String,
-    liked: MutableState<Boolean?>,
+    liked: Boolean?,
     onClick: (String, Boolean?) -> Unit,
 ) {
-    val upVoted = liked.value == true
+    val upVoted = liked == true
     val icon = if (upVoted) {
         R.drawable.ic_baseline_thumb_up_24
     } else {
@@ -165,12 +162,12 @@ fun UpVoteButton(
     }
     val tint = if (upVoted) getVotesColor(true) else MaterialTheme.colors.onSurface
     IconButton(onClick = {
-        liked.value = if (liked.value != true) {
+        val newLikedValue = if (liked != true) {
             true
         } else {
             null
         }
-        onClick(fullname, liked.value)
+        onClick(fullname, newLikedValue)
     }) {
         Icon(imageVector = vectorResource(id = icon), tint = tint)
     }
@@ -179,10 +176,10 @@ fun UpVoteButton(
 @Composable
 fun DownVoteButton(
     fullname: String,
-    liked: MutableState<Boolean?>,
+    liked: Boolean?,
     onClick: (String, Boolean?) -> Unit,
 ) {
-    val downVoted = liked.value == false
+    val downVoted = liked == false
     val icon = if (downVoted) {
         R.drawable.ic_baseline_thumb_down_24
     } else {
@@ -190,12 +187,12 @@ fun DownVoteButton(
     }
     val tint = if (downVoted) getVotesColor(false) else MaterialTheme.colors.onSurface
     IconButton(onClick = {
-        liked.value = if (liked.value != false) {
+        val newLikedValue = if (liked != false) {
             false
         } else {
             null
         }
-        onClick(fullname, liked.value)
+        onClick(fullname, newLikedValue)
     }) {
         Icon(imageVector = vectorResource(id = icon), tint = tint)
     }

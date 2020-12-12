@@ -26,6 +26,14 @@ class SubmissionViewModel @ViewModelInject constructor(
     }
 
     fun vote(fullname: String, liked: Boolean?) = execute {
-        submissionPresenter.vote(fullname, liked)
+        val oldState = viewState as? SubmissionReadyState ?: return@execute
+
+        viewState = oldState.copy(voting = true)
+
+        if (submissionPresenter.vote(fullname, liked)) {
+            oldState.submission.likes = liked
+        }
+
+        viewState = oldState.copy(voting = false)
     }
 }

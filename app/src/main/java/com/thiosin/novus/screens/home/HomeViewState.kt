@@ -14,4 +14,5 @@ data class HomeReady(
     val subreddits: List<Subreddit>,
     val user: User? = null,
     val loading: Boolean = false,
+    val voting: Boolean = false,
 ) : HomeViewState()
