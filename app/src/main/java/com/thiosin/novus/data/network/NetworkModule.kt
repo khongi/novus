@@ -1,19 +1,16 @@
 package com.thiosin.novus.data.network
 
-import android.content.Context
-import com.kirkbushman.araw.RedditClient
-import com.kirkbushman.araw.helpers.AuthUserlessHelper
 import com.kirkbushman.auth.RedditAuth
 import com.kirkbushman.auth.managers.StorageManager
 import com.squareup.moshi.Moshi
 import com.thiosin.novus.BuildConfig
+import com.thiosin.novus.data.auth.AuthInfoProvider
+import com.thiosin.novus.data.auth.AuthInterceptor
 import com.thiosin.novus.data.network.json.CResponseDataChildListAdapter
-import com.thiosin.novus.data.prefs.AuthInfoProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,24 +22,17 @@ import javax.inject.Qualifier
 @InstallIn(ActivityComponent::class)
 class NetworkModule {
 
-    @Provides
-    fun provideStorageManager(authInfoProvider: AuthInfoProvider): StorageManager {
-        return authInfoProvider
-    }
-
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class UserlessAuth
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class InstalledAppAuth
+
     @Provides
-    fun provideAuthUserlessHelper(@ApplicationContext context: Context): AuthUserlessHelper {
-        return AuthUserlessHelper(
-            context = context,
-            clientId = BuildConfig.CLIENT_ID,
-            deviceId = null,
-            scopes = arrayOf(),
-            logging = true
-        )
+    fun provideStorageManager(authInfoProvider: AuthInfoProvider): StorageManager {
+        return authInfoProvider
     }
 
     @UserlessAuth
@@ -56,13 +46,7 @@ class NetworkModule {
             .build()
     }
 
-    @UserlessAuth
-    @Provides
-    fun provideUserlessRedditClient(authUserlessHelper: AuthUserlessHelper): RedditClient {
-        return authUserlessHelper.getRedditClient() ?: throw IllegalStateException("No token")
-    }
-
-    @UserAuth
+    @InstalledAppAuth
     @Provides
     fun provideUserRedditAuth(storageManager: StorageManager): RedditAuth {
         return RedditAuth.Builder()
@@ -73,36 +57,30 @@ class NetworkModule {
             .build()
     }
 
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class UserAuth
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class PageSize
-
-    @PageSize
-    @Provides
-    fun providePageSize(): Int = 25
-
-    @UserlessAuth
     @Provides
     @ActivityScoped
-    fun provideOkHttpClient(@UserlessAuth redditAuth: RedditAuth): OkHttpClient {
+    fun provideOkHttpClient(
+        authInfoProvider: AuthInfoProvider,
+        @UserlessAuth userlessAuth: RedditAuth,
+        @InstalledAppAuth installedAppAuth: RedditAuth,
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addNetworkInterceptor(
                 HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
+                    level = HttpLoggingInterceptor.Level.HEADERS
                 }
             )
-            .addInterceptor(AuthInterceptor(redditAuth))
+            .addInterceptor(AuthInterceptor(
+                authInfoProvider = authInfoProvider,
+                userlessAuth = userlessAuth,
+                installedAppAuth = installedAppAuth
+            ))
             .build()
     }
 
-    @UserlessAuth
     @Provides
     @ActivityScoped
-    fun provideRetrofit(@UserlessAuth okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val innerMoshi = Moshi.Builder().build()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
@@ -115,9 +93,15 @@ class NetworkModule {
             .build()
     }
 
-    @UserlessAuth
     @Provides
     @ActivityScoped
-    fun provideRedditApi(@UserlessAuth retrofit: Retrofit): RedditAPI = retrofit.create(RedditAPI::class.java)
+    fun provideRedditApi(retrofit: Retrofit): RedditAPI = retrofit.create(RedditAPI::class.java)
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class PageSize
+
+    @PageSize
+    @Provides
+    fun providePageSize(): Int = 25
 }

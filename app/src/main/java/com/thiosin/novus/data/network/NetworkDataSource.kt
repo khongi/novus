@@ -4,15 +4,12 @@ import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
 import com.thiosin.novus.data.network.model.user.MeResponse
-import com.thiosin.novus.data.prefs.AuthInfoProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 class NetworkDataSource @Inject constructor(
-    // TODO check if the same token is returned with userless RedditAuth
-    @NetworkModule.UserlessAuth private val redditAPI: RedditAPI,
+    private val redditAPI: RedditAPI,
     @NetworkModule.PageSize private val pageSize: Int,
-    private val authInfoProvider: AuthInfoProvider,
 ) {
 
     suspend fun getListing(
