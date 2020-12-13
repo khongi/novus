@@ -11,10 +11,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.ui.view.*
+
+const val HomeScreenTestTag = "HomeScreenTestTag"
 
 @Composable
 fun HomeScreen(
@@ -30,7 +33,7 @@ fun HomeScreen(
     val scaffoldState = rememberScaffoldState()
     val lazyListState = rememberLazyListState()
     Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().testTag(HomeScreenTestTag),
         scaffoldState = scaffoldState,
         topBar = {
             NovusTopAppBar(
