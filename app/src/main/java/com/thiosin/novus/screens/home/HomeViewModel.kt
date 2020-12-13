@@ -14,7 +14,7 @@ class HomeViewModel @ViewModelInject constructor(
     fun load(subreddit: Subreddit? = null) = execute {
         val readyState = viewState as? HomeReady
 
-        val user: User? = getUser()
+        val user: User? = readyState?.user ?: getUser()
         if (user == null) {
             homePresenter.acquireUserlessCredentials()
         }

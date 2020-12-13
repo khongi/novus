@@ -8,6 +8,7 @@ import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.kotest.ViewModelTestListener
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -28,11 +29,14 @@ class HomeViewModelTest : BehaviorSpec({
         type = SubredditType.Community,
     )
 
-    Given("One default, one non default subreddit and no submissions") {
+    Given("one default, one non default subreddit and no submissions") {
         coEvery { homePresenter.getDefaultSubreddit() } returns defaultSubreddit
-        coEvery { homePresenter.getSubreddits() } returns listOf(defaultSubreddit, nonDefaultSubreddit)
-        coEvery { homePresenter.getSubredditPage(defaultSubreddit.queryName) } returns listOf()
-        And("Initial state without user") {
+        coEvery { homePresenter.getSubreddits() } returns listOf(
+            defaultSubreddit,
+            nonDefaultSubreddit
+        )
+        coEvery { homePresenter.getSubredditPage(any()) } returns listOf()
+        And("no user") {
             coEvery { homePresenter.getUser() } returns null
             When("load without args") {
                 Then("should acquire userless credentials") {
@@ -45,23 +49,40 @@ class HomeViewModelTest : BehaviorSpec({
                     vm.observeStateAndEvents { stateObserver, eventsObserver ->
                         vm.load()
 
-                        stateObserver.assertDidObserve(HomeReady(
-                            submissions = listOf(),
-                            selectedSubreddit = defaultSubreddit,
-                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
-                            user = null
-                        ))
+                        stateObserver.assertDidObserve(
+                            HomeReady(
+                                submissions = listOf(),
+                                selectedSubreddit = defaultSubreddit,
+                                subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
+                                user = null
+                            )
+                        )
                     }
                 }
             }
         }
-        And("Initial state with user") {
+        And("has user") {
             coEvery { homePresenter.getUser() } returns user
             When("load without args") {
                 val vm = HomeViewModel(homePresenter)
                 vm.load()
                 Then("should NOT acquire userless credentials") {
                     coVerify(exactly = 0) { homePresenter.acquireUserlessCredentials() }
+                }
+            }
+            When("load with non default subreddit") {
+                Then("selected subreddit should be non default subreddit") {
+                    val vm = HomeViewModel(homePresenter)
+                    vm.observeStateAndEvents { stateObserver, _ ->
+                        vm.load(nonDefaultSubreddit)
+
+                        stateObserver.observed.last() shouldBe HomeReady(
+                            submissions = listOf(),
+                            selectedSubreddit = nonDefaultSubreddit,
+                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
+                            user = user
+                        )
+                    }
                 }
             }
         }
