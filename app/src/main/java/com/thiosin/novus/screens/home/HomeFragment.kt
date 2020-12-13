@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
@@ -35,32 +33,22 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
             setContent {
                 NovusTheme {
                     val state = viewModel.state.observeAsState()
-                    val scaffoldState = rememberScaffoldState()
-                    val lazyListState = rememberLazyListState()
 
                     state.value?.let { viewState ->
                         HomeScreen(
-                            scaffoldState = scaffoldState,
                             viewState = viewState,
-                            lazyListState = lazyListState,
                             onNextPage = { viewModel.loadNextPage() },
                             onSwitchSubreddit = { subreddit -> viewModel.switchSubreddit(subreddit) },
                             onLinkClick = { url -> navigateToWebFragment(url) },
                             onDetailsClick = { submission -> navigateToDetails(submission) },
                             onLoginClick = {
                                 viewModel.startLoading()
-                                scaffoldState.drawerState.close()
                                 findNavController().navigate(
                                     HomeFragmentDirections.actionHomeFragmentToLoginFragment()
                                 )
                             },
-                            onLogoutClick = {
-                                scaffoldState.drawerState.close()
-                                viewModel.switchToUserlessMode()
-                            },
-                            onVoteClick = { fullname, liked ->
-                                viewModel.vote(fullname, liked)
-                            }
+                            onLogoutClick = { viewModel.switchToUserlessMode() },
+                            onVoteClick = { fullname, liked -> viewModel.vote(fullname, liked) }
                         )
                     }
                 }

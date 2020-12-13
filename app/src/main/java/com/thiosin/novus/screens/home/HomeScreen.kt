@@ -4,10 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.thiosin.novus.domain.model.Submission
@@ -17,9 +18,7 @@ import com.thiosin.novus.ui.view.*
 
 @Composable
 fun HomeScreen(
-    scaffoldState: ScaffoldState,
     viewState: HomeViewState,
-    lazyListState: LazyListState,
     onNextPage: () -> Unit,
     onSwitchSubreddit: (Subreddit) -> Unit,
     onLinkClick: (String) -> Unit,
@@ -28,6 +27,8 @@ fun HomeScreen(
     onLogoutClick: () -> Unit,
     onVoteClick: (String, Boolean?) -> Unit,
 ) {
+    val scaffoldState = rememberScaffoldState()
+    val lazyListState = rememberLazyListState()
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         scaffoldState = scaffoldState,
@@ -47,8 +48,8 @@ fun HomeScreen(
                 },
                 selected = viewState.getCurrentSubreddit(),
                 user = viewState.getUser(),
-                onLogin = onLoginClick,
-                onLogout = onLogoutClick
+                onLogin = { scaffoldState.drawerState.close(onLoginClick) },
+                onLogout = { scaffoldState.drawerState.close(onLogoutClick) }
             )
         },
         drawerBackgroundColor = MaterialTheme.colors.background,
