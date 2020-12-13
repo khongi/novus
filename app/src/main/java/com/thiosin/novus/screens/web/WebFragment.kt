@@ -9,7 +9,6 @@ import androidx.navigation.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.ui.theme.NovusTheme
-import com.thiosin.novus.ui.view.WebContentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +25,7 @@ class WebFragment : RainbowCakeFragment<WebViewState, WebViewModel>() {
         return ComposeView(requireContext()).apply {
             setContent {
                 NovusTheme {
-                    WebContentScreen(
+                    WebScreen(
                         sourceUrl = WebFragmentArgs.fromBundle(requireArguments()).url,
                         onClose = { findNavController().popBackStack() }
                     )
