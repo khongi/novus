@@ -227,6 +227,43 @@ class HomeViewModelTest : BehaviorSpec({
             }
         }
     }
+    Given("default subreddit has submissionToVote at first page") {
+        val submissionToVote = getSubmission(id = "voted id", fullname = "voted fullname")
+        coEvery { homePresenter.getDefaultSubreddit() } returns defaultSubreddit
+        coEvery { homePresenter.getSubreddits() } returns listOf(defaultSubreddit)
+        coEvery { homePresenter.getSubredditPage(defaultSubreddit.queryName) } returns listOf(submissionToVote)
+        coEvery { homePresenter.getUser() } returns user
+        When("load and vote successfully") {
+            coEvery { homePresenter.vote(fullname = submissionToVote.fullname, likes = true) } returns true
+            val vm = HomeViewModel(homePresenter)
+
+            vm.load()
+            vm.vote(fullname = submissionToVote.fullname, liked = true)
+            Then("submission's liked value should be updated") {
+                submissionToVote.liked shouldBe true
+            }
+            Then("voting status should be set while voting") {
+                val vm = HomeViewModel(homePresenter)
+                vm.observeStateAndEvents { stateObserver, _ ->
+                    vm.load()
+                    vm.vote(fullname = submissionToVote.fullname, liked = true)
+
+                    val expectedStateAfterLoad = HomeReady(
+                        submissions = listOf(submissionToVote),
+                        selectedSubreddit = defaultSubreddit,
+                        subreddits = listOf(defaultSubreddit),
+                        user = user,
+                        voting = false
+                    )
+
+                    stateObserver.observed shouldContainAll listOf(
+                        expectedStateAfterLoad.copy(voting = true),
+                        expectedStateAfterLoad.copy(voting = false)
+                    )
+                }
+            }
+        }
+    }
 }) {
     init {
         listener(ViewModelTestListener())
