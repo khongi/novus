@@ -41,6 +41,8 @@ object Versions {
 
     const val krate = "1.0.0"
 
+    const val jacoco = "0.8.6"
+
     object Tests {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"
@@ -156,11 +158,10 @@ object Plugins {
     const val safeArgsGradle = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav}"
 
     const val androidApplication = "com.android.application"
-
     const val kotlinAndroid = "kotlin-android"
     const val kotlinKapt = "kotlin-kapt"
     const val kotlinAndroidExtensions = "kotlin-android-extensions"
-
     const val hilt = "dagger.hilt.android.plugin"
     const val safeArgs = "androidx.navigation.safeargs.kotlin"
+    const val jacoco = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
 }
