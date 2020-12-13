@@ -53,7 +53,7 @@ class HomeViewModelTest : BehaviorSpec({
         coEvery { homePresenter.getSubredditPage(any()) } returns listOf()
         And("no user") {
             coEvery { homePresenter.getUser() } returns null
-            When("load without args") {
+            When("initial load") {
                 Then("should acquire userless credentials") {
                     val vm = HomeViewModel(homePresenter)
                     vm.load()
@@ -129,7 +129,7 @@ class HomeViewModelTest : BehaviorSpec({
         }
         And("has user") {
             coEvery { homePresenter.getUser() } returns user
-            When("load without args") {
+            When("load") {
                 val vm = HomeViewModel(homePresenter)
                 vm.load()
                 Then("should NOT acquire userless credentials") {
@@ -194,6 +194,35 @@ class HomeViewModelTest : BehaviorSpec({
                         )
                     }
 
+                }
+            }
+            When("load and switchToUserlessMode") {
+                val vm = HomeViewModel(homePresenter)
+                vm.load()
+                vm.switchToUserlessMode()
+                Then("should logout") {
+                    coVerify { homePresenter.logout() }
+                }
+                Then("should get userless mode credentials") {
+                    coVerify { homePresenter.acquireUserlessCredentials() }
+                }
+                Then("should download subreddits and submissions again") {
+                    coVerify(exactly = 2) { homePresenter.getSubreddits() }
+                    coVerify(exactly = 2) { homePresenter.getSubredditPage(defaultSubreddit.queryName) }
+                }
+                Then("user should not be set") {
+                    val vm = HomeViewModel(homePresenter)
+                    vm.observeStateAndEvents { stateObserver, _ ->
+                        vm.load()
+                        vm.switchToUserlessMode()
+
+                        stateObserver.observed.last() shouldBe HomeReady(
+                            submissions = listOf(submissionOne),
+                            selectedSubreddit = defaultSubreddit,
+                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
+                            user = null
+                        )
+                    }
                 }
             }
         }
