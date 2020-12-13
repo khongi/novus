@@ -8,6 +8,7 @@ import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.kotest.ViewModelTestListener
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -46,7 +47,7 @@ class HomeViewModelTest : BehaviorSpec({
                 }
                 Then("default subreddit should be selected") {
                     val vm = HomeViewModel(homePresenter)
-                    vm.observeStateAndEvents { stateObserver, eventsObserver ->
+                    vm.observeStateAndEvents { stateObserver, _ ->
                         vm.load()
 
                         stateObserver.assertDidObserve(
@@ -56,6 +57,46 @@ class HomeViewModelTest : BehaviorSpec({
                                 subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
                                 user = null
                             )
+                        )
+                    }
+                }
+            }
+            When("load then switch to non default subreddit then load again (pop behavior)") {
+                Then("non default subreddit should remain selected") {
+                    val vm = HomeViewModel(homePresenter)
+                    vm.observeStateAndEvents { stateObserver, _ ->
+                        vm.load()
+                        vm.switchSubreddit(nonDefaultSubreddit)
+                        vm.load()
+
+                        val expectedStateAfterSwitch = HomeReady(
+                            submissions = listOf(),
+                            selectedSubreddit = nonDefaultSubreddit,
+                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
+                            user = null
+                        )
+
+                        stateObserver.observed.last() shouldBe expectedStateAfterSwitch
+                    }
+                }
+            }
+            When("load then switch to non default") {
+                Then("selected subreddit should change to non default") {
+                    val vm = HomeViewModel(homePresenter)
+                    vm.observeStateAndEvents { stateObserver, _ ->
+                        vm.load()
+                        vm.switchSubreddit(nonDefaultSubreddit)
+
+                        val expectedStateAfterLoad = HomeReady(
+                            submissions = listOf(),
+                            selectedSubreddit = defaultSubreddit,
+                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
+                            user = null
+                        )
+
+                        stateObserver.observed shouldContainAll listOf(
+                            expectedStateAfterLoad,
+                            expectedStateAfterLoad.copy(selectedSubreddit = nonDefaultSubreddit)
                         )
                     }
                 }
@@ -70,19 +111,14 @@ class HomeViewModelTest : BehaviorSpec({
                     coVerify(exactly = 0) { homePresenter.acquireUserlessCredentials() }
                 }
             }
-            When("load with non default subreddit") {
-                Then("selected subreddit should be non default subreddit") {
+            When("load twice") {
+                Then("user should be loaded only once") {
                     val vm = HomeViewModel(homePresenter)
-                    vm.observeStateAndEvents { stateObserver, _ ->
-                        vm.load(nonDefaultSubreddit)
 
-                        stateObserver.observed.last() shouldBe HomeReady(
-                            submissions = listOf(),
-                            selectedSubreddit = nonDefaultSubreddit,
-                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
-                            user = user
-                        )
-                    }
+                    vm.load()
+                    vm.load()
+
+                    coVerify(exactly = 1) { homePresenter.getUser() }
                 }
             }
         }

@@ -11,7 +11,7 @@ class HomeViewModel @ViewModelInject constructor(
     private val homePresenter: HomePresenter,
 ) : RainbowCakeViewModel<HomeViewState>(HomeEmptyLoading) {
 
-    fun load(subreddit: Subreddit? = null) = execute {
+    fun load() = execute {
         val readyState = viewState as? HomeReady
 
         val user: User? = readyState?.user ?: getUser()
@@ -19,8 +19,7 @@ class HomeViewModel @ViewModelInject constructor(
             homePresenter.acquireUserlessCredentials()
         }
         val subreddits = readyState?.subreddits ?: getSubreddits()
-        val selectedSubreddit = readyState?.selectedSubreddit
-            ?: (subreddit ?: homePresenter.getDefaultSubreddit())
+        val selectedSubreddit = readyState?.selectedSubreddit ?: homePresenter.getDefaultSubreddit()
 
         val submissions = homePresenter.getSubredditPage(
             subreddit = selectedSubreddit.queryName
