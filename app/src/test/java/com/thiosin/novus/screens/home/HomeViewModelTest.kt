@@ -30,6 +30,17 @@ class HomeViewModelTest : BehaviorSpec({
         type = SubredditType.Community,
     )
 
+    Given("no setup") {
+        When("called nothing") {
+            Then("state should be empty loading") {
+                val vm = HomeViewModel(homePresenter)
+                vm.observeStateAndEvents { stateObserver, _ ->
+                    stateObserver.observed shouldBe listOf(HomeEmptyLoading)
+                }
+            }
+        }
+    }
+
     Given("one default, one non default subreddit and no submissions") {
         coEvery { homePresenter.getDefaultSubreddit() } returns defaultSubreddit
         coEvery { homePresenter.getSubreddits() } returns listOf(
@@ -58,6 +69,17 @@ class HomeViewModelTest : BehaviorSpec({
                                 user = null
                             )
                         )
+                    }
+                }
+            }
+            When("load then startLoading") {
+                Then("should switch to loading state") {
+                    val vm = HomeViewModel(homePresenter)
+                    vm.observeStateAndEvents { stateObserver, _ ->
+                        vm.load()
+                        vm.startLoading()
+
+                        stateObserver.observed shouldContainAll listOf(HomeEmptyLoading, HomeEmptyLoading)
                     }
                 }
             }
@@ -112,13 +134,21 @@ class HomeViewModelTest : BehaviorSpec({
                 }
             }
             When("load twice") {
+                val vm = HomeViewModel(homePresenter)
+
+                vm.load()
+                vm.load()
                 Then("user should be loaded only once") {
-                    val vm = HomeViewModel(homePresenter)
-
-                    vm.load()
-                    vm.load()
-
                     coVerify(exactly = 1) { homePresenter.getUser() }
+                }
+                Then("subreddits should be loaded only once") {
+                    coVerify(exactly = 1) { homePresenter.getSubreddits() }
+                }
+                Then("default subreddit should be loaded only once") {
+                    coVerify(exactly = 1) { homePresenter.getDefaultSubreddit() }
+                }
+                Then("submissions should be loaded twice") {
+                    coVerify(exactly = 2) { homePresenter.getSubredditPage(defaultSubreddit.queryName) }
                 }
             }
         }
