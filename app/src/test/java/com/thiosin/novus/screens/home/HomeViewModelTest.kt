@@ -2,6 +2,7 @@ package com.thiosin.novus.screens.home
 
 import co.zsmb.rainbowcake.test.assertDidObserve
 import co.zsmb.rainbowcake.test.observeStateAndEvents
+import com.thiosin.novus.creators.getSubmission
 import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.domain.model.SubredditType
 import com.thiosin.novus.domain.model.User
@@ -29,6 +30,8 @@ class HomeViewModelTest : BehaviorSpec({
         displayName = "non default displayName",
         type = SubredditType.Community,
     )
+    val submissionOne = getSubmission(id = "submission 1", fullname = "submission 1 fullname")
+    val submissionTwo = getSubmission(id = "submission 2")
 
     Given("no setup") {
         When("called nothing") {
@@ -149,6 +152,48 @@ class HomeViewModelTest : BehaviorSpec({
                 }
                 Then("submissions should be loaded twice") {
                     coVerify(exactly = 2) { homePresenter.getSubredditPage(defaultSubreddit.queryName) }
+                }
+            }
+        }
+    }
+    Given("default subreddit has submissionOne at first page and submissionTwo at second page") {
+        coEvery { homePresenter.getDefaultSubreddit() } returns defaultSubreddit
+        coEvery { homePresenter.getSubreddits() } returns listOf(
+            defaultSubreddit,
+            nonDefaultSubreddit
+        )
+        coEvery { homePresenter.getSubredditPage(defaultSubreddit.queryName) } returns listOf(submissionOne)
+        coEvery {
+            homePresenter.getSubredditPage(
+                subreddit = defaultSubreddit.queryName,
+                count = 1,
+                after = submissionOne.fullname
+            )
+        } returns listOf(submissionTwo)
+        And("has user") {
+            coEvery { homePresenter.getUser() } returns user
+            When("load and loadNextPage") {
+                Then("first page result should be appended") {
+                    val vm = HomeViewModel(homePresenter)
+                    vm.observeStateAndEvents { stateObserver, _ ->
+                        vm.load()
+                        vm.loadNextPage()
+
+                        val expectedStateAfterLoad = HomeReady(
+                            submissions = listOf(submissionOne),
+                            selectedSubreddit = defaultSubreddit,
+                            subreddits = listOf(defaultSubreddit, nonDefaultSubreddit),
+                            user = user
+                        )
+
+                        stateObserver.observed shouldContainAll listOf(
+                            expectedStateAfterLoad,
+                            expectedStateAfterLoad.copy(
+                                submissions = listOf(submissionOne, submissionTwo)
+                            )
+                        )
+                    }
+
                 }
             }
         }

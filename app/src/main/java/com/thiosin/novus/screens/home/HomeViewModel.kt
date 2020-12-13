@@ -2,7 +2,6 @@ package com.thiosin.novus.screens.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
-import com.thiosin.novus.domain.model.SubmissionSort
 import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.domain.model.User
 import timber.log.Timber
@@ -44,7 +43,7 @@ class HomeViewModel @ViewModelInject constructor(
 
         val submissions = oldState.submissions + newSubmissions
         submissions.forEach {
-            Timber.d("${it.subreddit} ${it.author} ${it.relativeTime} ${it.votes}")
+            Timber.v("${it.subreddit} ${it.author} ${it.relativeTime} ${it.votes}")
         }
 
         viewState = oldState.copy(
@@ -63,7 +62,6 @@ class HomeViewModel @ViewModelInject constructor(
 
         val submissions = homePresenter.getSubredditPage(
             subreddit = subreddit.queryName,
-            sort = SubmissionSort.Hot
         )
 
         viewState = oldState.copy(
