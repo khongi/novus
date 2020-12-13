@@ -7,6 +7,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply from: "$project.rootDir/jacoco.gradle"
 
 android {
     compileSdkVersion Versions.compileSdk
@@ -112,6 +113,7 @@ dependencies {
     implementation Dependencies.Storage.krateMoshiCodegen
 
     testImplementation Dependencies.Tests.Framework.kotest
+    testImplementation Dependencies.Tests.Framework.coroutine
     testImplementation Dependencies.Tests.Assertion.kotest
     testImplementation Dependencies.Tests.Framework.rainbowcake
     testImplementation Dependencies.Tests.Mock.mockk

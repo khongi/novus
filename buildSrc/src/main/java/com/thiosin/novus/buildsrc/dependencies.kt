@@ -11,6 +11,7 @@ object Versions {
     const val versionName = "1.0"
 
     const val kotlin = "1.4.20"
+    const val coroutine = "1.4.2"
 
     const val rainbowcake = "1.3.0"
 
@@ -40,6 +41,8 @@ object Versions {
     const val nav = "2.3.2"
 
     const val krate = "1.0.0"
+
+    const val jacoco = "0.8.6"
 
     object Tests {
         const val jUnit = "4.13.1"
@@ -128,6 +131,7 @@ object Dependencies {
             const val junit = "junit:junit:${Versions.Tests.jUnit}"
             const val kotest = "io.kotest:kotest-runner-junit5:${Versions.Tests.kotest}"
             const val rainbowcake = "co.zsmb:rainbow-cake-test:${Versions.rainbowcake}"
+            const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutine}"
         }
 
         object Assertion {
@@ -156,11 +160,10 @@ object Plugins {
     const val safeArgsGradle = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav}"
 
     const val androidApplication = "com.android.application"
-
     const val kotlinAndroid = "kotlin-android"
     const val kotlinKapt = "kotlin-kapt"
     const val kotlinAndroidExtensions = "kotlin-android-extensions"
-
     const val hilt = "dagger.hilt.android.plugin"
     const val safeArgs = "androidx.navigation.safeargs.kotlin"
+    const val jacoco = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
 }
