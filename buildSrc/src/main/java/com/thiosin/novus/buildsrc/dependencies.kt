@@ -11,6 +11,7 @@ object Versions {
     const val versionName = "1.0"
 
     const val kotlin = "1.4.20"
+    const val coroutine = "1.4.2"
 
     const val rainbowcake = "1.3.0"
 
@@ -130,6 +131,7 @@ object Dependencies {
             const val junit = "junit:junit:${Versions.Tests.jUnit}"
             const val kotest = "io.kotest:kotest-runner-junit5:${Versions.Tests.kotest}"
             const val rainbowcake = "co.zsmb:rainbow-cake-test:${Versions.rainbowcake}"
+            const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutine}"
         }
 
         object Assertion {
