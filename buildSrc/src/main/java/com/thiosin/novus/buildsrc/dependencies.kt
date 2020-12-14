@@ -1,7 +1,7 @@
 package com.thiosin.novus.buildsrc
 
 object Versions {
-    const val androidGradlePlugin = "7.0.0-alpha01"
+    const val androidGradlePlugin = "7.0.0-alpha02"
 
     const val compileSdk = 30
     const val targetSdk = 30
@@ -26,7 +26,6 @@ object Versions {
     const val hiltAndroidx = "1.0.0-alpha02"
     const val hiltGradlePlugin = "2.29.1-alpha"
 
-    const val redditARAW = "v1.0.0"
     const val redditAuth = "v1.2.2"
 
     const val accompanist = "0.4.0"
