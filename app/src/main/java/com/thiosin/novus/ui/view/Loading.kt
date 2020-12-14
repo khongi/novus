@@ -6,7 +6,10 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+
+const val ItemLoadingTestTag = "ItemLoadingTestTag"
 
 @Composable
 fun LoadingItem() {
@@ -14,6 +17,7 @@ fun LoadingItem() {
         modifier = Modifier.fillMaxWidth()
             .padding(16.dp)
             .wrapContentWidth(Alignment.CenterHorizontally)
+            .testTag(ItemLoadingTestTag)
     )
 }
 

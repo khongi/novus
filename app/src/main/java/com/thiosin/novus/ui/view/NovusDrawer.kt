@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.annotatedString
@@ -24,6 +25,8 @@ import com.thiosin.novus.domain.model.User
 import com.thiosin.novus.ui.theme.redditOrange
 import dev.chrisbanes.accompanist.coil.CoilImage
 
+const val DrawerTestTag = "DrawerTag"
+
 @Composable
 fun NovusDrawer(
     subreddits: List<Subreddit>,
@@ -33,7 +36,7 @@ fun NovusDrawer(
     onLogin: () -> Unit,
     onLogout: () -> Unit,
 ) {
-    Column {
+    Column(modifier = Modifier.testTag(DrawerTestTag)) {
         HeaderSection(user, onLogin, onLogout)
         SubredditsSection(subreddits, selected, onSubredditSelect)
     }

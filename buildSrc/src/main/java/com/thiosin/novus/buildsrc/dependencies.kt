@@ -45,6 +45,7 @@ object Versions {
     const val jacoco = "0.8.6"
 
     object Tests {
+        const val androidX = "1.2.0"
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"
         const val espresso = "3.3.0"
@@ -143,8 +144,11 @@ object Dependencies {
         }
 
         object UI {
-            const val androidx_junit = "androidx.test.ext:junit:${Versions.Tests.jUnitExt}"
-            const val espresso = "androidx.test.espresso:espresso-core:${Versions.Tests.espresso}"
+            const val composeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.compose}"
+            const val core = "androidx.test:core:${Versions.Tests.androidX}"
+            const val rules = "androidx.test:rules:${Versions.Tests.androidX}"
+            const val ktxJUnit = "androidx.test.ext:junit-ktx:${Versions.Tests.jUnitExt}"
+            const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.Tests.espresso}"
         }
 
         object Hilt {

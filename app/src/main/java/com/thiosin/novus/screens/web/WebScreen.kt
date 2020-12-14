@@ -1,4 +1,4 @@
-package com.thiosin.novus.ui.view
+package com.thiosin.novus.screens.web
 
 import android.net.Uri
 import android.webkit.WebResourceRequest
@@ -11,10 +11,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.viewinterop.AndroidView
+import com.thiosin.novus.ui.view.LoadingScreen
+import com.thiosin.novus.ui.view.NavigationIcon
+import com.thiosin.novus.ui.view.NovusTopAppBar
 import timber.log.Timber
 
 @Composable
-fun WebContentScreen(sourceUrl: String, onClose: () -> Unit) {
+fun WebScreen(sourceUrl: String, onClose: () -> Unit) {
     val context = AmbientContext.current
     val isLoading = remember { mutableStateOf(true) }
     val host = remember { mutableStateOf("") }
