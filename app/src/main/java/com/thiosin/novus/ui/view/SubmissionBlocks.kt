@@ -2,7 +2,6 @@ package com.thiosin.novus.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -11,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -25,7 +23,6 @@ import com.thiosin.novus.domain.model.SubmissionMedia
 import com.thiosin.novus.ui.theme.redditDownVote
 import com.thiosin.novus.ui.theme.redditUpvote
 import com.thiosin.novus.ui.utils.shortenToThousands
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun SubmissionInfoRow(submission: Submission) {

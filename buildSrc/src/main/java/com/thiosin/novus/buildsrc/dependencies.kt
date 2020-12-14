@@ -102,7 +102,6 @@ object Dependencies {
 
     object Reddit {
         const val auth = "com.github.KirkBushman:Android-Reddit-OAuth2:${Versions.redditAuth}"
-        const val api = "com.github.KirkBushman:ARAW:${Versions.redditARAW}"
     }
 
     object Accompanist {

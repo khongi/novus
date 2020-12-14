@@ -19,7 +19,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Novus.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Novus.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" tools:keep="@style/Theme_Novus_AppBarOverlay" />
 
-    <style name="Theme.Novus.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Novus.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" tools:keep="@style/Theme_Novus_PopupOverlay" />
 </resources>
