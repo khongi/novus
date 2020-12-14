@@ -1,7 +1,7 @@
 package com.thiosin.novus.buildsrc
 
 object Versions {
-    const val androidGradlePlugin = "7.0.0-alpha01"
+    const val androidGradlePlugin = "7.0.0-alpha02"
 
     const val compileSdk = 30
     const val targetSdk = 30
@@ -26,17 +26,16 @@ object Versions {
     const val hiltAndroidx = "1.0.0-alpha02"
     const val hiltGradlePlugin = "2.29.1-alpha"
 
-    const val redditARAW = "v1.0.0"
-    const val redditAuth = "v1.2.2"
+    const val redditAuth = "1.2.2"
 
     const val accompanist = "0.4.0"
     const val coil = "1.1.0"
 
-    const val exoplayer = "2.11.8"
+    const val exoplayer = "2.12.2"
 
     const val okHttp = "4.8.1"
     const val retrofit = "2.9.0"
-    const val moshi = "1.10.0"
+    const val moshi = "1.11.0"
 
     const val nav = "2.3.2"
 
@@ -44,13 +43,15 @@ object Versions {
 
     const val jacoco = "0.8.6"
 
+    const val gradleVersions = "0.36.0"
+
     object Tests {
         const val androidX = "1.2.0"
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"
         const val espresso = "3.3.0"
-        const val kotest = "4.3.1"
-        const val mockk = "1.10.2"
+        const val kotest = "4.3.2"
+        const val mockk = "1.10.3"
     }
 }
 
@@ -161,12 +162,6 @@ object Plugins {
     const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val hiltGradle = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltGradlePlugin}"
     const val safeArgsGradle = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav}"
-
-    const val androidApplication = "com.android.application"
-    const val kotlinAndroid = "kotlin-android"
-    const val kotlinKapt = "kotlin-kapt"
-    const val kotlinAndroidExtensions = "kotlin-android-extensions"
-    const val hilt = "dagger.hilt.android.plugin"
-    const val safeArgs = "androidx.navigation.safeargs.kotlin"
-    const val jacoco = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
+    const val jacocoGradle = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
+    const val versionGradle = "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersions}"
 }
