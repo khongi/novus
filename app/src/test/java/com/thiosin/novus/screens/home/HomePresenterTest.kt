@@ -8,15 +8,13 @@ import com.thiosin.novus.domain.interactor.UserInteractor
 import com.thiosin.novus.domain.model.Subreddit
 import com.thiosin.novus.domain.model.SubredditType
 import com.thiosin.novus.domain.model.User
-import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.core.test.TestCase
+import com.thiosin.novus.kotest.MockKAwareBehaviorSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk
 
-class HomePresenterTest : BehaviorSpec({
+class HomePresenterTest : MockKAwareBehaviorSpec({
 
     val authInteractor: AuthInteractor = mockk()
     val userInteractor: UserInteractor = mockk()
@@ -83,17 +81,4 @@ class HomePresenterTest : BehaviorSpec({
             }
         }
     }
-}) {
-    override fun beforeTest(testCase: TestCase) {
-        super.beforeTest(testCase)
-
-        // Always start from fresh
-        if (testCase.description.isRootTest()) {
-            clearAllMocks()
-        }
-        // Preserve answers inside containers for nested tests
-        else if (testCase.description.isContainer()) {
-            clearAllMocks(answers = false)
-        }
-    }
-}
+})

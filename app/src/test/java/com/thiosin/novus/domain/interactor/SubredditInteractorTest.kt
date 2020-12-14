@@ -2,15 +2,13 @@ package com.thiosin.novus.domain.interactor
 
 import com.thiosin.novus.data.network.NetworkDataSource
 import com.thiosin.novus.domain.model.SubredditType
-import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.core.test.TestCase
+import com.thiosin.novus.kotest.MockKAwareBehaviorSpec
 import io.kotest.matchers.collections.shouldExist
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.shouldBe
-import io.mockk.clearAllMocks
 import io.mockk.mockk
 
-class SubredditInteractorTest : BehaviorSpec({
+class SubredditInteractorTest : MockKAwareBehaviorSpec({
 
     val networkDataSource: NetworkDataSource = mockk()
     val subredditInteractor = SubredditInteractor(networkDataSource)
@@ -28,17 +26,4 @@ class SubredditInteractorTest : BehaviorSpec({
             }
         }
     }
-}) {
-    override fun beforeTest(testCase: TestCase) {
-        super.beforeTest(testCase)
-
-        // Always start from fresh
-        if (testCase.description.isRootTest()) {
-            clearAllMocks()
-        }
-        // Preserve answers inside containers for nested tests
-        else if (testCase.description.isContainer()) {
-            clearAllMocks(answers = false)
-        }
-    }
-}
+})
