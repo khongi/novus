@@ -76,5 +76,5 @@ detekt {
 }
 
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
-    exclude("**/network/json/**")
+    exclude("**/network/json/**", "**/network/model/**")
 }
