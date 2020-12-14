@@ -74,3 +74,7 @@ detekt {
     }
     autoCorrect = true
 }
+
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    exclude("**/network/json/**")
+}
