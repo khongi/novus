@@ -2,6 +2,7 @@ package com.thiosin.novus.screens.home
 
 import com.thiosin.novus.R
 import com.thiosin.novus.domain.interactor.AuthInteractor
+import com.thiosin.novus.domain.interactor.SubmissionsLister
 import com.thiosin.novus.domain.interactor.SubredditInteractor
 import com.thiosin.novus.domain.interactor.UserInteractor
 import com.thiosin.novus.domain.model.Subreddit
@@ -9,6 +10,7 @@ import com.thiosin.novus.domain.model.SubredditType
 import com.thiosin.novus.domain.model.User
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -60,10 +62,24 @@ class HomePresenterTest : BehaviorSpec({
             When("getBuiltInSubreddits with user") {
                 val result = homePresenter.getSubreddits()
                 Then("result should contain built in and user community subreddits in order") {
-                    result.size shouldBe 2
+                    result shouldHaveSize 2
                     result[0].type shouldBe SubredditType.Frontpage
                     result[1] shouldBe userCommunitySubreddit
                 }
+            }
+        }
+    }
+
+    Given("no submissions for built in subreddit") {
+        val submissionLister: SubmissionsLister = mockk()
+        coEvery { submissionLister.getPage(0, "") } returns null
+        coEvery {
+            subredditInteractor.getSubmissionsLister(subreddit = builtInSubreddit.queryName, sort = any())
+        } returns submissionLister
+        When("getSubredditPage with built in subreddit") {
+            val result = homePresenter.getSubredditPage(builtInSubreddit.queryName)
+            Then("empty list should be returned") {
+                result shouldHaveSize 0
             }
         }
     }
