@@ -26,16 +26,16 @@ object Versions {
     const val hiltAndroidx = "1.0.0-alpha02"
     const val hiltGradlePlugin = "2.29.1-alpha"
 
-    const val redditAuth = "v1.2.2"
+    const val redditAuth = "1.2.2"
 
     const val accompanist = "0.4.0"
     const val coil = "1.1.0"
 
-    const val exoplayer = "2.11.8"
+    const val exoplayer = "2.12.2"
 
     const val okHttp = "4.8.1"
     const val retrofit = "2.9.0"
-    const val moshi = "1.10.0"
+    const val moshi = "1.11.0"
 
     const val nav = "2.3.2"
 
@@ -50,8 +50,8 @@ object Versions {
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"
         const val espresso = "3.3.0"
-        const val kotest = "4.3.1"
-        const val mockk = "1.10.2"
+        const val kotest = "4.3.2"
+        const val mockk = "1.10.3"
     }
 }
 
