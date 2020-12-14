@@ -33,10 +33,9 @@ class SubmissionViewModel @ViewModelInject constructor(
 
         viewState = oldState.copy(voting = true)
 
-        if (submissionPresenter.vote(fullname, liked)) {
-            if (isComment.not()) {
-                oldState.submission.liked = liked
-            }
+        val voteResult = submissionPresenter.vote(fullname, liked)
+        if (voteResult && isComment.not()) {
+            oldState.submission.liked = liked
         }
 
         viewState = oldState.copy(voting = false)
