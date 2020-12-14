@@ -48,7 +48,7 @@ fun SubredditsSection(
     selected: Subreddit?,
     onClick: (Subreddit) -> Unit
 ) {
-    ScrollableColumn() {
+    ScrollableColumn {
         subreddits.forEach {
             DrawerItem(
                 subreddit = it,
