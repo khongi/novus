@@ -2,7 +2,7 @@ package com.thiosin.novus.ui.utils
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawBehind
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -22,7 +22,7 @@ fun Modifier.border(
     end: Border? = null,
     bottom: Border? = null,
 ) =
-    drawBehind {
+    this.drawBehind {
         start?.let {
             drawStartBorder(it, shareTop = top != null, shareBottom = bottom != null)
         }
