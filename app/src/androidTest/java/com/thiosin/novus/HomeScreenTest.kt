@@ -1,16 +1,22 @@
 package com.thiosin.novus
 
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.milliseconds
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.test.espresso.Espresso
+import com.thiosin.novus.screens.home.HomeFragmentDirections
 import com.thiosin.novus.screens.home.HomeScreen
 import com.thiosin.novus.screens.home.HomeScreenTestTag
 import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.view.AppBarTitleTestTag
 import com.thiosin.novus.ui.view.DrawerTestTag
 import com.thiosin.novus.ui.view.NavIconTestTag
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,11 +27,14 @@ class HomeScreenTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     private lateinit var activity: ComponentActivity
+    private lateinit var navController: NavController
 
     @Before
     fun setUp() {
         composeTestRule.activityRule.scenario.onActivity { newActivity ->
             activity = newActivity
+            val navHostFragment: View = newActivity.findViewById(R.id.contentFrame)
+            navController = Navigation.findNavController(navHostFragment)
 
             composeTestRule.setContent {
                 NovusTheme {
@@ -82,5 +91,32 @@ class HomeScreenTest {
             )
         }
         composeTestRule.onNodeWithTag(DrawerTestTag).assertIsDisplayed()
+    }
+
+    @Test
+    fun appStart_homeScreenShows() {
+        assertEquals(navController.currentDestination?.id, R.id.homeFragment)
+    }
+
+    @Test
+    fun loginScreen_back_homeScreen() {
+        composeTestRule.runOnUiThread {
+            navController.navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
+        }
+
+        assertEquals(navController.currentDestination?.id, R.id.loginFragment)
+
+        Espresso.pressBack()
+
+        assertEquals(navController.currentDestination?.id, R.id.homeFragment)
+    }
+
+    @Test
+    fun homeScreen_to_detailsScreen() {
+        composeTestRule.runOnUiThread {
+            navController.navigate(HomeFragmentDirections.actionHomeFragmentToSubmissionFragment(submissions[0]))
+        }
+
+        assertEquals(navController.currentDestination?.id, R.id.submissionFragment)
     }
 }

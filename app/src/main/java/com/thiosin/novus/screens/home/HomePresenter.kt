@@ -42,7 +42,7 @@ class HomePresenter @Inject constructor(
         } else {
             subredditInteractor.getUserSubreddits()
         }
-        val buildInSubreddits = subredditInteractor.getBuiltInSubreddits().map {
+        val builtInSubreddits = subredditInteractor.getBuiltInSubreddits().map {
             when (it.type) {
                 SubredditType.Frontpage -> it.copy(iconResource = R.drawable.ic_home)
                 SubredditType.All -> it.copy(iconResource = R.drawable.ic_group)
@@ -50,7 +50,7 @@ class HomePresenter @Inject constructor(
                 else -> it
             }
         }
-        buildInSubreddits + communitySubreddits
+        builtInSubreddits + communitySubreddits
     }
 
     suspend fun getDefaultSubreddit(): Subreddit = withIOContext {
