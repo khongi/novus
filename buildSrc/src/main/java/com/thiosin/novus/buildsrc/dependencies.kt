@@ -15,6 +15,7 @@ object Versions {
     const val coil = "1.1.0"
     const val compose = "1.0.0-alpha08"
     const val coroutine = "1.4.2"
+    const val detekt = "1.14.2"
     const val exoplayer = "2.12.2"
     const val gradleVersions = "0.36.0"
     const val hilt = "2.29-alpha"
@@ -147,6 +148,7 @@ object Dependencies {
 
 object Plugins {
     const val androidGradle = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
+    const val detektGradle = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Versions.detekt}"
     const val hiltGradle = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltGradlePlugin}"
     const val jacocoGradle = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
     const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
