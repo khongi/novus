@@ -11,7 +11,8 @@ buildscript {
         classpath Plugins.kotlinGradle
         classpath Plugins.hiltGradle
         classpath Plugins.safeArgsGradle
-        classpath Plugins.jacoco
+        classpath Plugins.jacocoGradle
+        classpath Plugins.versionGradle
     }
 }
 
