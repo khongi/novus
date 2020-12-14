@@ -1,27 +1,15 @@
 package com.thiosin.novus.ui.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.annotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.thiosin.novus.R
 import com.thiosin.novus.domain.model.Submission
 import com.thiosin.novus.domain.model.SubmissionMedia
-import com.thiosin.novus.ui.theme.redditDownVote
-import com.thiosin.novus.ui.theme.redditUpvote
 import com.thiosin.novus.ui.utils.shortenToThousands
 
 @Composable
@@ -59,27 +47,6 @@ fun SubmissionStatRow(submission: Submission) {
             modifier = Modifier.padding(start = 8.dp),
             style = MaterialTheme.typography.caption,
         )
-    }
-}
-
-fun getVotesFormat(votes: Int): AnnotatedString {
-    val formattedValue = shortenToThousands(votes)
-
-    return annotatedString {
-        withStyle(SpanStyle(color = getVotesColor(votes > 0))) {
-            append(formattedValue)
-        }
-    }
-}
-
-fun getVotesColor(liked: Boolean): Color {
-    return when (liked) {
-        true -> {
-            redditUpvote
-        }
-        false -> {
-            redditDownVote
-        }
     }
 }
 
@@ -138,91 +105,5 @@ fun SubmissionButtonRow(
             CommentsButton(submission = submission, onClick = onCommentsClick)
         }
         LinkButton(url = submission.link, onClick = onLinkClick)
-    }
-}
-
-@Composable
-fun VoteButtons(
-    fullname: String,
-    liked: Boolean?,
-    onVoteClick: (String, Boolean?) -> Unit,
-) {
-    UpVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
-    DownVoteButton(fullname = fullname, liked = liked, onClick = onVoteClick)
-}
-
-@Composable
-fun UpVoteButton(
-    fullname: String,
-    liked: Boolean?,
-    onClick: (String, Boolean?) -> Unit,
-) {
-    val upVoted = liked == true
-    val tint = if (upVoted) getVotesColor(true) else null
-    val colorFilter = tint?.let { ColorFilter.tint(tint) }
-    IconButton(onClick = {
-        val newLikedValue = if (liked != true) {
-            true
-        } else {
-            null
-        }
-        onClick(fullname, newLikedValue)
-    }) {
-        Image(
-            imageVector = vectorResource(id = R.drawable.ic_like),
-            modifier = Modifier.size(24.dp),
-            colorFilter = colorFilter
-        )
-    }
-}
-
-@Composable
-fun DownVoteButton(
-    fullname: String,
-    liked: Boolean?,
-    onClick: (String, Boolean?) -> Unit,
-) {
-    val downVoted = liked == false
-    val tint = if (downVoted) getVotesColor(false) else null
-    val colorFilter = tint?.let { ColorFilter.tint(tint) }
-    IconButton(onClick = {
-        val newLikedValue = if (liked != false) {
-            false
-        } else {
-            null
-        }
-        onClick(fullname, newLikedValue)
-    }) {
-        Image(
-            imageVector = vectorResource(id = R.drawable.ic_dislike),
-            modifier = Modifier.size(24.dp),
-            colorFilter = colorFilter
-        )
-    }
-}
-
-@Composable
-fun CommentsButton(
-    submission: Submission,
-    onClick: (Submission) -> Unit,
-) {
-    IconButton(onClick = { onClick(submission) }) {
-        Image(
-            imageVector = vectorResource(id = R.drawable.ic_comment),
-            modifier = Modifier.size(24.dp)
-        )
-    }
-}
-
-@Composable
-fun LinkButton(
-    url: String,
-    onClick: (String) -> Unit,
-) {
-    IconButton(onClick = { onClick(url) }) {
-        Image(
-            imageVector = vectorResource(id = R.drawable.ic_link),
-            modifier = Modifier.size(24.dp),
-        )
     }
 }
