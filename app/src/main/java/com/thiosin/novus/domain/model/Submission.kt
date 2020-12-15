@@ -4,7 +4,7 @@ import android.os.Parcelable
 import com.thiosin.novus.data.network.model.submission.PostHint
 import com.thiosin.novus.data.network.model.submission.SubmissionListingChildData
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Submission(
