@@ -24,6 +24,7 @@ object Versions {
     const val jacoco = "0.8.6"
     const val kotlin = "1.4.20"
     const val krate = "1.0.0"
+    const val ktlint = "9.4.1"
     const val ktxCore = "1.3.2"
     const val ktxLifecycle = "2.3.0-beta01"
     const val material = "1.2.1"
@@ -152,6 +153,7 @@ object Plugins {
     const val hiltGradle = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltGradlePlugin}"
     const val jacocoGradle = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
     const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val ktlintGradle = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}"
     const val safeArgsGradle = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav}"
     const val versionGradle = "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersions}"
 }

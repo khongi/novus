@@ -6,16 +6,19 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
         classpath Plugins.androidGradle
         classpath Plugins.kotlinGradle
-        classpath Plugins.hiltGradle
-        classpath Plugins.safeArgsGradle
-        classpath Plugins.jacocoGradle
-        classpath Plugins.versionGradle
+
         classpath Plugins.detektGradle
+        classpath Plugins.hiltGradle
+        classpath Plugins.jacocoGradle
+        classpath Plugins.ktlintGradle
+        classpath Plugins.safeArgsGradle
+        classpath Plugins.versionGradle
     }
 }
 
