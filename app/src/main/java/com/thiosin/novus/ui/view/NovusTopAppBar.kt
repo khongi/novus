@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import com.thiosin.novus.R
 
-
 const val AppBarTitleTestTag = "AppBarTitleTestTag"
 const val NavIconTestTag = "NavIconTag"
 
@@ -23,9 +22,11 @@ fun NovusTopAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = title,
+            Text(
+                text = title,
                 color = MaterialTheme.colors.primary,
-                modifier = Modifier.testTag(AppBarTitleTestTag))
+                modifier = Modifier.testTag(AppBarTitleTestTag)
+            )
         },
         backgroundColor = MaterialTheme.colors.surface,
         navigationIcon = {

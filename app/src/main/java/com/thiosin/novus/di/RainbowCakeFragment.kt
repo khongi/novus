@@ -5,7 +5,6 @@ import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import co.zsmb.rainbowcake.base.ViewModelScope
 
-
 /**
  * Fetch the appropriate ViewModel instance for the Fragment.
  *
@@ -13,7 +12,7 @@ import co.zsmb.rainbowcake.base.ViewModelScope
  *              See [ViewModelScope] for details.
  */
 inline fun <F : RainbowCakeFragment<VS, VM>, VS, reified VM : RainbowCakeViewModel<VS>> F.getViewModel(
-        scope: ViewModelScope = ViewModelScope.Default
+    scope: ViewModelScope = ViewModelScope.Default,
 ): VM {
     return when (scope) {
         ViewModelScope.Default -> {
@@ -21,7 +20,7 @@ inline fun <F : RainbowCakeFragment<VS, VM>, VS, reified VM : RainbowCakeViewMod
         }
         is ViewModelScope.ParentFragment -> {
             val parentFragment = getParentFragment()
-                    ?: throw IllegalStateException("No parent Fragment")
+                ?: throw IllegalStateException("No parent Fragment")
             val key = scope.key
             if (key != null) {
                 ViewModelProvider(parentFragment).get(key, VM::class.java)

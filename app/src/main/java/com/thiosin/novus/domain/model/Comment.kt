@@ -42,9 +42,7 @@ private fun getDepthString(depth: Long): String {
 }
 
 fun CommentData.toComment(): Comment {
-    Timber.v("${getDepthString(depth)} $score ${
-        body.trim().substringBefore('\n').take(40)
-    }")
+    Timber.v("${getDepthString(depth)} $score ${body.trim().substringBefore('\n').take(40)}")
 
     val repliedComments = mutableListOf<Comment>()
 
@@ -74,4 +72,3 @@ fun getDistinguished(distinguished: Distinguished?): AuthorType {
         null -> AuthorType.NORMAL
     }
 }
-

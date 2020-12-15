@@ -14,8 +14,10 @@ import com.thiosin.novus.ui.utils.shortenToThousands
 
 @Composable
 fun SubmissionInfoRow(submission: Submission) {
-    Row(modifier = Modifier.padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             text = submission.subreddit,
             color = MaterialTheme.colors.secondary,
@@ -36,8 +38,10 @@ fun SubmissionInfoRow(submission: Submission) {
 
 @Composable
 fun SubmissionStatRow(submission: Submission) {
-    Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
-        verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             text = getVotesFormat(submission.votes),
             style = MaterialTheme.typography.subtitle1,
@@ -62,9 +66,11 @@ fun SubmissionTitleRow(submission: Submission) {
 
 @Composable
 fun SubmissionSelfText(text: String) {
-    Text(text = text,
+    Text(
+        text = text,
         style = MaterialTheme.typography.body2,
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    )
 }
 
 @Composable

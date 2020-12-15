@@ -27,18 +27,21 @@ fun CommentItem(
     var isCollapsed by remember { mutableStateOf(collapse) }
     var showControls by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
-            .clickable(
-                onLongClick = { isCollapsed = isCollapsed.not() },
-                onClick = { showControls = showControls.not() }
-            ))
-        {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
+                .clickable(
+                    onLongClick = { isCollapsed = isCollapsed.not() },
+                    onClick = { showControls = showControls.not() }
+                )
+        ) {
             Spacer(modifier = Modifier.width((comment.depth * 8).dp))
             CommentContent(comment = comment, collapse = isCollapsed)
         }
         if (canVote && showControls) {
-            Row(horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 var liked: Boolean? by remember { mutableStateOf(comment.liked) }
                 VoteButtons(comment.fullname, liked) { fullname, newLikedValue ->
                     liked = newLikedValue
@@ -85,8 +88,10 @@ private fun CommentHeader(
     comment: Comment,
     collapse: Boolean,
 ) {
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             val authorColor = getAuthorColor(comment)
             Text(
@@ -150,7 +155,6 @@ private fun getCommentDepthColor(depth: Int): Color? {
         else -> indigo500
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

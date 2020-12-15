@@ -46,14 +46,16 @@ fun DownVoteButton(
     val downVoted = liked == false
     val tint = if (downVoted) getVotesColor(false) else null
     val colorFilter = tint?.let { ColorFilter.tint(tint) }
-    IconButton(onClick = {
-        val newLikedValue = if (liked != false) {
-            false
-        } else {
-            null
+    IconButton(
+        onClick = {
+            val newLikedValue = if (liked != false) {
+                false
+            } else {
+                null
+            }
+            onClick(fullname, newLikedValue)
         }
-        onClick(fullname, newLikedValue)
-    }) {
+    ) {
         Image(
             imageVector = vectorResource(id = R.drawable.ic_dislike),
             modifier = Modifier.size(24.dp),
@@ -71,14 +73,16 @@ fun UpVoteButton(
     val upVoted = liked == true
     val tint = if (upVoted) getVotesColor(true) else null
     val colorFilter = tint?.let { ColorFilter.tint(tint) }
-    IconButton(onClick = {
-        val newLikedValue = if (liked != true) {
-            true
-        } else {
-            null
+    IconButton(
+        onClick = {
+            val newLikedValue = if (liked != true) {
+                true
+            } else {
+                null
+            }
+            onClick(fullname, newLikedValue)
         }
-        onClick(fullname, newLikedValue)
-    }) {
+    ) {
         Image(
             imageVector = vectorResource(id = R.drawable.ic_like),
             modifier = Modifier.size(24.dp),

@@ -70,11 +70,13 @@ class NetworkModule {
                     level = HttpLoggingInterceptor.Level.HEADERS
                 }
             )
-            .addInterceptor(AuthInterceptor(
-                authInfoProvider = authInfoProvider,
-                userlessAuth = userlessAuth,
-                installedAppAuth = installedAppAuth
-            ))
+            .addInterceptor(
+                AuthInterceptor(
+                    authInfoProvider = authInfoProvider,
+                    userlessAuth = userlessAuth,
+                    installedAppAuth = installedAppAuth
+                )
+            )
             .build()
     }
 
@@ -85,11 +87,13 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create(
-                Moshi.Builder()
-                    .add(CResponseDataChildListAdapter(innerMoshi))
-                    .build()
-            ))
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder()
+                        .add(CResponseDataChildListAdapter(innerMoshi))
+                        .build()
+                )
+            )
             .build()
     }
 
