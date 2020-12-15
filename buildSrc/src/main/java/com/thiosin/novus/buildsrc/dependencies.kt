@@ -10,46 +10,35 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val kotlin = "1.4.20"
-    const val coroutine = "1.4.2"
-
-    const val rainbowcake = "1.3.0"
-
-    const val compose = "1.0.0-alpha08"
-    const val material = "1.2.1"
-
-    const val ktxCore = "1.3.2"
-    const val ktxLifecycle = "2.3.0-beta01"
+    const val accompanist = "0.4.0"
     const val appCompat = "1.2.0"
-
+    const val coil = "1.1.0"
+    const val compose = "1.0.0-alpha08"
+    const val coroutine = "1.4.2"
+    const val detekt = "1.14.2"
+    const val exoplayer = "2.12.2"
+    const val gradleVersions = "0.36.0"
     const val hilt = "2.29-alpha"
     const val hiltAndroidx = "1.0.0-alpha02"
     const val hiltGradlePlugin = "2.29.1-alpha"
-
-    const val redditAuth = "1.2.2"
-
-    const val accompanist = "0.4.0"
-    const val coil = "1.1.0"
-
-    const val exoplayer = "2.12.2"
-
-    const val okHttp = "4.8.1"
-    const val retrofit = "2.9.0"
-    const val moshi = "1.11.0"
-
-    const val nav = "2.3.2"
-
-    const val krate = "1.0.0"
-
     const val jacoco = "0.8.6"
-
-    const val gradleVersions = "0.36.0"
+    const val kotlin = "1.4.20"
+    const val krate = "1.0.0"
+    const val ktxCore = "1.3.2"
+    const val ktxLifecycle = "2.3.0-beta01"
+    const val material = "1.2.1"
+    const val moshi = "1.11.0"
+    const val nav = "2.3.2"
+    const val okHttp = "4.8.1"
+    const val rainbowcake = "1.3.0"
+    const val redditAuth = "1.2.2"
+    const val retrofit = "2.9.0"
 
     object Tests {
         const val androidX = "1.2.0"
+        const val espresso = "3.3.0"
         const val jUnit = "4.13.1"
         const val jUnitExt = "1.1.2"
-        const val espresso = "3.3.0"
         const val kotest = "4.3.2"
         const val mockk = "1.10.3"
     }
@@ -159,9 +148,10 @@ object Dependencies {
 
 object Plugins {
     const val androidGradle = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
-    const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val detektGradle = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Versions.detekt}"
     const val hiltGradle = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltGradlePlugin}"
-    const val safeArgsGradle = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav}"
     const val jacocoGradle = "org.jacoco:org.jacoco.core:${Versions.jacoco}"
+    const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val safeArgsGradle = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.nav}"
     const val versionGradle = "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersions}"
 }

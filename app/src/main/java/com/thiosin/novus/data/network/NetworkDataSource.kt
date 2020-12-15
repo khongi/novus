@@ -4,7 +4,9 @@ import com.thiosin.novus.data.network.model.comment.CResponse
 import com.thiosin.novus.data.network.model.submission.SubmissionListingResponse
 import com.thiosin.novus.data.network.model.subreddit.SubredditListingResponse
 import com.thiosin.novus.data.network.model.user.MeResponse
-import timber.log.Timber
+import com.thiosin.novus.data.network.util.apiCallBoolean
+import com.thiosin.novus.data.network.util.apiCallList
+import com.thiosin.novus.data.network.util.apiCallNullable
 import javax.inject.Inject
 
 class NetworkDataSource @Inject constructor(
@@ -17,73 +19,42 @@ class NetworkDataSource @Inject constructor(
         sort: String,
         count: Int,
         after: String,
-    ): SubmissionListingResponse? {
-        return try {
-            if (subreddit.isBlank()) {
-                redditAPI.getFrontpage(
-                    count = count,
-                    limit = pageSize,
-                    sort = sort,
-                    after = after
-                )
-            } else {
-                redditAPI.getSubmissions(
-                    subreddit = subreddit,
-                    count = count,
-                    limit = pageSize,
-                    sort = sort,
-                    after = after
-                )
-            }
-        } catch (t: Throwable) {
-            Timber.e(t)
-            null
+    ): SubmissionListingResponse? = apiCallNullable {
+        if (subreddit.isBlank()) {
+            redditAPI.getFrontpage(
+                count = count,
+                limit = pageSize,
+                sort = sort,
+                after = after
+            )
+        } else {
+            redditAPI.getSubmissions(
+                subreddit = subreddit,
+                count = count,
+                limit = pageSize,
+                sort = sort,
+                after = after
+            )
         }
     }
 
-    suspend fun getUserlessSubreddits(): SubredditListingResponse? {
-        return try {
-            redditAPI.getSubreddits()
-        } catch (t: Throwable) {
-            Timber.e(t)
-            null
-        }
+    suspend fun getUserlessSubreddits(): SubredditListingResponse? = apiCallNullable {
+        redditAPI.getSubreddits()
     }
 
-    suspend fun getUserSubreddits(): SubredditListingResponse? {
-        return try {
-            redditAPI.getMySubreddits()
-        } catch (t: Throwable) {
-            Timber.e(t)
-            null
-        }
+    suspend fun getUserSubreddits(): SubredditListingResponse? = apiCallNullable {
+        redditAPI.getMySubreddits()
     }
 
-    suspend fun getComments(submissionId: String): List<CResponse> {
-        return try {
-            redditAPI.getComments(submissionId)
-        } catch (t: Throwable) {
-            Timber.e(t)
-            emptyList()
-        }
+    suspend fun getComments(submissionId: String): List<CResponse> = apiCallList {
+        redditAPI.getComments(submissionId)
     }
 
-    suspend fun getUserInfo(): MeResponse? {
-        return try {
-            redditAPI.getMe()
-        } catch (t: Throwable) {
-            Timber.e(t)
-            null
-        }
+    suspend fun getUserInfo(): MeResponse? = apiCallNullable {
+        redditAPI.getMe()
     }
 
-    suspend fun vote(id: String, direction: Int): Boolean {
-        return try {
-            redditAPI.vote(dir = direction, id = id)
-            true
-        } catch (t: Throwable) {
-            Timber.e(t)
-            false
-        }
+    suspend fun vote(id: String, direction: Int): Boolean = apiCallBoolean {
+        redditAPI.vote(dir = direction, id = id)
     }
 }

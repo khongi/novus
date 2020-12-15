@@ -68,34 +68,36 @@ private fun getThumbnail(url: String?): String? {
 }
 
 private fun getSubmissionMedia(submission: SubmissionListingChildData): SubmissionMedia? {
-    val (url: String?, type: SubmissionMediaType) = when (submission.postHint) {
+    var url: String? = null
+    var type: SubmissionMediaType? = null
+    when (submission.postHint) {
         PostHint.Link -> {
             when {
                 submission.domain == "i.imgur.com" && submission.url.contains(".gifv") -> {
-                    val url = submission.url.replace(".gifv", ".mp4")
-                    val type = SubmissionMediaType.Video
-                    Pair(url, type)
+                    url = submission.url.replace(".gifv", ".mp4")
+                    type = SubmissionMediaType.Video
                 }
-                else -> return null
             }
         }
         PostHint.Image -> {
-            val url = submission.url
-            val type = SubmissionMediaType.Image
-            Pair(url, type)
+            url = submission.url
+            type = SubmissionMediaType.Image
         }
         PostHint.HostedVideo -> {
             // Remove end of URL until .mp4
-            val url = submission.media?.redditVideo?.fallbackURL?.dropLastWhile { !it.isDigit() }
-            val type = SubmissionMediaType.Video
-            Pair(url, type)
+            url = submission.media?.redditVideo?.fallbackURL?.dropLastWhile { !it.isDigit() }
+            type = SubmissionMediaType.Video
         }
-        else -> return null
+        else -> {
+            // No-op
+        }
     }
+    if (url == null || type == null)
+        return null
 
     val sourcePreview = submission.preview?.images?.get(0)?.source
     val width = sourcePreview?.width?.toInt() ?: submission.thumbnailWidth ?: 200
     val height = sourcePreview?.height?.toInt() ?: submission.thumbnailHeight ?: 200
 
-    return url?.let { SubmissionMedia(url = it, type = type, width = width, height = height) }
+    return SubmissionMedia(url = url, type = type, width = width, height = height)
 }

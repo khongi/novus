@@ -1,5 +1,7 @@
 import com.thiosin.novus.buildsrc.Plugins
 
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
 buildscript {
     repositories {
         google()
@@ -13,6 +15,7 @@ buildscript {
         classpath Plugins.safeArgsGradle
         classpath Plugins.jacocoGradle
         classpath Plugins.versionGradle
+        classpath Plugins.detektGradle
     }
 }
 
@@ -40,4 +43,38 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+detekt {
+    // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
+    input = files("app/src/main/java")
+    config = files("$projectDir/config/detekt/detekt.yml")
+//    baseline = file("$projectDir/config/detekt/baseline.xml")
+
+    buildUponDefaultConfig = false
+    disableDefaultRuleSets = false
+    debug = false
+    ignoreFailures = false
+    ignoredBuildTypes = ["release"]
+    ignoredFlavors = ["production"]
+    ignoredVariants = ["productionRelease"]
+    reports {
+        xml {
+            enabled = true
+            destination = file("build/reports/detekt/detekt.xml")
+        }
+        html {
+            enabled = true
+            destination = file("build/reports/detekt/detekt.html")
+        }
+        txt {
+            enabled = true
+            destination = file("build/reports/detekt/detekt.txt")
+        }
+    }
+    autoCorrect = true
+}
+
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    exclude("**/network/json/**", "**/network/model/**")
 }
