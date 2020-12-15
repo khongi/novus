@@ -10,13 +10,20 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 
-@Suppress("DEPRECATION", "unused", "ClassName", "REDUNDANT_PROJECTION", "RedundantExplicitType",
-    "LocalVariableName")
+@Suppress(
+    "DEPRECATION",
+    "unused",
+    "ClassName",
+    "REDUNDANT_PROJECTION",
+    "RedundantExplicitType",
+    "LocalVariableName"
+)
 class CommentDataAdapter(
     moshi: Moshi,
     private val cRepliesAdapter: JsonAdapter<CReplies>,
 ) : JsonAdapter<CommentData>() {
-    private val options: JsonReader.Options = JsonReader.Options.of("total_awards_received",
+    private val options: JsonReader.Options = JsonReader.Options.of(
+        "total_awards_received",
         "ups",
         "link_id",
         "replies",
@@ -53,28 +60,49 @@ class CommentDataAdapter(
         "likes"
     )
 
-    private val longAdapter: JsonAdapter<Long> = moshi.adapter(Long::class.java, emptySet(),
-        "totalAwardsReceived")
+    private val longAdapter: JsonAdapter<Long> = moshi.adapter(
+        Long::class.java,
+        emptySet(),
+        "totalAwardsReceived"
+    )
 
-    private val stringAdapter: JsonAdapter<String> = moshi.adapter(String::class.java, emptySet(),
-        "linkID")
+    private val stringAdapter: JsonAdapter<String> = moshi.adapter(
+        String::class.java,
+        emptySet(),
+        "linkID"
+    )
 
     private val booleanAdapter: JsonAdapter<Boolean> =
-        moshi.adapter(Boolean::class.java, emptySet(),
-            "saved")
+        moshi.adapter(
+            Boolean::class.java,
+            emptySet(),
+            "saved"
+        )
 
-    private val nullableStringAdapter: JsonAdapter<String?> = moshi.adapter(String::class.java,
-        emptySet(), "authorFullname")
+    private val nullableStringAdapter: JsonAdapter<String?> = moshi.adapter(
+        String::class.java,
+        emptySet(),
+        "authorFullname"
+    )
 
     private val listOfAllAwardingAdapter: JsonAdapter<List<AllAwarding>> =
-        moshi.adapter(Types.newParameterizedType(List::class.java, AllAwarding::class.java),
-            emptySet(), "allAwardings")
+        moshi.adapter(
+            Types.newParameterizedType(List::class.java, AllAwarding::class.java),
+            emptySet(),
+            "allAwardings"
+        )
 
-    private val gildingsAdapter: JsonAdapter<Gildings> = moshi.adapter(Gildings::class.java,
-        emptySet(), "gildings")
+    private val gildingsAdapter: JsonAdapter<Gildings> = moshi.adapter(
+        Gildings::class.java,
+        emptySet(),
+        "gildings"
+    )
 
-    private val doubleAdapter: JsonAdapter<Double> = moshi.adapter(Double::class.java, emptySet(),
-        "created")
+    private val doubleAdapter: JsonAdapter<Double> = moshi.adapter(
+        Double::class.java,
+        emptySet(),
+        "created"
+    )
 
     private val nullableBooleanAdapter: JsonAdapter<Boolean?> =
         moshi.adapter(Boolean::class.javaObjectType, emptySet(), "authorCakeday")
@@ -130,106 +158,189 @@ class CommentDataAdapter(
         reader.beginObject()
         while (reader.hasNext()) {
             when (reader.selectName(options)) {
-                0 -> totalAwardsReceived =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("totalAwardsReceived",
-                        "total_awards_received",
-                        reader)
-                1 -> ups =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("ups", "ups", reader)
-                2 -> linkID = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("linkID",
-                    "link_id", reader)
-                3 -> replies =
-                    cRepliesAdapter.fromJson(reader) ?: throw Util.unexpectedNull("replies",
-                        "replies", reader)
-                4 -> saved =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("saved", "saved",
-                        reader)
-                5 -> id =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("id", "id", reader)
-                6 -> gilded =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("gilded", "gilded",
-                        reader)
-                7 -> archived =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("archived",
-                        "archived", reader)
-                8 -> author = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("author",
-                    "author", reader)
-                9 -> sendReplies =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("sendReplies",
+                0 ->
+                    totalAwardsReceived = longAdapter.fromJson(reader)
+                        ?: throw Util.unexpectedNull(
+                            "totalAwardsReceived",
+                            "total_awards_received",
+                            reader
+                        )
+                1 ->
+                    ups = longAdapter.fromJson(reader)
+                        ?: throw Util.unexpectedNull("ups", "ups", reader)
+                2 ->
+                    linkID = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "linkID",
+                        "link_id",
+                        reader
+                    )
+                3 ->
+                    replies = cRepliesAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "replies",
+                        "replies",
+                        reader
+                    )
+                4 ->
+                    saved = booleanAdapter.fromJson(reader)
+                        ?: throw Util.unexpectedNull(
+                            "saved",
+                            "saved",
+                            reader
+                        )
+                5 ->
+                    id = stringAdapter.fromJson(reader)
+                        ?: throw Util.unexpectedNull("id", "id", reader)
+                6 ->
+                    gilded = longAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "gilded",
+                        "gilded",
+                        reader
+                    )
+                7 ->
+                    archived = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "archived",
+                        "archived",
+                        reader
+                    )
+                8 -> author = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                    "author",
+                    "author",
+                    reader
+                )
+                9 ->
+                    sendReplies = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "sendReplies",
                         "send_replies",
-                        reader)
-                10 -> parentID =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("parentID",
-                        "parent_id", reader)
-                11 -> score =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("score", "score",
-                        reader)
+                        reader
+                    )
+                10 ->
+                    parentID = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "parentID",
+                        "parent_id",
+                        reader
+                    )
+                11 ->
+                    score = longAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "score",
+                        "score",
+                        reader
+                    )
                 12 -> {
                     authorFullname = nullableStringAdapter.fromJson(reader)
                     // $mask = $mask and (1 shl 12).inv()
                     mask0 = mask0 and 0xffffefff.toInt()
                 }
-                13 -> allAwardings = listOfAllAwardingAdapter.fromJson(reader)
-                    ?: throw Util.unexpectedNull("allAwardings", "all_awardings", reader)
-                14 -> subredditID =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("subredditID",
+                13 ->
+                    allAwardings = listOfAllAwardingAdapter.fromJson(reader)
+                        ?: throw Util.unexpectedNull("allAwardings", "all_awardings", reader)
+                14 ->
+                    subredditID = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "subredditID",
                         "subreddit_id",
-                        reader)
-                15 -> body =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("body", "body",
-                        reader)
-                16 -> downs =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("downs", "downs",
-                        reader)
-                17 -> isSubmitter =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("isSubmitter",
+                        reader
+                    )
+                15 ->
+                    body = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "body",
+                        "body",
+                        reader
+                    )
+                16 ->
+                    downs = longAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "downs",
+                        "downs",
+                        reader
+                    )
+                17 ->
+                    isSubmitter = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "isSubmitter",
                         "is_submitter",
-                        reader)
-                18 -> collapsed =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("collapsed",
-                        "collapsed", reader)
-                19 -> gildings =
-                    gildingsAdapter.fromJson(reader) ?: throw Util.unexpectedNull("gildings",
-                        "gildings", reader)
-                20 -> stickied =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("stickied",
-                        "stickied", reader)
-                21 -> canGild =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("canGild",
-                        "can_gild", reader)
-                22 -> scoreHidden =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("scoreHidden",
+                        reader
+                    )
+                18 ->
+                    collapsed = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "collapsed",
+                        "collapsed",
+                        reader
+                    )
+                19 ->
+                    gildings = gildingsAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "gildings",
+                        "gildings",
+                        reader
+                    )
+                20 ->
+                    stickied = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "stickied",
+                        "stickied",
+                        reader
+                    )
+                21 ->
+                    canGild = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "canGild",
+                        "can_gild",
+                        reader
+                    )
+                22 ->
+                    scoreHidden = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "scoreHidden",
                         "score_hidden",
-                        reader)
-                23 -> permalink =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("permalink",
-                        "permalink", reader)
-                24 -> locked =
-                    booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull("locked",
-                        "locked", reader)
-                25 -> name =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("name", "name",
-                        reader)
-                26 -> created =
-                    doubleAdapter.fromJson(reader) ?: throw Util.unexpectedNull("created",
-                        "created", reader)
-                27 -> subreddit =
-                    stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull("subreddit",
-                        "subreddit", reader)
-                28 -> createdUTC =
-                    doubleAdapter.fromJson(reader) ?: throw Util.unexpectedNull("createdUTC",
-                        "created_utc", reader)
-                29 -> subredditNamePrefixed = stringAdapter.fromJson(reader)
-                    ?: throw Util.unexpectedNull("subredditNamePrefixed",
+                        reader
+                    )
+                23 ->
+                    permalink = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "permalink",
+                        "permalink",
+                        reader
+                    )
+                24 ->
+                    locked = booleanAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "locked",
+                        "locked",
+                        reader
+                    )
+                25 ->
+                    name = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "name",
+                        "name",
+                        reader
+                    )
+                26 ->
+                    created = doubleAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "created",
+                        "created",
+                        reader
+                    )
+                27 ->
+                    subreddit = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "subreddit",
+                        "subreddit",
+                        reader
+                    )
+                28 ->
+                    createdUTC = doubleAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "createdUTC",
+                        "created_utc",
+                        reader
+                    )
+                29 ->
+                    subredditNamePrefixed = stringAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "subredditNamePrefixed",
                         "subreddit_name_prefixed",
-                        reader)
-                30 -> controversiality =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("controversiality",
+                        reader
+                    )
+                30 ->
+                    controversiality = longAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
                         "controversiality",
-                        reader)
-                31 -> depth =
-                    longAdapter.fromJson(reader) ?: throw Util.unexpectedNull("depth", "depth",
-                        reader)
+                        "controversiality",
+                        reader
+                    )
+                31 ->
+                    depth = longAdapter.fromJson(reader) ?: throw Util.unexpectedNull(
+                        "depth",
+                        "depth",
+                        reader
+                    )
                 32 -> {
                     authorCakeday = nullableBooleanAdapter.fromJson(reader)
                     // $mask = $mask and (1 shl 0).inv()
@@ -255,7 +366,8 @@ class CommentDataAdapter(
         reader.endObject()
         @Suppress("UNCHECKED_CAST")
         val localConstructor: Constructor<CommentData> = this.constructorRef
-            ?: CommentData::class.java.getDeclaredConstructor(Long::class.javaPrimitiveType,
+            ?: CommentData::class.java.getDeclaredConstructor(
+                Long::class.javaPrimitiveType,
                 Long::class.javaPrimitiveType,
                 String::class.java,
                 CReplies::class.java,
@@ -292,12 +404,16 @@ class CommentDataAdapter(
                 Boolean::class.javaObjectType,
                 Int::class.javaPrimitiveType,
                 Int::class.javaPrimitiveType,
-                Util.DEFAULT_CONSTRUCTOR_MARKER).also {
+                Util.DEFAULT_CONSTRUCTOR_MARKER
+            ).also {
                 this.constructorRef = it
             }
         return localConstructor.newInstance(
-            totalAwardsReceived ?: throw Util.missingProperty("totalAwardsReceived",
-                "total_awards_received", reader),
+            totalAwardsReceived ?: throw Util.missingProperty(
+                "totalAwardsReceived",
+                "total_awards_received",
+                reader
+            ),
             ups ?: throw Util.missingProperty("ups", "ups", reader),
             linkID ?: throw Util.missingProperty("linkID", "link_id", reader),
             replies ?: throw Util.missingProperty("replies", "replies", reader),
@@ -326,10 +442,16 @@ class CommentDataAdapter(
             created ?: throw Util.missingProperty("created", "created", reader),
             subreddit ?: throw Util.missingProperty("subreddit", "subreddit", reader),
             createdUTC ?: throw Util.missingProperty("createdUTC", "created_utc", reader),
-            subredditNamePrefixed ?: throw Util.missingProperty("subredditNamePrefixed",
-                "subreddit_name_prefixed", reader),
-            controversiality ?: throw Util.missingProperty("controversiality", "controversiality",
-                reader),
+            subredditNamePrefixed ?: throw Util.missingProperty(
+                "subredditNamePrefixed",
+                "subreddit_name_prefixed",
+                reader
+            ),
+            controversiality ?: throw Util.missingProperty(
+                "controversiality",
+                "controversiality",
+                reader
+            ),
             depth ?: throw Util.missingProperty("depth", "depth", reader),
             authorCakeday,
             distinguished,

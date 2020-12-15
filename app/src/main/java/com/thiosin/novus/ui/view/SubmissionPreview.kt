@@ -35,8 +35,10 @@ fun SubmissionPreview(
                 // Screen width - Horizontal padding
                 SubmissionMediaRow(it, displayWidthDp.dp - 16.dp)
             }
-            Row(horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 SubmissionStatRow(submission)
                 SubmissionButtonRow(
                     submission = submission,
@@ -75,4 +77,3 @@ fun DefaultPreview() {
         onVoteClick = { _: String, _: Boolean? -> },
     )
 }
-

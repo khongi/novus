@@ -96,24 +96,24 @@ fun RemoteVideo(url: String) {
         exoPlayer.prepare(source)
     }
 
-    onDispose(callback = {
-        exoPlayer.release()
-    })
+    onDispose(callback = { exoPlayer.release() })
 
-    AndroidView(viewBlock = {
-        PlayerView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-            resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-            useController = true
-            controllerAutoShow = true
-            player = exoPlayer
-            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
-            exoPlayer.playWhenReady = false
+    AndroidView(
+        viewBlock = {
+            PlayerView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                )
+                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                useController = true
+                controllerAutoShow = true
+                player = exoPlayer
+                exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
+                exoPlayer.playWhenReady = false
+            }
         }
-    })
+    )
 }
 
 @Composable

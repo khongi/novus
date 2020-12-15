@@ -70,7 +70,6 @@ fun HomeScreen(
     )
 }
 
-
 @Composable
 fun HomeContent(
     viewState: HomeViewState,

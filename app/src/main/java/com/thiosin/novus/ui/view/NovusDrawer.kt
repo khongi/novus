@@ -108,13 +108,15 @@ fun UserSection(user: User?, onLogin: () -> Unit, onLogout: () -> Unit) {
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
-        IconButton(onClick = {
-            if (user == null) {
-                onLogin()
-            } else {
-                onLogout()
+        IconButton(
+            onClick = {
+                if (user == null) {
+                    onLogin()
+                } else {
+                    onLogout()
+                }
             }
-        }) {
+        ) {
             val iconId = if (user == null) {
                 R.drawable.ic_login
             } else {

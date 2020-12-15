@@ -297,4 +297,3 @@ data class UserSubreddit(
     @Json(name = "user_is_subscriber")
     val userIsSubscriber: Boolean,
 )
-

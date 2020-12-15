@@ -94,7 +94,8 @@ class CRepliesAdapter(
             throw Util.unexpectedNull(
                 "nested data",
                 "nested data",
-                reader)
+                reader
+            )
         }
         replies.add(cResponseDataChild)
     }

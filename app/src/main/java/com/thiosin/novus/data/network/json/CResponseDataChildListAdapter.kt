@@ -48,4 +48,3 @@ class CResponseDataChildListAdapter(
         throw NotImplementedError("Not implementing")
     }
 }
-

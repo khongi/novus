@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# To use this script create a symlink in .git/hooks
+# To create symlink run the following command in project root
+#
+# CMD:        <target>            <path to file>
+# mklink .git/hooks/pre-commit .githooks/pre-commit
+#
+# SH:        <path to file>          <target>
+# ln -s -f .githooks/pre-commit .git/hooks/pre-commit
+
+echo "++++++++++++++++"
+echo "Running ktlint"
+echo "++++++++++++++++"
+
+# Inspect code using ktlint
+./gradlew ktlintDebugCheck
+
+# Acquire result
+status=$?
+
+returnStatus=0
+
+if [ "$status" != 0 ] ; then
+    echo "++++++++++++++++"
+	echo "Found some problem(s). Running ktlintDebugFormat"
+    echo "++++++++++++++++"
+
+	./gradlew ktlintDebugFormat
+
+	formatResult=$?
+
+	if [ "$formatResult" = 0 ] ; then
+        echo "++++++++++++++++"
+		echo "Auto format is successful! :)"
+		echo "Please edit your commit and re-commit!"
+        echo "++++++++++++++++"
+		returnStatus=1
+	else
+        echo "++++++++++++++++"
+		echo "Could not fix automatically! :("
+		echo "Please fix the problems manually!"
+        echo "++++++++++++++++"
+		returnStatus=2
+	fi
+fi
+
+exit $returnStatus
