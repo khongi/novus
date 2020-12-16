@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +21,11 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return ComposeView(requireContext())
+        return ComposeView(requireContext()).apply {
+            setContent {
+                NovusTheme { }
+            }
+        }
     }
 
     override fun onStart() {
@@ -30,18 +35,20 @@ class LoginFragment : RainbowCakeFragment<LoginViewState, LoginViewModel>() {
 
     override fun render(viewState: LoginViewState) {
         (view as ComposeView).setContent {
-            when (viewState) {
-                is LoginInitial -> Unit
-                is LoginStart -> {
-                    LoginScreen(
-                        authUrl = viewState.authUrl,
-                        redirectUrl = viewState.redirectUrl,
-                        onPageStart = { url -> viewModel.onPageStart(url) },
-                        onAbort = { findNavController().popBackStack() }
-                    )
-                }
-                is LoginComplete -> {
-                    findNavController().popBackStack()
+            NovusTheme {
+                when (viewState) {
+                    is LoginInitial -> Unit
+                    is LoginStart -> {
+                        LoginScreen(
+                            authUrl = viewState.authUrl,
+                            redirectUrl = viewState.redirectUrl,
+                            onPageStart = { url -> viewModel.onPageStart(url) },
+                            onAbort = { findNavController().popBackStack() }
+                        )
+                    }
+                    is LoginComplete -> {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }

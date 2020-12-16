@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
 import com.thiosin.novus.domain.model.Submission
+import com.thiosin.novus.ui.theme.NovusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,24 +31,26 @@ class HomeFragment : RainbowCakeFragment<HomeViewState, HomeViewModel>() {
     ): View {
         return ComposeView(inflater.context).apply {
             setContent {
-                val state = viewModel.state.observeAsState()
+                NovusTheme {
+                    val state = viewModel.state.observeAsState()
 
-                state.value?.let { viewState ->
-                    HomeScreen(
-                        viewState = viewState,
-                        onNextPage = { viewModel.loadNextPage() },
-                        onSwitchSubreddit = { subreddit -> viewModel.switchSubreddit(subreddit) },
-                        onLinkClick = { url -> navigateToWebFragment(url) },
-                        onDetailsClick = { submission -> navigateToDetails(submission) },
-                        onLoginClick = {
-                            viewModel.startLoading()
-                            findNavController().navigate(
-                                HomeFragmentDirections.actionHomeFragmentToLoginFragment()
-                            )
-                        },
-                        onLogoutClick = { viewModel.switchToUserlessMode() },
-                        onVoteClick = { fullname, liked -> viewModel.vote(fullname, liked) }
-                    )
+                    state.value?.let { viewState ->
+                        HomeScreen(
+                            viewState = viewState,
+                            onNextPage = { viewModel.loadNextPage() },
+                            onSwitchSubreddit = { subreddit -> viewModel.switchSubreddit(subreddit) },
+                            onLinkClick = { url -> navigateToWebFragment(url) },
+                            onDetailsClick = { submission -> navigateToDetails(submission) },
+                            onLoginClick = {
+                                viewModel.startLoading()
+                                findNavController().navigate(
+                                    HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+                                )
+                            },
+                            onLogoutClick = { viewModel.switchToUserlessMode() },
+                            onVoteClick = { fullname, liked -> viewModel.vote(fullname, liked) }
+                        )
+                    }
                 }
             }
         }
