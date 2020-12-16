@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import com.thiosin.novus.di.getViewModel
+import com.thiosin.novus.ui.theme.NovusTheme
 import com.thiosin.novus.ui.utils.getDisplayWidth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,23 +32,25 @@ class SubmissionFragment : RainbowCakeFragment<SubmissionViewState, SubmissionVi
     ): View? {
         return ComposeView(inflater.context).apply {
             setContent {
-                val state = viewModel.state.observeAsState()
-                state.value?.let { viewState ->
-                    when (viewState) {
-                        is SubmissionReadyState -> {
-                            SubmissionScreen(
-                                viewState = viewState,
-                                onNavigationClick = { findNavController().popBackStack() },
-                                onLinkClick = { url -> showWebScreen(url) },
-                                onVoteClick = { fullname, liked ->
-                                    viewModel.vote(fullname, liked)
-                                },
-                                onCommentVoteClick = { fullname, liked ->
-                                    viewModel.vote(fullname, liked, isComment = true)
-                                }
-                            )
+                NovusTheme {
+                    val state = viewModel.state.observeAsState()
+                    state.value?.let { viewState ->
+                        when (viewState) {
+                            is SubmissionReadyState -> {
+                                SubmissionScreen(
+                                    viewState = viewState,
+                                    onNavigationClick = { findNavController().popBackStack() },
+                                    onLinkClick = { url -> showWebScreen(url) },
+                                    onVoteClick = { fullname, liked ->
+                                        viewModel.vote(fullname, liked)
+                                    },
+                                    onCommentVoteClick = { fullname, liked ->
+                                        viewModel.vote(fullname, liked, isComment = true)
+                                    }
+                                )
+                            }
+                            SubmissionInitial -> Unit
                         }
-                        SubmissionInitial -> Unit
                     }
                 }
             }
