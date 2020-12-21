@@ -22,7 +22,7 @@ object Versions {
     const val hiltAndroidx = "1.0.0-alpha02"
     const val hiltGradlePlugin = "2.29.1-alpha"
     const val jacoco = "0.8.6"
-    const val kotlin = "1.4.20"
+    const val kotlin = "1.4.21"
     const val krate = "1.0.0"
     const val ktlint = "9.4.1"
     const val ktxCore = "1.3.2"
