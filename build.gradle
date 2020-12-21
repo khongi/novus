@@ -83,8 +83,8 @@ tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
 }
 
 task installGitHook(type: Copy) {
-    from new File(rootProject.rootDir, '.githooks/pre-commit')
-    into { new File(rootProject.rootDir, '.git/hooks') }
+    from "$rootProject.rootDir/.githooks/pre-commit"
+    into "$rootProject.rootDir/.git/hooks"
     fileMode 0777
 }
 
