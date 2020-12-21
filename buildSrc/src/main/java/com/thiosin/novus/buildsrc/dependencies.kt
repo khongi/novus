@@ -10,7 +10,7 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val accompanist = "0.4.0"
+    const val accompanist = "0.4.1"
     const val appCompat = "1.2.0"
     const val coil = "1.1.0"
     const val compose = "1.0.0-alpha08"
