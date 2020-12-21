@@ -1,7 +1,7 @@
 package com.thiosin.novus.buildsrc
 
 object Versions {
-    const val androidGradlePlugin = "7.0.0-alpha02"
+    const val androidGradlePlugin = "7.0.0-alpha03"
 
     const val compileSdk = 30
     const val targetSdk = 30
