@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection", "unused")
+
 package com.thiosin.novus.buildsrc
 
 object Versions {
@@ -13,7 +15,7 @@ object Versions {
     const val accompanist = "0.4.1"
     const val appCompat = "1.2.0"
     const val coil = "1.1.0"
-    const val compose = "1.0.0-alpha08"
+    const val compose = "1.0.0-alpha09"
     const val coroutine = "1.4.2"
     const val detekt = "1.14.2"
     const val exoplayer = "2.12.2"
