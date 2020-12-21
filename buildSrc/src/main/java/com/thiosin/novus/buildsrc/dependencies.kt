@@ -1,7 +1,9 @@
+@file:Suppress("SpellCheckingInspection", "unused")
+
 package com.thiosin.novus.buildsrc
 
 object Versions {
-    const val androidGradlePlugin = "7.0.0-alpha02"
+    const val androidGradlePlugin = "7.0.0-alpha03"
 
     const val compileSdk = 30
     const val targetSdk = 30
@@ -10,23 +12,23 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val accompanist = "0.4.0"
+    const val accompanist = "0.4.1"
     const val appCompat = "1.2.0"
     const val coil = "1.1.0"
-    const val compose = "1.0.0-alpha08"
+    const val compose = "1.0.0-alpha09"
     const val coroutine = "1.4.2"
     const val detekt = "1.14.2"
     const val exoplayer = "2.12.2"
     const val gradleVersions = "0.36.0"
-    const val hilt = "2.29-alpha"
+    const val hilt = "2.30.1-alpha"
     const val hiltAndroidx = "1.0.0-alpha02"
     const val hiltGradlePlugin = "2.29.1-alpha"
     const val jacoco = "0.8.6"
-    const val kotlin = "1.4.20"
+    const val kotlin = "1.4.21"
     const val krate = "1.0.0"
     const val ktlint = "9.4.1"
     const val ktxCore = "1.3.2"
-    const val ktxLifecycle = "2.3.0-beta01"
+    const val ktxLifecycle = "2.3.0-rc01"
     const val material = "1.2.1"
     const val moshi = "1.11.0"
     const val nav = "2.3.2"
